@@ -53,11 +53,14 @@ builds do not reference the backend package. Native publishing uses the
 conditional package reference in the source-generated consumer.
 
 The independently built source-generated C# consumer has now been published and
-executed without an SDK: **0 IL diagnostics and 0 other warnings**, with exact
+executed without an SDK on macOS ARM64 (`osx-arm64`), using the selected .NET
+10.0.13 runtime: **0 IL diagnostics and 0 other warnings**, with exact
 stock JIT, fork JIT and published-entry JIT output parity. Its actual native
 inputs contain the serializer built here, not a package serializer. The proof is
 `provenance/native-conformance-proof.json`: 178 actual references and 176 matched
 PE/PDB pairs, including corrupt and wrong-pair negative controls.
+Other runtime identifiers and .NET 10 servicing patches require their own
+publish-and-execute checks before claiming support.
 
 | Scope | Evidence |
 | --- | --- |
