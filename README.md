@@ -115,3 +115,12 @@ For deterministic source builds before and after Git commits,
 project's declared informational version remains stable; the upstream commit is
 recorded separately in provenance. A fresh post-commit build reproduced the
 accepted serializer and generator byte hashes exactly.
+
+## Build-output retention
+
+Generated build outputs, the private package cache and duplicate local SDK were
+removed during cleanup on 2026-10-25. The source, Git history and small provenance
+records remain. Native proof records describe historical executions; their
+ignored compiler inputs and binaries are no longer retained. Reinstall the SDK
+selected by `global.json` and restore/rebuild the paired backend before repeating
+those checks. Use one shared SDK/cache and remove completed temporary outputs.
