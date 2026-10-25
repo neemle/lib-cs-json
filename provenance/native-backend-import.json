@@ -1,0 +1,50 @@
+{
+  "scope": "Native ABI dependency only; serializer and generator are built from this checkout.",
+  "originManifestSha256": "82b9c8ebb6a742f9622532ca7db692130ece777b084b4e4afc70f974f6cd561f",
+  "packages": {
+    "Neemle.DBAL.Runtime.NativeBootstrap": {
+      "version": "10.0.13-neemle.alpha.1.verify.native50.r1",
+      "archive": "artifacts/native-feed/Neemle.DBAL.Runtime.NativeBootstrap.10.0.13-neemle.alpha.1.verify.native50.r1.nupkg",
+      "sha256": "01bf83c5e898e12c7c7a6d123eaf7cca0e1a7afd6b8aa70d3bbed334b4a39705",
+      "dependencies": [
+        "Neemle.DBAL.Runtime.Queryable"
+      ]
+    },
+    "Neemle.DBAL.Runtime.Queryable": {
+      "version": "10.0.13-neemle.alpha.1.verify.native50.r1",
+      "archive": "artifacts/native-feed/Neemle.DBAL.Runtime.Queryable.10.0.13-neemle.alpha.1.verify.native50.r1.nupkg",
+      "sha256": "3e0ec4efd0c7c4ee0f50db4ed688ee3766271f7c53b972cf9fa9593f7af9edaa",
+      "dependencies": [
+        "Neemle.DBAL.Runtime.CoreLib",
+        "Neemle.DBAL.Runtime.ILCompiler",
+        "Neemle.DBAL.Runtime.Reflection"
+      ]
+    },
+    "Neemle.DBAL.Runtime.Reflection": {
+      "version": "10.0.13-neemle.alpha.1.verify.attrs1",
+      "archive": "artifacts/native-feed/neemle.dbal.runtime.reflection.10.0.13-neemle.alpha.1.verify.attrs1.nupkg",
+      "sha256": "fa32e51d727d16bb1cdca790864dfc55fe167289c4c7b3ac04078c07e702af96",
+      "dependencies": []
+    },
+    "Neemle.DBAL.Runtime.ILCompiler": {
+      "version": "10.0.13-neemle.alpha.1",
+      "archive": "artifacts/native-feed/neemle.dbal.runtime.ilcompiler.10.0.13-neemle.alpha.1.nupkg",
+      "sha256": "84ff291a5164729a0a07b74659739afadcab9301ed87ac28578583bf64a14dbe",
+      "dependencies": []
+    },
+    "Neemle.DBAL.Runtime.CoreLib": {
+      "version": "10.0.13-neemle.alpha.1.verify.native50.r1",
+      "archive": "artifacts/native-feed/Neemle.DBAL.Runtime.CoreLib.10.0.13-neemle.alpha.1.verify.native50.r1.nupkg",
+      "sha256": "51960a1774ef2545bbb6946f37b415d4bae93f14c05637d9d38879f60a1c2ece",
+      "dependencies": [
+        "Neemle.DBAL.Runtime.Expressions"
+      ]
+    },
+    "Neemle.DBAL.Runtime.Expressions": {
+      "version": "10.0.13-neemle.alpha.1.verify.native50.r1",
+      "archive": "artifacts/native-feed/Neemle.DBAL.Runtime.Expressions.10.0.13-neemle.alpha.1.verify.native50.r1.nupkg",
+      "sha256": "aa23c7cb368cea81d9fc6fe21a85782c0f1134db2a00b6a0544ec4e75fd28f04",
+      "dependencies": []
+    }
+  }
+}

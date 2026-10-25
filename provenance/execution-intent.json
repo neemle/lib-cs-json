@@ -1,0 +1,19 @@
+{
+  "scope": "Standalone sourcefork from immutableSTJ5+metadataTool50, exactABI retained",
+  "mcpUnavailable": true,
+  "source": {
+    "repository": "https://github.com/dotnet/runtime",
+    "commit": "6aa72daa24f66c01c3d7b6a32519e9d21396deec",
+    "version": "10.0.13"
+  },
+  "plannedTree": [
+    "src/System.Text.Json",
+    "src/Shared",
+    "src/Neemle.NativeSupport",
+    "tools/NativeContracts",
+    "tests",
+    "eng",
+    "provenance"
+  ],
+  "sourceBuildNativeClaimsPending": true
+}

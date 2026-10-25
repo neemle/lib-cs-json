@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "actualBinlogSha256": "6487821256ff4f4c37887433e3faacb6dad930b9545163ef50142419cefbae5f",
+  "actualCscCount": 1,
+  "auditorScriptSha256": "901eacecf3d6371ed1a1f20c612feb58af93ec5f715b0ba90052661fb04f295c",
+  "actualSourceGenerator": "src/System.Text.Json.SourceGeneration/bin/Release/net10.0/System.Text.Json.SourceGeneration.dll",
+  "sourceGeneratorSha256": "5c74c301886726b33ca8b9b01d566cfdddb51fe68db966f46caf299abca87d38",
+  "jsonSourceGeneratorCount": 1,
+  "actualLibraryReference": "src/System.Text.Json/bin/Release/net10.0/System.Text.Json.dll",
+  "actualLibraryReferenceSha256": "2124a2ec3d65e01eb52fbcaa7e5bf9b1a98a735c56b8cd8ac8776f9fcb595e47",
+  "generatedSourceCount": 12,
+  "generatedSourceHashes": {
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.String.g.cs": "57c6c90df24a2465b9e52db59282ab2ac212cbc7c5e4c85ccda027f6e7640453",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.PropertyNames.g.cs": "1b791a95c3c194532c921a629fef9b1ab2c89741eeccc406eb807f73f18a429c",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.Payload.g.cs": "42632edec35b3b93c647e0406091dd6759190f5f4e07f5ac0566bc90c1594dd5",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.Single.g.cs": "6c8fa0f01a9e79a1b79e54abacb7ca57d4cf95626d5d354377629e6dd31f0408",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.g.cs": "6edc980da35bd2f52e037de614f6503393a2e4058999a25ac2f3a047f0b51014",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.Animal.g.cs": "20ad5aa4d536240d6dcfe025de11d61fcd4daf3b5e10de0bbc8ca7dd948a12c3",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.GetJsonTypeInfo.g.cs": "ba7cc416bde701edd3de914370c02c65d7b6a0dad098aba6a6d0544dc1bf4103",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.Int32.g.cs": "616a90a5df389eb8fa390af48e88565f9774caf2e05446183bf71a104b78a491",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.Cat.g.cs": "082cee8c6ff6f599ab8265e8e9f2c441a9651e9bb355d7288d6217b52f87314b",
+    "tests/SourceGenerated/obj/generated/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.JsonSourceGenerator/DemoContext.ListInt32.g.cs": "26b3689e0d159afa2a74ab1a57afb088e8536521cb1334ded0e9219093438568",
+    "tests/SourceGenerated/obj/generated/Neemle.DBAL.Runtime.Generators/Neemle.DBAL.Runtime.Generators.RuntimeArrayRootsGenerator/Neemle.NativeRuntimeArrayRoots.g.cs": "6129253410ec76b662b8b94d238168e4d0fb7aee177b316ba17ab5d7dd7eb80b",
+    "tests/SourceGenerated/obj/generated/Neemle.DBAL.Runtime.Generators/Neemle.DBAL.Runtime.Generators.NativeOptionalReflectionRootsGenerator/Neemle.NativeOptionalReflectionRoots.g.cs": "d85bded6d865fd28c711ad1114585dbd6e5f5f0ef55a720ba04c551afd3d6631"
+  },
+  "sdkJsonGeneratorAbsentFromConsumerCommand": true,
+  "noIlCodedNoWarn": true,
+  "otherCheckoutDependency": false,
+  "nativeAcceptance": false,
+  "jitRuntimeBindingVerified": false
+}

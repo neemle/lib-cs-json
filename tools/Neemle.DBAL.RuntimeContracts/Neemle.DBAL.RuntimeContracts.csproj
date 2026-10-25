@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <UseAppHost>false</UseAppHost>
+    <IsPackable>false</IsPackable>
+    <EmbedAllSources>true</EmbedAllSources>
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
+    <!-- This build-time tool reads untrimmed target metadata; it is never part of a native consumer. -->
+    <IsAotCompatible>false</IsAotCompatible>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Shared/NativeMetadataNames.cs" Link="NativeMetadataNames.cs" />
+    <Reference Include="System.Reflection.MetadataLoadContext">
+      <HintPath>$(MSBuildToolsPath)/System.Reflection.MetadataLoadContext.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,234 @@
+{
+  "repository": "https://github.com/dotnet/runtime",
+  "commit": "6aa72daa24f66c01c3d7b6a32519e9d21396deec",
+  "files": [
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Helpers/KnownTypeSymbols.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Helpers/KnownTypeSymbols.cs",
+      "gitBlobSha": "0837c6f42f88712500d1749c846dd882ce3aa659",
+      "sha256": "4b14f7ed2a7b1069594565e5ca4c4e3840989eca253ef169370aec40750d0d9e"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Helpers/RoslynExtensions.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Helpers/RoslynExtensions.cs",
+      "gitBlobSha": "3701b263a315bcfbc52805fc08707898bf15a8da",
+      "sha256": "c732128f3cbcb256cf6fc851aa9821f3254a984c918b2f16c8260959bf013326"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Helpers/SourceGeneratorHelpers.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Helpers/SourceGeneratorHelpers.cs",
+      "gitBlobSha": "26c5d3fb937738901d7a740f4dcb725e37a4773a",
+      "sha256": "69728800b0d55a8ad7db8f62c4967bd3ed1519008a0da8b2df2d42a303c3d617"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonConstants.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonConstants.cs",
+      "gitBlobSha": "71c121c7c557477b70d19e2cf8f180162457e98f",
+      "sha256": "390296ed3c3abeef933a20ccb5cf12949ecae338e73957216ac7365fb759c976"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonSourceGenerator.DiagnosticDescriptors.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonSourceGenerator.DiagnosticDescriptors.cs",
+      "gitBlobSha": "688cc31f86697ce399fc6630874de38bd805fcd0",
+      "sha256": "4384069add8769575447f9e5f4acddeb13dbfd5bff9781c4c9505506109270f4"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonSourceGenerator.Emitter.ExceptionMessages.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonSourceGenerator.Emitter.ExceptionMessages.cs",
+      "gitBlobSha": "99a07d9e40d68d3c05a4a0a3ed735286edef2bb7",
+      "sha256": "68b2e617e0be5028448ae977b7547f132ae36560784a0fd414e9ce39791cb7fb"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonSourceGenerator.Emitter.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonSourceGenerator.Emitter.cs",
+      "gitBlobSha": "879b41e23c324a7f2f213bd466d647e24831b841",
+      "sha256": "41056a0509cc7ef52d5ec171df3a3640fd4f5dcca45d85e267fd3f7303cf9a9d"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonSourceGenerator.Parser.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonSourceGenerator.Parser.cs",
+      "gitBlobSha": "fc64ef50b766f3961cf65f4401b08353a15e6d94",
+      "sha256": "b792a8539e080cfaafd61547188b0c4228af16f97c6d32a8f31bfb0873f902ca"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonSourceGenerator.Roslyn3.11.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonSourceGenerator.Roslyn3.11.cs",
+      "gitBlobSha": "3fd7785a1b27a971eba6ca56c038975e78b9ae61",
+      "sha256": "d6feaabb5aec9924b22de27ec5dc09eac98bc93360df1aef4a50c84e5c4fea54"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/JsonSourceGenerator.Roslyn4.0.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/JsonSourceGenerator.Roslyn4.0.cs",
+      "gitBlobSha": "447f54c7f078212ef3fe6713e662121989bd2123",
+      "sha256": "514ea170552bc6b427d4bcb48ec07ba3c7403dba24e9e5e7dd3ab531aa80b88b"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/ClassType.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/ClassType.cs",
+      "gitBlobSha": "c283039249f57723d0c514e7ee7eb1b481e138cf",
+      "sha256": "20e973d0202ec063d9879ee4cce16ee6746b8d940562ddf98393dc32c28c16ec"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/CollectionType.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/CollectionType.cs",
+      "gitBlobSha": "7692e0973bb296fee0119d2d9960807c3cbaa14e",
+      "sha256": "1b5647c1478089d2b0dcf69a13398ed7c66d8fa64be3ea3c9aa4b72a80cba313"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/ContextGenerationSpec.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/ContextGenerationSpec.cs",
+      "gitBlobSha": "00c7192c3ae58ca54929aaebde3f6962e77949f9",
+      "sha256": "79f3705a4db6ee41c3c122e92b804a7581c38f9ef7775332a478398fa4c6e2b7"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/JsonPrimitiveTypeKind.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/JsonPrimitiveTypeKind.cs",
+      "gitBlobSha": "d8f0ca1b506040751571c20545b96a2985afac04",
+      "sha256": "997d105db3dfb9fa7bc010f32ea29071b23be66cdcc2dcd4e872292856594f47"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/ObjectConstructionStrategy.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/ObjectConstructionStrategy.cs",
+      "gitBlobSha": "9908503f027eeec470342db6e11217f153b86df8",
+      "sha256": "bf74493e347210b2312d4f09e0308cf66cea2f1a7689c1f852e779d28b6292f6"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/ParameterGenerationSpec.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/ParameterGenerationSpec.cs",
+      "gitBlobSha": "2dea67e2159ccb4b84b1f20c123de7e7d8bf18e0",
+      "sha256": "40a864d508c7851525aeea6d5a66d7ac3c44a7e044bb91c48b0c7438243dd23f"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/PropertyGenerationSpec.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/PropertyGenerationSpec.cs",
+      "gitBlobSha": "a003a9d74d48c20035a7144ab042886adb95f944",
+      "sha256": "e3a2b859fe20803bd2dc37b7e2584316ed115f6969819d6036bda57920052364"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/PropertyInitializerGenerationSpec.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/PropertyInitializerGenerationSpec.cs",
+      "gitBlobSha": "189dac1784e4f1c91e2f46091a738fad6bebcf61",
+      "sha256": "53c5160032e5e1ef82c753d9895867601a72fd01c89781e439c39bff408a0e6e"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/SourceGenerationOptionsSpec.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/SourceGenerationOptionsSpec.cs",
+      "gitBlobSha": "c7f6156c1dac57b9f3ffcf141296d1a2ff88a7ce",
+      "sha256": "fdf96765ffee1a8de2db671d71cd5d442267536a748245b4daa3ed5b2d5ff621"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Model/TypeGenerationSpec.cs",
+      "upstream": "src/libraries/System.Text.Json/gen/Model/TypeGenerationSpec.cs",
+      "gitBlobSha": "9b71bf16438b89e001106af4b14ba76cf2c62833",
+      "sha256": "449f363d9beacae2b824b135a4730f88c15a031c2dfc22ac49cc4fb2fdd7a82f"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/Strings.resx",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/Strings.resx",
+      "gitBlobSha": "5c2d06929aacbe21952481edd46927a31f2bfc67",
+      "sha256": "5d4281eccc43acecd10b587459333de3386c675a003c82e9ebbee7130b8b7fb4"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.cs.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.cs.xlf",
+      "gitBlobSha": "49ede1a3986cd040d4f900f9ab29937f872c4bf5",
+      "sha256": "07f2b71e20b360c5df446f6d4a4a20861b37c6b7be28b51e9cd943ccaadfaa06"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.de.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.de.xlf",
+      "gitBlobSha": "35bfee5db3fbd9c5d3cc82bd5dd09cd3c3ddef04",
+      "sha256": "f39e3365d78017332709522762a9c577aaeab7fc65e23a42fcd29f19156c5748"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.es.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.es.xlf",
+      "gitBlobSha": "3fdbb1b2f07fe5bcb411df19c3b668f5dba24f4f",
+      "sha256": "98c2b331284497cf0cd23dfda5d9c1c0ba33c0250ce00e1696695218181a1b9f"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.fr.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.fr.xlf",
+      "gitBlobSha": "1704ce42aeb52dc587348de9ef222e6e49277c0e",
+      "sha256": "1860565a0055d668b6b524cc20694f0b6036c3028f98c31901417b18fc8c564c"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.it.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.it.xlf",
+      "gitBlobSha": "c44dbd4a4cc5fa353cb849f11a758c20cdff35da",
+      "sha256": "0e85285ee276bf271f6321e09f4ad302bbd4677c970253868e899558313e35a4"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.ja.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.ja.xlf",
+      "gitBlobSha": "ef07d1387562b04ae35633e22be8c7c37010178c",
+      "sha256": "2b381c49fd43dfac998610607674700e133089281710c941f6f927319be668a1"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.ko.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.ko.xlf",
+      "gitBlobSha": "615789e0daae07c56529c931c90c2ac9a872c9bb",
+      "sha256": "d863a08224f899bd5731cd28a637df45a835475f5789a55d41560c92068a92d1"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.pl.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.pl.xlf",
+      "gitBlobSha": "ef4fd7d87655c28afb344b35f9a238ddba328d69",
+      "sha256": "3c752c55acfe3db191c6e3f4f435e8bf721963151d3bfd014e88cfdab0492bdc"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.pt-BR.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.pt-BR.xlf",
+      "gitBlobSha": "3a76db6711dc19a810b337564c486ecb0bf2fbe8",
+      "sha256": "9abdd8473aa7ed775e3c1111709506d5ab82411d0bfec58930d685e05868cda3"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.ru.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.ru.xlf",
+      "gitBlobSha": "b40f42392e4b98d3ddc986a3b1776f726f0c52b6",
+      "sha256": "8a3c40144b059e1e618f3b9e1d0ee3ff093bd5834d542067d026cf8832d744b7"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.tr.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.tr.xlf",
+      "gitBlobSha": "6c843de0282ff50113a64b027e7e003c64b96575",
+      "sha256": "df772ec2399958c90fe9da402ac65644926311ae1d96b6fb20efca4704da98bf"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.zh-Hans.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.zh-Hans.xlf",
+      "gitBlobSha": "b5b714c3d13d2296fa47d47b371025b367806581",
+      "sha256": "2f25265f260a3c5ea3cf8154835b344e6a72e92392233bde67d60a1ed28d86cf"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/Resources/xlf/Strings.zh-Hant.xlf",
+      "upstream": "src/libraries/System.Text.Json/gen/Resources/xlf/Strings.zh-Hant.xlf",
+      "gitBlobSha": "ac3fd35f8414b64db7b2249c5c439c873c809eea",
+      "sha256": "59bc29395800d9d6ec2872e609664039d0484256b844be98c738475e1524e10e"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/System.Text.Json.SourceGeneration.Roslyn3.11.csproj",
+      "upstream": "src/libraries/System.Text.Json/gen/System.Text.Json.SourceGeneration.Roslyn3.11.csproj",
+      "gitBlobSha": "3cdebbd97e2e76cd0a4d7d9adbd444155e93eef2",
+      "sha256": "87631a718a7e46cc2123befe01384f90193c4d4157d182646c4925cfd5129528"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/System.Text.Json.SourceGeneration.Roslyn4.0.csproj",
+      "upstream": "src/libraries/System.Text.Json/gen/System.Text.Json.SourceGeneration.Roslyn4.0.csproj",
+      "gitBlobSha": "b1e819265f8d24721ac410b6e158550ef29d0f1a",
+      "sha256": "a82133743ef0db8beae1ad4cd39635176a76d4df9de22ffd239709cd91a90656"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/System.Text.Json.SourceGeneration.Roslyn4.4.csproj",
+      "upstream": "src/libraries/System.Text.Json/gen/System.Text.Json.SourceGeneration.Roslyn4.4.csproj",
+      "gitBlobSha": "4aa02a1438bab478b302640f3ca41f249e324269",
+      "sha256": "518aae0fa687ec52580b0058abac7486ed0efc1bca35ce2b700dfb9f7574dac2"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/upstream/System.Text.Json.SourceGeneration.targets",
+      "upstream": "src/libraries/System.Text.Json/gen/System.Text.Json.SourceGeneration.targets",
+      "gitBlobSha": "aa7ae500ce7870286afe46eb6212266ab544388c",
+      "sha256": "70bb79a42ac29c53cee4debc7737f5ef03db0a9638d7238bdf4f6e5fd191cf2d"
+    }
+  ]
+}

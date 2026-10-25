@@ -1,0 +1,15 @@
+{
+  "recordedUtc": "2026-10-25T19:29:58.852901+00:00",
+  "sourceFiles": {
+    "Program.cs": {
+      "origin": "DBAL MIT source verifier Program.cs",
+      "sha256": "954044cd6b9daab5f67dc209656cd9828547b0bb116cb6ea6ac06353f195e991"
+    },
+    "MetadataInventory.cs": {
+      "origin": "DBAL MIT source verifier MetadataInventory.cs",
+      "sha256": "0e3579bdf69f38a0694e703060454c4dd0211be13ee168ff59d5692037823268"
+    }
+  },
+  "externalBuildDependency": false,
+  "purpose": "Standalone verifier of embedded source and metadata using framework-only SDK APIs"
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "Standalone source home, bounded actual C# source-generated native consumer; no stable/public release.",
+  "branch": "codex/stj-standalone",
+  "upstreamCommit": "6aa72daa24f66c01c3d7b6a32519e9d21396deec",
+  "actualSerializerSourceInputs": 344,
+  "sourceOnlyRegressionFiles": 17,
+  "managedBuildsPassed": true,
+  "actualManagedParityPassed": true,
+  "nativeProof": "provenance/native-conformance-proof.json",
+  "independentNativeProof": "provenance/root-independent-native-proof.json",
+  "runtimeAbiPackageImport": "provenance/native-backend-import.json",
+  "sourceGeneratorIdentity": "Explicit private portable analyzer; not SDK binary identity compatibility",
+  "efDependency": false,
+  "foreignCheckoutProjectDependency": false,
+  "ownCompletedObjectBytesCleaned": {
+    "tests/SourceGenerated/obj/Release/net10.0/osx-arm64/native/SourceGenerated.o": {
+      "sha256": "0232a535acfecbf42e50437e1611c8fd2add84d9ddfe2109e9ea9fadcc9d749d",
+      "bytes": 14700677
+    }
+  }
+}

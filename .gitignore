@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+.dotnet/
+.nuget/
+artifacts/
+out/
+artifacts-*.log
+**/__pycache__/
+*.pyc

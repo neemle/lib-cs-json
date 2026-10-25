@@ -1,0 +1,60 @@
+{
+  "commit": "6aa72daa24f66c01c3d7b6a32519e9d21396deec",
+  "files": [
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/Roslyn/DiagnosticDescriptorHelper.cs",
+      "upstream": "src/libraries/Common/src/Roslyn/DiagnosticDescriptorHelper.cs",
+      "sha256": "8f0306ab39d9e86d1430fa2d7689fe52fbc2c6318d08f22c5dcae0037983f295"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/Roslyn/GetBestTypeByMetadataName.cs",
+      "upstream": "src/libraries/Common/src/Roslyn/GetBestTypeByMetadataName.cs",
+      "sha256": "c756c72e26773200a754553b75a4eb74afe761d9f93533d2f53905656352d7a7"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/SourceGenerators/CSharpSyntaxUtilities.cs",
+      "upstream": "src/libraries/Common/src/SourceGenerators/CSharpSyntaxUtilities.cs",
+      "sha256": "51f19ca12103aa7e9ac52b1387a375d15f9978c11defee16f833e27cbdb5b722"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/SourceGenerators/DiagnosticInfo.cs",
+      "upstream": "src/libraries/Common/src/SourceGenerators/DiagnosticInfo.cs",
+      "sha256": "f7a3cf484ef38e83a8033983616f62244e2bd60400fe74107da068b5aa9417cd"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/SourceGenerators/ImmutableEquatableArray.cs",
+      "upstream": "src/libraries/Common/src/SourceGenerators/ImmutableEquatableArray.cs",
+      "sha256": "0b6451502b15e71bb29655c39fb641434917d52f267e1598b9c15754bad4edfc"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/SourceGenerators/SourceWriter.cs",
+      "upstream": "src/libraries/Common/src/SourceGenerators/SourceWriter.cs",
+      "sha256": "45a03b82124b89db98c6114daeb5069f739c1b439369be77e35ee8b7a8ce3513"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/SourceGenerators/TypeModelHelper.cs",
+      "upstream": "src/libraries/Common/src/SourceGenerators/TypeModelHelper.cs",
+      "sha256": "5c203c417061310d2d05b0be09ab9853f5d7f9d078f85f978e84653c5ab5f8d7"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/Common/src/SourceGenerators/TypeRef.cs",
+      "upstream": "src/libraries/Common/src/SourceGenerators/TypeRef.cs",
+      "sha256": "c0babfa44b7fa3415cc5ed4c867b5346a5ac9b8db5755025085040112cffd50b"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/System.Private.CoreLib/src/System/Numerics/Hashing/HashHelpers.cs",
+      "upstream": "src/libraries/System.Private.CoreLib/src/System/Numerics/Hashing/HashHelpers.cs",
+      "sha256": "3e2fffa71181679f6142fc0573805b0d2aaae1777af1c8ca37bf07bdef854f70"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.cs",
+      "upstream": "src/libraries/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.cs",
+      "sha256": "325a1ee7108845bb538b803982e0c0f984f7a88def592bcfe71ed295ea4abb81"
+    },
+    {
+      "path": "src/System.Text.Json.SourceGeneration/shared/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.Pop.cs",
+      "upstream": "src/libraries/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.Pop.cs",
+      "sha256": "79a096be0b91db125c70a186b2c6d40615acd72508da9b3d6b9dbd73bfed9321"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "scope": "Source-only port of existing finite inference/attribute regression witnesses; original cross-project execution does not establish execution here.",
+  "originProject": "Neemle DBAL runtime/Json, MIT; source snapshot SHA per file",
+  "nativeMetadataBaseline": "Tool50",
+  "executedInThisCheckout": false,
+  "files": [
+    {
+      "path": "tests/RegressionSources/MemberConformance/ConstructorRoles/Check.cs",
+      "originRelativePath": "MemberConformance/ConstructorRoles/Check.cs",
+      "sha256": "ac8779320b729c2b12c181f1496f5441cae44566c196d19b1fe35f270e0386ac"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/ConstructorRoles/Roles.cs",
+      "originRelativePath": "MemberConformance/ConstructorRoles/Roles.cs",
+      "sha256": "a1415ff1f053a9399f240cfd785b755ba10d94b0c07d776b6d05fbe36f876536"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/ConstructorRoles/Smoke.cs",
+      "originRelativePath": "MemberConformance/ConstructorRoles/Smoke.cs",
+      "sha256": "6fa8f80b4009511a6babf3e87c92807cba8fa6ad28f0ec30a2a6fdbbf64d7bf8"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/ConstructorRoles/UnknownMapping.cs",
+      "originRelativePath": "MemberConformance/ConstructorRoles/UnknownMapping.cs",
+      "sha256": "98b17e64a4e7d4b80adce23361c91873271026b00f075bb2896aa34448de798b"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/FSharp/Record.fs",
+      "originRelativePath": "MemberConformance/FSharp/Record.fs",
+      "sha256": "5d51aae4abc3389fce424f33056860a8b73998bb9ca0a750d2379fb007589ede"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/Library/Unsafe.cs",
+      "originRelativePath": "MemberConformance/Library/Unsafe.cs",
+      "sha256": "eae5c5ba01a97049c58931af4ff2788110651b9c49d71526b6c23331235e740c"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/Library/UnusedConstructors.cs",
+      "originRelativePath": "MemberConformance/Library/UnusedConstructors.cs",
+      "sha256": "148e6c1b7c52820a3123063985d1a6a4cdea6ecb32b6de52355c83441c779246"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/Program.cs",
+      "originRelativePath": "MemberConformance/Program.cs",
+      "sha256": "0bbdae5c5ac53bcba6cb383b8c85b5c8214b8ff45391adf69ecc7dcead4cab66"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/README.md",
+      "originRelativePath": "MemberConformance/README.md",
+      "sha256": "5191c68e3a734b226dd423f2eeb03b9e7c447b811adb93588aee999007de90a1"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/RawRoles/Library.cs",
+      "originRelativePath": "MemberConformance/RawRoles/Library.cs",
+      "sha256": "04b3da5893de917589466e3fa8612df6ce79a87e79d623b5b61130bf2f64f917"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/RawRoles/Program.cs",
+      "originRelativePath": "MemberConformance/RawRoles/Program.cs",
+      "sha256": "c1206000f2c25fb2b500bd4e251dda18b239e22fa3ab0cbe450621e9dfe4ed04"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/RawRoles/Smoke.cs",
+      "originRelativePath": "MemberConformance/RawRoles/Smoke.cs",
+      "sha256": "b5868a7c5a501dfe7b59b43426b2477da3dd3cb62bf3058ac82c268d93fd4f6f"
+    },
+    {
+      "path": "tests/RegressionSources/MemberConformance/UnsafeControl/Program.cs",
+      "originRelativePath": "MemberConformance/UnsafeControl/Program.cs",
+      "sha256": "87dedc26798d7673fae1c61008ba841563f0814a1b98cf87e1d3381014d43225"
+    },
+    {
+      "path": "tests/RegressionSources/Conformance/AttributeOwnerInference.Library.cs",
+      "originRelativePath": "Conformance/AttributeOwnerInference.Library.cs",
+      "sha256": "5cdb24a1f29be6bf58186fac333c6b7f445f1891960d0c7026dcc3d815ae65fa"
+    },
+    {
+      "path": "tests/RegressionSources/Conformance/AttributeOwnerInference.cs",
+      "originRelativePath": "Conformance/AttributeOwnerInference.cs",
+      "sha256": "dafb9d4c6d5f614a2724f4f607d3c76508814af1b537354a4a3d2a030cd92774"
+    },
+    {
+      "path": "tests/RegressionSources/Conformance/EnumNames.cs",
+      "originRelativePath": "Conformance/EnumNames.cs",
+      "sha256": "c75d6d718215b6c4bba9d7ba912b6dfd24991a0684f07651be3f6e6de863bba4"
+    },
+    {
+      "path": "tests/RegressionSources/Conformance/Polymorphism.cs",
+      "originRelativePath": "Conformance/Polymorphism.cs",
+      "sha256": "82cefe8d22af0627fa804b672f356bcf3ae1f0b6dbe1a135f54b48fb5d034d3f"
+    }
+  ]
+}

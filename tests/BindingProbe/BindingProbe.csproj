@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net10.0</TargetFramework><OutputType>Exe</OutputType><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../src/System.Text.Json/System.Text.Json.csproj" Private="true" /></ItemGroup>
+  <Target Name="KeepSourceJsonProjectReference" AfterTargets="AddPrunePackageReferences"><ItemGroup><PrunePackageReference Remove="System.Text.Json" /></ItemGroup></Target>
+  <Import Project="../../eng/UseSourceLibrary.targets" />
+</Project>

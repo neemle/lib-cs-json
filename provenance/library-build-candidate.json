@@ -1,0 +1,11 @@
+{
+  "dll": "/Users/para/work/system-text-json/src/System.Text.Json/bin/Release/net10.0/System.Text.Json.dll",
+  "dllSha256": "2124a2ec3d65e01eb52fbcaa7e5bf9b1a98a735c56b8cd8ac8776f9fcb595e47",
+  "pdb": "/Users/para/work/system-text-json/src/System.Text.Json/bin/Release/net10.0/System.Text.Json.pdb",
+  "pdbSha256": "b32a66105a2d66f02d29908bf94f6c3776c873efca57aebf65efbc266f2cb174",
+  "project": "/Users/para/work/system-text-json/src/System.Text.Json/System.Text.Json.csproj",
+  "sourceInventory": "/Users/para/work/system-text-json/provenance/source-inventory.json",
+  "buildLog": "/Users/para/work/system-text-json/artifacts-library-build.log",
+  "sourceStableForAudit": true,
+  "nativeAccepted": false
+}
