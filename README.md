@@ -59,6 +59,11 @@ stock JIT, fork JIT and published-entry JIT output parity. Its actual native
 inputs contain the serializer built here, not a package serializer. The proof is
 `provenance/native-conformance-proof.json`: 178 actual references and 176 matched
 PE/PDB pairs, including corrupt and wrong-pair negative controls.
+These native calls use the `JsonTypeInfo<T>` overloads supplied by an application-declared
+`JsonSerializerContext` and `JsonSerializable` declarations. They do **not** prove automatic
+AOT support for ordinary `Serialize<T>(value, options)` or `Deserialize<T>(json, options)`
+even when `T` is statically closed. That inference and invocation path is still missing.
+
 Other runtime identifiers and .NET 10 servicing patches require their own
 publish-and-execute checks before claiming support.
 
@@ -68,6 +73,7 @@ publish-and-execute checks before claiming support.
 | Local C# generator | Actual compiler/analyzer inputs and emitted source audit |
 | JIT payload, scalar, collection, polymorphism and schema | Stock, app-local and isolated fork execution parity |
 | Native same C# consumer | SDK-free execution, strict diagnostics and unchanged actual input hashes |
+| Closed ordinary `Serialize<T>` / `Deserialize<T>` without application context declarations | Not implemented; the strict capability stage reports genuine IL2026 / IL3050 |
 | Unbounded runtime JSON types, native F# or a stable release | Not established by this consumer |
 
 The portable generator currently targets the selected .NET 10 SDK and is loaded
@@ -83,3 +89,29 @@ and corrupt/wrong-pair negative controls. The metadata inference tool is also
 included as source under `tools/`; it has no EF project or package reference.
 Unsupported runtime metadata contracts fail with actionable errors. The fork
 does not replace genuine unsafe-operation diagnostics with empty results.
+
+## Ordinary API inference gap
+
+`tests/OrdinaryApi` is a failing capability characterization, not a supported AOT
+sample. It uses only the ordinary generic serializer APIs, with no application
+type list or context declaration. Its four payload/nested/options operations
+match stock JIT when the actual source-built serializer is loaded. The strict
+native build stage stops on the preserved public Requires contracts (IL2026 and
+IL3050); no native compiler or executable is run. Evidence is under
+`artifacts/ordinary-api-assessment-v3/assessment.json`.
+
+The current finite tool discovers JSON owners from canonical context/type-info
+contracts. It does not infer the closed serialization graph from ordinary
+`Serialize<T>` / `Deserialize<T>` callsites. Closing this gap requires an automatic
+canonical callsite/type-flow contract, generated typed materialization/member
+operations, and a safe native call route that preserves options, converters,
+attribute effects and errors. The original JIT API and public Requires annotations
+must remain intact. Merely generating attribute roots or removing those
+annotations would not establish that behavior. Unknown runtime graphs need an
+explicit inference boundary.
+
+For deterministic source builds before and after Git commits,
+`IncludeSourceRevisionInInformationalVersion` is disabled intentionally. The
+project's declared informational version remains stable; the upstream commit is
+recorded separately in provenance. A fresh post-commit build reproduced the
+accepted serializer and generator byte hashes exactly.
