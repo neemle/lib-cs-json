@@ -1,0 +1,67 @@
+{
+  "completedOwnedTemporaryOutputs": [
+    {
+      "path": "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-interception-contract-f_bw689l",
+      "fileCount": 86,
+      "logicalBytes": 41098181,
+      "allocatedBytes": 41316352,
+      "retainedCompactLogReceipts": {
+        "patched-analyzer-build-v2.log": {
+          "sha256": "117d82493b0ab0afc6a59923bb666d3839a8f7112c6d9c3deb0f5b7bcaaa10f5",
+          "bytes": 347
+        },
+        "InterceptionContractProbe-build-final.log": {
+          "sha256": "576cd7c4742e72b2db2509388ce4c187bfff8a6979199b9a480488ef88a2595b",
+          "bytes": 339
+        },
+        "oracle.log": {
+          "sha256": "859b14cbdca9d1af6cd894910b2113dff1a69cc245668b69802054fc0fbd8551",
+          "bytes": 2281
+        },
+        "corrected-dataflow-oracle-v4.log": {
+          "sha256": "db91674db4099f0f3e1a2db867dda3f3566d90b75c00f94b3d99d7b9fe111ece",
+          "bytes": 10616
+        },
+        "corrected-dataflow-oracle-v2.log": {
+          "sha256": "f7b7651bd004b1e99472a162931bf18e59eb38eedbb50981c7a4bc32a4470f2a",
+          "bytes": 9328
+        },
+        "corrected-dataflow-oracle-v3.log": {
+          "sha256": "6305ea48919d89c998e4f56634fed0b59be15594b6430162656bc2b9be186031",
+          "bytes": 549
+        },
+        "InterceptionAwareAnalyzer-build-final.log": {
+          "sha256": "725b593ffe9e468a86a470ea8b67a034fc931779a97d4112a56cdf360970edfe",
+          "bytes": 347
+        },
+        "corrected-oracle.log": {
+          "sha256": "c633d8074bc63c92b71a8fa905ebbec1dce168b02fccea55bd4d147a9f2cee77",
+          "bytes": 3703
+        },
+        "corrected-dataflow-oracle.log": {
+          "sha256": "b6ae6a16ba75a7db9b33f1d8ede37895fbb3a74526f6dada7cdfad7f6f5ab014",
+          "bytes": 700
+        },
+        "patched-analyzer-build.log": {
+          "sha256": "383e0fa9008e2ee3bf954f0b361992be7d569ffba70392b34ab49d35c12c1888",
+          "bytes": 442819
+        }
+      },
+      "reason": "Completed private development outputs; accepted proofs and maintained source retained separately",
+      "removed": true
+    },
+    {
+      "path": "/private/tmp/stj-inferred-dev.LttWtJ",
+      "fileCount": 159,
+      "logicalBytes": 45215440,
+      "allocatedBytes": 45645824,
+      "retainedCompactLogReceipts": {},
+      "reason": "Completed private development outputs; accepted proofs and maintained source retained separately",
+      "removed": true
+    }
+  ],
+  "logicalBytesRemoved": 86313621,
+  "allocatedBytesRemoved": 86962176,
+  "managedAndNativeFormalTemporaryOutputsRemoved": true,
+  "sharedSdkOrCacheChanged": false
+}

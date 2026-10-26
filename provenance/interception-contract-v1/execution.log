@@ -1,0 +1,162 @@
+{
+  "Passed": true,
+  "Reports": [
+    {
+      "name": "unsafe-original-safe-target",
+      "OperationTarget": "Probe.Original.Identity\u003Cint\u003E(int)",
+      "ExecutableTarget": "Probe.Generated.Hooks.Identity(int)",
+      "EmittedCall": "Probe.Generated.Hooks.Identity",
+      "StockAnalyzerDiagnostics": [
+        {
+          "Id": "IL2026",
+          "Message": "Using member \u0027Probe.Original.Identity\u003CT\u003E(Int32)\u0027 which has \u0027RequiresUnreferencedCodeAttribute\u0027 can break functionality when trimming application code. genuine trim contract.",
+          "Path": "/contract/unsafe-original-safe-target.cs"
+        },
+        {
+          "Id": "IL3050",
+          "Message": "Using member \u0027Probe.Original.Identity\u003CT\u003E(Int32)\u0027 which has \u0027RequiresDynamicCodeAttribute\u0027 can break functionality when AOT compiling. genuine code contract.",
+          "Path": "/contract/unsafe-original-safe-target.cs"
+        }
+      ],
+      "CorrectedAnalyzerDiagnostics": [],
+      "ActualResult": 21
+    },
+    {
+      "name": "safe-original-unsafe-target",
+      "OperationTarget": "Probe.Original.Identity\u003Cint\u003E(int)",
+      "ExecutableTarget": "Probe.Generated.Hooks.Identity(int)",
+      "EmittedCall": "Probe.Generated.Hooks.Identity",
+      "StockAnalyzerDiagnostics": [],
+      "CorrectedAnalyzerDiagnostics": [
+        {
+          "Id": "IL2026",
+          "Message": "Using member \u0027Probe.Generated.Hooks.Identity(Int32)\u0027 which has \u0027RequiresUnreferencedCodeAttribute\u0027 can break functionality when trimming application code. genuine trim contract.",
+          "Path": "/contract/safe-original-unsafe-target.cs"
+        },
+        {
+          "Id": "IL3050",
+          "Message": "Using member \u0027Probe.Generated.Hooks.Identity(Int32)\u0027 which has \u0027RequiresDynamicCodeAttribute\u0027 can break functionality when AOT compiling. genuine code contract.",
+          "Path": "/contract/safe-original-unsafe-target.cs"
+        }
+      ],
+      "ActualResult": 21
+    },
+    {
+      "name": "unintercepted-unsafe",
+      "OperationTarget": "Probe.Original.Identity\u003Cint\u003E(int)",
+      "ExecutableTarget": "Probe.Original.Identity\u003Cint\u003E(int)",
+      "EmittedCall": "Probe.Original.Identity",
+      "StockAnalyzerDiagnostics": [
+        {
+          "Id": "IL2026",
+          "Message": "Using member \u0027Probe.Original.Identity\u003CT\u003E(Int32)\u0027 which has \u0027RequiresUnreferencedCodeAttribute\u0027 can break functionality when trimming application code. genuine trim contract.",
+          "Path": "/contract/unintercepted-unsafe.cs"
+        },
+        {
+          "Id": "IL3050",
+          "Message": "Using member \u0027Probe.Original.Identity\u003CT\u003E(Int32)\u0027 which has \u0027RequiresDynamicCodeAttribute\u0027 can break functionality when AOT compiling. genuine code contract.",
+          "Path": "/contract/unintercepted-unsafe.cs"
+        }
+      ],
+      "CorrectedAnalyzerDiagnostics": [
+        {
+          "Id": "IL2026",
+          "Message": "Using member \u0027Probe.Original.Identity\u003CT\u003E(Int32)\u0027 which has \u0027RequiresUnreferencedCodeAttribute\u0027 can break functionality when trimming application code. genuine trim contract.",
+          "Path": "/contract/unintercepted-unsafe.cs"
+        },
+        {
+          "Id": "IL3050",
+          "Message": "Using member \u0027Probe.Original.Identity\u003CT\u003E(Int32)\u0027 which has \u0027RequiresDynamicCodeAttribute\u0027 can break functionality when AOT compiling. genuine code contract.",
+          "Path": "/contract/unintercepted-unsafe.cs"
+        }
+      ],
+      "ActualResult": 11
+    }
+  ],
+  "Dataflow": [
+    {
+      "name": "parameter-removes-requirement",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+      "DirectExecutableOracleDiagnostics": [],
+      "CorrectedAnalyzerDiagnostics": [],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "parameter-adds-requirement",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+      "DirectExecutableOracleDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027Probe.Generated.Hooks.Map(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "CorrectedAnalyzerDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027Probe.Generated.Hooks.Map(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "return-adds-guarantee",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+      "DirectExecutableOracleDiagnostics": [],
+      "CorrectedAnalyzerDiagnostics": [],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "return-removes-guarantee",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+      "DirectExecutableOracleDiagnostics": [
+        "IL2072: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027FlowProbe.Entry.Need(Type)\u0027. The return value of method \u0027Probe.Generated.Hooks.Map(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "CorrectedAnalyzerDiagnostics": [
+        "IL2072: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027FlowProbe.Entry.Need(Type)\u0027. The return value of method \u0027Probe.Generated.Hooks.Map(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "ref-replaces-contract",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(ref System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map(ref System.Type)",
+      "DirectExecutableOracleDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027FlowProbe.Entry.Need(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "CorrectedAnalyzerDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027FlowProbe.Entry.Need(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "out-replaces-contract",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(out System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map(out System.Type)",
+      "DirectExecutableOracleDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027FlowProbe.Entry.Need(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "CorrectedAnalyzerDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027FlowProbe.Entry.Need(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "constructed-generic-return",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map\u003CT\u003E(System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map\u003Cint\u003E(System.Type)",
+      "DirectExecutableOracleDiagnostics": [],
+      "CorrectedAnalyzerDiagnostics": [],
+      "EmittedWithoutErrors": true
+    },
+    {
+      "name": "constructed-generic-parameter",
+      "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map\u003CT\u003E(System.Type)",
+      "ExecutableInterceptor": "Probe.Generated.Hooks.Map\u003Cint\u003E(System.Type)",
+      "DirectExecutableOracleDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027Probe.Generated.Hooks.Map\u003CT\u003E(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "CorrectedAnalyzerDiagnostics": [
+        "IL2067: \u0027value\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicMethods\u0027 in call to \u0027Probe.Generated.Hooks.Map\u003CT\u003E(Type)\u0027. The parameter \u0027value\u0027 of method \u0027FlowProbe.Entry.Run(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+      ],
+      "EmittedWithoutErrors": true
+    }
+  ]
+}

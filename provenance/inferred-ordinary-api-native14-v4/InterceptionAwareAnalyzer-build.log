@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /Users/para/work/system-text-json/tools/InterceptionAwareAnalyzer/InterceptionAwareAnalyzer.csproj (in 56 ms).
+  InterceptionAwareAnalyzer -> /private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/build/bin/InterceptionAwareAnalyzer/release/Neemle.SystemTextJson.AotAnalysis.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.55

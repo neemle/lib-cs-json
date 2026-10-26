@@ -16,6 +16,7 @@
   <ItemGroup>
     <Compile Include="upstream/**/*.cs" Exclude="upstream/JsonSourceGenerator.Roslyn3.11.cs" />
     <Compile Include="shared/**/*.cs" />
+    <Compile Include="Neemle/*.cs" />
     <Compile Include="../System.Text.Json/Common/*.cs" Exclude="../System.Text.Json/Common/ReflectionExtensions.cs" />
     <Compile Include="SR.Generated.cs" />
     <EmbeddedResource Include="upstream/Resources/Strings.resx" LogicalName="FxResources.System.Text.Json.SourceGeneration.SR.resources" />

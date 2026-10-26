@@ -20,6 +20,7 @@
     <Description>System.Text.Json source fork with inferred finite native attribute operations.</Description>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Neemle/InferredJsonOperations.cs" />
     <Compile Include="../../src/Shared/Common/src/System/HexConverter.cs" />
     <Compile Include="../../src/Shared/Common/src/System/Net/ArrayBuffer.cs" />
     <Compile Include="../../src/Shared/Common/src/System/Text/ValueStringBuilder.cs" />

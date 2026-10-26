@@ -4,7 +4,7 @@
        SDK's bundled generator from running a second time over the same context. -->
   <Target Name="UseLocallyBuiltJsonSourceGenerator" BeforeTargets="CoreCompile">
     <PropertyGroup>
-      <_LocalJsonSourceGenerator>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../src/System.Text.Json.SourceGeneration/bin/$(Configuration)/net10.0/System.Text.Json.SourceGeneration.dll'))</_LocalJsonSourceGenerator>
+      <_LocalJsonSourceGenerator Condition="'$(_LocalJsonSourceGenerator)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../src/System.Text.Json.SourceGeneration/bin/$(Configuration)/net10.0/System.Text.Json.SourceGeneration.dll'))</_LocalJsonSourceGenerator>
     </PropertyGroup>
     <Error Condition="!Exists('$(_LocalJsonSourceGenerator)')" Text="Build the source-generator project before compiling a JSON source consumer." />
     <ItemGroup>

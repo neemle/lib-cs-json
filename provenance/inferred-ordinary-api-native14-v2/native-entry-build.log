@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-b4ngmzed/native-consumer/OrdinaryJson.csproj (in 215 ms).
+  OrdinaryJson -> /private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-b4ngmzed/native-build/bin/OrdinaryJson/release_osx-arm64/OrdinaryJson.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.83

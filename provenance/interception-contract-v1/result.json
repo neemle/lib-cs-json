@@ -1,0 +1,344 @@
+{
+  "passed": true,
+  "scope": "Static executable-interceptor analyzer prototype; ordinary JSON inference and native acceptance remain incomplete",
+  "sdkVersion": "10.0.403",
+  "frameworkReferenceVersion": "10.0.14",
+  "stockAnalyzerSha256": "b5bb2b432850ef712baba7ebebc3a6b4160142c344c8cd0429ea2e2f584a4e4f",
+  "roslynSha256": {
+    "Microsoft.CodeAnalysis.CSharp.dll": "bcc5ee5d8627a8e419295e72a1d41ee5dda0456245c426a3f2da0e21576712a2",
+    "Microsoft.CodeAnalysis.dll": "d8b4b7703c08c9843094a606bc695017137a37e014d5368cae6d94de603c4fcb",
+    "Microsoft.CodeAnalysis.VisualBasic.dll": "4aa23eca87f72ac8310cb9b121f36c389cff3108b2e57aa79d2d2bddecff8a20"
+  },
+  "sourceSha256": {
+    "tools/InterceptionAwareAnalyzer/InterceptionAwareAnalyzer.csproj": "2be83360922345588e9ffb07950bf3197ebf72f8e24a76dbdace9b5501311d04",
+    "tools/InterceptionAwareAnalyzer/src/TypeProxy.cs": "9a9f5b17c869361acdf78faa48a54a3a2149ca2475c2197bd863150ccba6f489",
+    "tools/InterceptionAwareAnalyzer/src/ExecutableInvocationContract.cs": "1437ad4f91ef2deb8600580ee7eb7e302b4e69bce2c82ab754b8c02c990607e3",
+    "tools/InterceptionAwareAnalyzer/src/InterproceduralState.cs": "51bdf51e9f60f49a8f60629304bf92401901a817e4fb1ae4b196ecd9ce310333",
+    "tools/InterceptionAwareAnalyzer/src/SharedStrings.g.cs": "f9df11694867e4cfa0a1607bba0dd69c472a73258a3330a39c711447eae6adef",
+    "tools/InterceptionAwareAnalyzer/src/MethodBodyValue.cs": "29b371aece00c94eefc220a94291596b2a6116effe1833dbaa43358c1fde06d0",
+    "tools/InterceptionAwareAnalyzer/src/COMAnalyzer.cs": "a89526c64744afddba412593033475d4634a0edab14cf5ab4bdad2a51a3ddcda",
+    "tools/InterceptionAwareAnalyzer/src/LocalDataFlowVisitor.cs": "92f41d2c31783c7862d1c9eaa4ab5abade505a39e2d31e0a2723ab468bc8c4cb",
+    "tools/InterceptionAwareAnalyzer/src/LocalStateLattice.cs": "9ba14f959c48d043c791e3878113fa1001640711c7010737f331ed1bae9fd62e",
+    "tools/InterceptionAwareAnalyzer/src/CapturedReferenceValue.cs": "7edb111a1a454f4b3caa5deb22c13301135900e85db00281e6fc2cdba442cfc2",
+    "tools/InterceptionAwareAnalyzer/src/MethodProxy.cs": "03e8ea0c5e959473353f73becb12096a48be0a597b01e302fe929559e02b4bef",
+    "tools/InterceptionAwareAnalyzer/src/GenericParameterProxy.cs": "8c9a67916f5781c44ad8ac9c7266d394067f9381a423204a9f6dec1ffdc692dc",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/RequiresAssemblyFilesAnalyzer.cs": "96129cf11d0503e4d68061d04bb6119f7750e681548a109091fccdee7091968a",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlowAnalyzerContext.cs": "4b2c0433f0bb7843e280c53ddb74b6343c05b61b719963a6ae46f869ed81fe56",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DynamicallyAccessedMembersTypeHierarchy.cs": "d09bf9477caca63f85d859cbc616f121b5aa6fd9750dd1dbc9ac9cead4af60bc",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/IMethodSymbolExtensions.cs": "49f958eba1c7c07669c1d556f32b6da90c207f358541ba7f1ed80121ef11792e",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/ImmutableArrayOperations.cs": "8827d2867e953397ab14095401c73df2ee7c7590a586f0830c533fbc6e4d7121",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DynamicallyAccessedMemberTypes.cs": "7c335c6e61d36e6f256664bbfe56dcbc9327d07df731462e04d050317d551677",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/RequiresAnalyzerBase.cs": "8430ff98b64f28f22fd2f69bb67cc6108f75df5ad0ddc137e225742c364e3067",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/CompilationExtensions.cs": "9afcc806fe648993ad632445df67a6552ef0c6e5eb58136fe0f610e2ce48edfb",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/IPropertySymbolExtensions.cs": "b97b3480db9b6de1ccdd4cd62f52e4b40b1393a0359e7fb28beb666144542ecf",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/ITypeSymbolExtensions.cs": "511879c54a178e2d61481599a6a041c8eccb42b7743ebd98d5a840808ec2ffbc",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DiagnosticDescriptors.cs": "38cbe3a0f983ee845de6beceb8988c3c1af865c7f417591362500fb71129bc5f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/COMAnalyzer.cs": "fb95c52015d2432363bba7fbcaa4fca266ed22330d6b75a237aed1ddf4049db1",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/RequiresISymbolExtensions.cs": "3d1accb3efef877673c2f9e0c91dec4453d230ed712f8c54b86850ac3685c584",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/RequiresDynamicCodeAnalyzer.cs": "1feb9ac49017d1c834df24bc0e3e0c6cbc58d7578618df928cfd093d1dab2065",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/RequiresUnreferencedCodeUtils.cs": "21dadad941f0ee53be6b533dd301ea1690aa73c41bd4571992713421318a75fd",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/ValueUsageInfo.cs": "f3142eacae6aaadb9810610f76c5812dd7fe79fb9f2853d3b1e097fe06b75f7b",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/NullableAttributes.cs": "35cc49b8907cdb9a9ad14ee043f8103a813291b24adc62af9bb3e50ca2fc9597",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/MSBuildPropertyOptionNames.cs": "757ae02530bc474f3583dd2ecc8a6c3c2e6a336c33212af4f4110a9fdbc9fcaf",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/ISymbolExtensions.cs": "f3b4f34f291291343bbfc751aaeff3c3ca02a0df2864d6fc18a99c1a40db157d",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/INamedTypeSymbolExtensions.cs": "6dd0da3169d084545693e6e731803b8daa171a6bd9f0435427a726fa594c7411",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/IOperationExtensions.cs": "8e66dedb011a0fb7af836b60c01072b1ac7dfb738604614c773559fdf688ef22",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/RequiresUnreferencedCodeAnalyzer.cs": "073fbd0d9aafc32d04a7db38cef5c0567eb31db390c447958f8695f0fe203a55",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DynamicallyAccessedMembersAnalyzer.cs": "f55f882f6e44ed4dffbcc2a5b28a29aecfa026a81685f9a9daefa816df35fd19",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/AnalyzerOptionsExtensions.cs": "6d8dd845aad913bf3812dfb78566e234d691fda032dcf38f9c9c13c209fb358c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DynamicallyAccessedMemberTypesEx.cs": "44e9da649d91f80b1598e432f55061b842ea9daaa295762eeee2064230ebfc37",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DiagnosticId.cs": "249e23dba7d724fcfcad25b1a60bc8244ec6c662ff068ca1d4a1bfd33ff21d45",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/MessageSubCategory.cs": "bd4edfeb7cf806fd366267e3aded63581da846250c2cecb0b01faf80ce086a61",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/IsExternalInit.cs": "9bc323d64ef60e2676c3dd0d893b12157e41eb05fa80c0256ccefeb5bead22ed",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/SharedStrings.resx": "d6a42a7aa0c965e1f82b6ef483a878ccd04f25efa3d0aa7f797b3260100cd7fa",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/RequiresDynamicCodeAttribute.cs": "22cca3b45357135342a029a5e9dc7e8dec13191f13342a7c261680ac98fd761d",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/RequiresUnreferencedCodeAttribute.cs": "e60fe64207a154ded924621e3c7a5fcc664c359bdabdfb2f326a2896cab27618",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/Annotations.cs": "68bc7471b666596ce69aff5cefccc39fbc36b5716d438e500bdae087a5055ca9",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/ParameterIndex.cs": "1b44c5d0ed6fa7ed95f4f63d1d6f543c3e31099e8fa5c38ccdea7273cbea8266",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DiagnosticString.cs": "5bf95b02bb315cd39977b4e90d1d9c8ae90022d780194c12fe6f171c814ef177",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/ClosedAttribute.cs": "c076bb5d4cfef584cb879ee50b0acd4f287bf1f17110807fd489d0aaf9c9ffaf",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/MessageFormat.cs": "2e1e2f02ec00247701093d9900f485a56ec18992c81e85fe34d3b565c611c999",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DiagnosticCategory.cs": "a175ec81dab6f1e12c61da46f58ac1fa17b93c2d17a14a93424ab03dfd800f93",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/HashUtils.cs": "1c8855f90df2ef2a57bc4d757adf473615131cef61669643ed74e9eaa480525b",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/DictionaryLattice.cs": "d88684657501144220e18bf70aeefa4e29ec18f268e947f1d5a7a6178522923f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/ForwardDataFlowAnalysis.cs": "4ac748cc5c7d563a476228bddcbca9acc87faa648768a7c69eea74b70f57dde3",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/ValueSet.cs": "5acf69a97a0c0ac6c5f1fa2fa728b6ee54628f8fcf162980d54c9c6da34bc30a",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/IDeepCopyValue.cs": "eb091b221f928b691f7b34ef1863d8ea4292697a86ed44247c4cbd27f35f1285",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/IDataFlowState.cs": "9d5be569adb6f35e2caa17e46fd6e4dac617ffd3c14157fdbd21a56672437dec",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/CompilerGeneratedNames.cs": "58371812bb51a7feb067fe6cdf6acd0c76e4ae68438760edc3a475516c3753ff",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/DefaultValueDictionary.cs": "9babc5a3874b9fb3caa30ef203a2676eaac680032b001315666b03fb9357eca4",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/ITransfer.cs": "4273dbbe4cdcc5b555a89ea176944be84bf6be93d6e155a0c04d5db92512c97d",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/MaybeLattice.cs": "47c0b3aefe57a1b7b785b5781c0a4252ef1d7f3c5b0118407439f67451771838",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/SingleValue.cs": "137ead2503fa0cc2c1da5ac6af3460ab59377f966218bdc50215281a03a6975f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/IControlFlowGraph.cs": "48534d6bf2034f5434502db4a4abd7a5781eb6921de7d7ddbbf54dcd62e23c1a",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/ValueSetLattice.cs": "c4d9f7eeb11c02b7172bee8ef049b80d40f8de639b464aca1ef4a8f2a8833896",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/DataFlow/ILattice.cs": "172d0dee004ac0d8c8834bac242b68e6bae0806f511fc6f189d4c6a65dd5682a",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/UnknownValue.cs": "8286148f08274084de5c4e50476d846e43daec2261504e705d08c45df4aaf79c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/FlowAnnotations.cs": "4b832ece720bcc8fded7d7c5a8d825ef06cb0b44522f0f6aecac44c40c1acb17",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RuntimeTypeHandleForNullableValueWithDynamicallyAccessedMembers.cs": "8d0fab8257934eb4c05e27fe7852a6690a422b6c05486b6c2438221a17d23138",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/ValueExtensions.cs": "6866653c9940af9b8b56c83578799b2799364ac3f89d2a42b4db667ff65b7502",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/MethodParameterValue.cs": "00eb81ce7cffce8bb0498a114001c90351d1be7f4eb84c08f235bf56da549d2f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/ConstIntValue.cs": "307a4d42121b06acd1574f849ed77242e6f5e95cf6eee659bfdade5a53423212",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RuntimeMethodHandleValue.cs": "b452d88a9fbe596249357ff92606918cc8bb437d310ae069dccc8059976be7e8",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/MethodReturnValue.cs": "8fd908f38f9c48885ca3ce4b5c89ce361ada2d17ef1f29dd9496cf9368f0d3e9",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RuntimeTypeHandleForNullableSystemTypeValue.cs": "95e8096b8bf114721e738c2909594238aafefbd2b7a142a18d798d48a1038ddb",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/HandleCallAction.cs": "993ec50f5c37baacd6998721ade7980a9498d4cc5d18f5e57aebcd3e82b97d2c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/GenericParameterValue.cs": "ce45242692e83376c077d9ba5fd79a8a0af345655dc16fb801e539345a290d09",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/NullableSystemTypeValue.cs": "04c5a6fe0f9e7b7faed54a0a0fecb814dfcad0f8c3f1c54c56369f3b5f822de5",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/NullableValueWithDynamicallyAccessedMembers.cs": "8d011726d12cc612f85dd80940a1e8f8f0fbd209b6942ec8388e490109f59f39",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/IValueWithStaticType.cs": "e5db664ac0c88d95959ce64cc77518b6b9d70bb52f96c26f193bbee8db6b61e6",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/ArrayOfAnnotatedSystemTypeValue.cs": "18394a4de13cfca4fd651bda60493ca81f03fbee3b9600332c61d80f652d26de",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RuntimeTypeHandleForValueWithDynamicallyAccessedMembers.cs": "4974e21b5390bf41e213d70876303b0995c1e3c42d58fa86befebe01919fb7f1",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RuntimeTypeHandleValue.cs": "f4fd99a9441cee04fb9197ac2ec3f25aa949551318ff7bdfd4e55960a1445065",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/IntrinsicId.cs": "8dc40855df1b266a5ff561d1abee0b0f20bb8f1c6a2ec869646e855e72140fb8",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/NullValue.cs": "16ba6c17af9ed80d4243cee957943617c050f6c0968f53f8a3c8339fae356907",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/Intrinsics.cs": "a8ee8def59cc69560c71ac56c9b0471c936e487ed37d15d5dfb2511a345b2652",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/FieldValue.cs": "7e7f0144ade6e30c0fc4c6b7881d0ae6e0cae509ffda1bef6c22132b1ee84adf",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/SystemReflectionMethodBaseValue.cs": "a2ff218a39566faa025c369de8e5bddf59444ca0a5056c287e82d5b468bda5dc",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/ReferenceKind.cs": "1c51ff33386eeaca41330f62b4d6d5f95a89d15799e6f6996b8d53311156c27f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RequireDynamicallyAccessedMembersAction.cs": "104166287722b3e13a6be943f7db8d9efbc494f27244711840a9840024a25a16",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/ArrayValue.cs": "c51a6e6fc2e333731e20549ca2bdb5954122e1cd666eb5e3aa0ef1e056cc916c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/RuntimeTypeHandleForGenericParameterValue.cs": "c9553743443d7bf0f46222341866d23494ad7c3374687b0dabd712f6c9ad55ac",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/DiagnosticContext.cs": "43b868ade9024b4e73626eba7811ae7611887a42a4cf7fe649c58e6bfd46002e",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/SystemTypeValue.cs": "ae0b997927ede614a1fe20809b5412e90aaf0833a7fc7f304e740c3426713c3b",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/ValueWithDynamicallyAccessedMembers.cs": "37650f3054928ee7e8830d060fd781924c8d48dcab84bc293a6afd8e3924b246",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TrimAnalysis/KnownStringValue.cs": "5d7dc9ece95eacd721a783dbc0e8326f8ce50b3f87d05bd121b515bd4004c55c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/TypeProxy.cs": "14b33229666ff8d097050495a0ce191f1cb9712273b9ecc5292f600da7aebb17",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/WellKnownType.cs": "04f53538e641a3d3609bc1e57679cff3e261adc9a33728758aca00bed7c34199",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/IMemberProxy.cs": "45d41b521111d0739e5daa4405d5137b4ee5aeb2c7fe65f09b5300c79532d498",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/ParameterCollection.cs": "f3b19619fc74112261ca85e261560d549ec3eb54651e1021cc7dafdcff58233e",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/MethodProxy.cs": "138cb4c9314473f10438dbaa0d1707982a774fc680203a959297250d1805f64b",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/ParameterProxy.cs": "25182eecf1d636034410740bea1c973e7abe90d45e147d987293fff505e0232b",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.Shared/TypeSystemProxy/GenericParameterProxy.cs": "90142b04f850ecd8127773f024d62cbc675b27954014815362c7722eaf07aeeb",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/LocalDataFlowState.cs": "471d07ec9b7f1ccd1a09399cb02dfb81c51400a3a162bd688ae7f08fe9a1f169",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/ControlFlowGraphExtensions.cs": "42a27d2da073bec8e792978dbf985a03847faae78090a505bb24e0880f371729",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/ControlFlowGraphProxy.cs": "de19c780f10fa07951faf50ca5601e6aa33a3babe82e5cbd59e65ae1ac98e72d",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/FlowCaptureKind.cs": "2940c964f1bce55b14a522b54868977bc4ea7d90db1c052d6672e1cd73318820",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/OperationWalker.cs": "82b05a7ed37812a2c2f2b1c7ddb0c45a21a3c0449e8f22a1a4e657eb8fabc095",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/InterproceduralState.cs": "6147cb8603b7a3341fd1948959a5012d122cbc7c7e650d9a05f30fcb1dcdf43c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/FeatureChecksValue.cs": "be9dc9cce3cef9b8b792c1d1dbc00216de63d41eb36966b33733e4665e3ecfc6",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/MethodBodyValue.cs": "1e5036c354c546e03114197a624d4b8cade27a86f919f195a76d7d88d3ff28f2",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/LocalDataFlowAnalysis.cs": "9b45905563df28928665aa9326a4260de71bfc6e20ba7b411bd6700fc125404f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/LValueFlowCaptureProvider.cs": "b56a66424e6c3785801ab4a06f88a4554f65e9efc8c694d8b3d36376eeb4697d",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/BasicBlockExtensions.cs": "79c4ae10606a349004d7168f178b0bb98e0ad94f149a6e622f96e56b41556354",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/FeatureContextLattice.cs": "ee70020a51dba2a73a72b83b818d4f29318324849b27f425a7e5b79c4470d9a5",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/DynamicallyAccessedMembersBinder.cs": "ffa351efa95b9652141360417799a4f040ce7956f2d5a687c85dafd78f439755",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/FeatureChecksVisitor.cs": "98542cc7b1cd56bc3f66b8645abbff9705a9beea1a803cc62ea666995a06a4d4",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/LocalDataFlowVisitor.cs": "fe596385954214cca912d2b85fc1bb34b221a7939e9741828ca796c0026099a0",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/LocalStateAndContextLattice.cs": "946dc89aef08679a304e9c7db6b300033d7b589c6aef5a79dfc7e70b13bc84c9",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/LocalStateLattice.cs": "1d6f8ff5bf2d8a08e8e05967e4d2a87dcad6d74e56918dbee7b68486a470bf81",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/UnexpectedOperationHandler.cs": "d22249d9e99cc43d6ef39daaeb7f8bb03c98102a000fcfe3dfaf1c3f69bd53d5",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/CapturedReferenceValue.cs": "ca9e532de9d403e92c0c45e1ac7912f94abd09c21af61852c0113ef0f77fa03f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/DataFlow/StackGuard.cs": "f8b83379ebebc00f0f0b8dd2800cb50319878925548a7f0f8536068ed0f870c1",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/FlowAnnotations.cs": "f6edd97f054aceed8c7428949136be1566c116c273c145e0edd6180d81dd0211",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TypeProxy.cs": "03b75fd828984c50d6bfc691fde48b1af7fbf33d6fc8e3fda39ce1b1faa1510d",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/MethodParameterValue.cs": "2d3ba65679e7e1e46f481892c2b85947ea105cbf44b5796c5e3af718bd4c3aab",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/GenericArgumentDataFlow.cs": "95aa49c76d2e23119db864a772708d342f7c91843e0c49fe2f5a4cac8ecf3ac4",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/FeatureCheckReturnValuePattern.cs": "9bcff4f11d6e5a40a0e0b5d07ad613554c96c97a826d3cee8783bf797237954c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/MethodReturnValue.cs": "3583aa9dcd0136434a8d122671e6c6bfd5943f7c425066c672780fdc2ff3ab3c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisVisitor.cs": "854efa773621f562871e7bbdc1c47886ce228009ab8b7ad9b90f69a8a57756f0",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisAssignmentPattern.cs": "a14e85d2a8ca7a9819699cea605997bdb7e9704bfcc19015fe3e825946751b27",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimDataFlowAnalysis.cs": "970e2b1936b73333bd9612e1b9a72d91a8a383a4839e1e046b47faeb4833ff96",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisGenericInstantiationPattern.cs": "6e7ebf86d580a32295449e9a7af85d868a30c8a372aeb84fc6106289ac782fa5",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/HandleCallAction.cs": "25b004c7188687e21acf4c0ca4af6283ebb102e4fcd6c0d976b3b80b803a25b2",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/GenericParameterValue.cs": "2a10be23292d8aae9037e486156ae5df90dca6a6cb6104e3db93807c8976265f",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisPatternStore.cs": "972624819e708e3f140b02b0e39e51bbbe06658e3d07666024c5c719929c674b",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/SingleValueExtensions.cs": "2b3cc2985f4f11c0182d6d845cc43cbb461e5d93c14f025caf1befadb58a0eae",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisFieldAccessPattern.cs": "3383a4fcac49753718eac1a18852fbd9ec4790eaeaaa8167acd73d1d703f12e2",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisReflectionAccessPattern.cs": "367791b93a96fbd430a1804cc04ddea850b5cb2a9d663258d50d6c147d31bd97",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/ReflectionAccessAnalyzer.cs": "b0a18e0d878b74a41815e9aaffa463f84c45fe38b9ce119e8929772a63c31c4e",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisMethodCallPattern.cs": "2ebf0e1c80a79a27f8667302311f66c0e32b4212e7acea00d9f001a489aa7e5c",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/FieldValue.cs": "8388bd65d2acea0d39d471e40b8614865ea85058d6e6d044241de1cd502e2efb",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/RequireDynamicallyAccessedMembersAction.cs": "7c48c514e08aebb83176a6f30aba0699d831a6bb76adec4c0d18d888487c54ca",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/MethodProxy.cs": "78b5247461819f093c6a1e5d107fc5ab06207924b83fd4c0816c9ff5d5951710",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/ArrayValue.cs": "0d343047083c93fd9a3c70ec98a48601bc4f9eaedf54c477bee876ad586bd708",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/ParameterProxy.cs": "507d482eb2a8a9dda0a3573c295e33e64391f932a8b13261424d36f66f8591c0",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TypeNameResolver.cs": "8b3903b0e965b35e5f77d2888c264adabeb74050e64d85017ae9f55c84d0e3c9",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/DiagnosticContext.cs": "eb06e6852b3585512202b1745c71c78b4ae8522f74a9f59f905d165529cd1950",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/TrimAnalysisBackingFieldAccessPattern.cs": "d705e68a227fb9e132961a4b301d4f66ac78d97d80c83aaa6228cc7826e3a512",
+    "tools/InterceptionAwareAnalyzer/upstream/ILLink.RoslynAnalyzer/TrimAnalysis/GenericParameterProxy.cs": "7dba8adf18eb09cd946910d456160078ad4edc0d9c8febc786dc61343947f9eb",
+    "tools/InterceptionContractProbe/DataflowControls.cs": "8c174ad91779af88a864e2fb17565fad0d4b60a2bd9ec3c5ec908f2b1c22bb37",
+    "tools/InterceptionContractProbe/InterceptionContractProbe.csproj": "75abb433c1063ed53c7fb02c058747c6d19269b968dfa0c7914ce4882e0a560c",
+    "tools/InterceptionContractProbe/Program.cs": "eaf4b5a5c5257079b2a364c95cdb0c58ff6010f604aa46e8f1c57e5acb0452c8"
+  },
+  "builds": [
+    {
+      "name": "InterceptionAwareAnalyzer",
+      "exitCode": 0,
+      "logSha256": "c52f564f59e693063a61673f82c04b74ce8a87c473964c5896926ad279178ac4"
+    },
+    {
+      "name": "InterceptionContractProbe",
+      "exitCode": 0,
+      "logSha256": "ea380a02639cd6e517af62e5e571484008bde2a785a66c9cc8f60e2be08417ec"
+    }
+  ],
+  "diagnosticFiltering": false,
+  "nativeOrFrameworkPublishExecuted": false,
+  "oracle": {
+    "Passed": true,
+    "Reports": [
+      {
+        "name": "unsafe-original-safe-target",
+        "OperationTarget": "Probe.Original.Identity<int>(int)",
+        "ExecutableTarget": "Probe.Generated.Hooks.Identity(int)",
+        "EmittedCall": "Probe.Generated.Hooks.Identity",
+        "StockAnalyzerDiagnostics": [
+          {
+            "Id": "IL2026",
+            "Message": "Using member 'Probe.Original.Identity<T>(Int32)' which has 'RequiresUnreferencedCodeAttribute' can break functionality when trimming application code. genuine trim contract.",
+            "Path": "/contract/unsafe-original-safe-target.cs"
+          },
+          {
+            "Id": "IL3050",
+            "Message": "Using member 'Probe.Original.Identity<T>(Int32)' which has 'RequiresDynamicCodeAttribute' can break functionality when AOT compiling. genuine code contract.",
+            "Path": "/contract/unsafe-original-safe-target.cs"
+          }
+        ],
+        "CorrectedAnalyzerDiagnostics": [],
+        "ActualResult": 21
+      },
+      {
+        "name": "safe-original-unsafe-target",
+        "OperationTarget": "Probe.Original.Identity<int>(int)",
+        "ExecutableTarget": "Probe.Generated.Hooks.Identity(int)",
+        "EmittedCall": "Probe.Generated.Hooks.Identity",
+        "StockAnalyzerDiagnostics": [],
+        "CorrectedAnalyzerDiagnostics": [
+          {
+            "Id": "IL2026",
+            "Message": "Using member 'Probe.Generated.Hooks.Identity(Int32)' which has 'RequiresUnreferencedCodeAttribute' can break functionality when trimming application code. genuine trim contract.",
+            "Path": "/contract/safe-original-unsafe-target.cs"
+          },
+          {
+            "Id": "IL3050",
+            "Message": "Using member 'Probe.Generated.Hooks.Identity(Int32)' which has 'RequiresDynamicCodeAttribute' can break functionality when AOT compiling. genuine code contract.",
+            "Path": "/contract/safe-original-unsafe-target.cs"
+          }
+        ],
+        "ActualResult": 21
+      },
+      {
+        "name": "unintercepted-unsafe",
+        "OperationTarget": "Probe.Original.Identity<int>(int)",
+        "ExecutableTarget": "Probe.Original.Identity<int>(int)",
+        "EmittedCall": "Probe.Original.Identity",
+        "StockAnalyzerDiagnostics": [
+          {
+            "Id": "IL2026",
+            "Message": "Using member 'Probe.Original.Identity<T>(Int32)' which has 'RequiresUnreferencedCodeAttribute' can break functionality when trimming application code. genuine trim contract.",
+            "Path": "/contract/unintercepted-unsafe.cs"
+          },
+          {
+            "Id": "IL3050",
+            "Message": "Using member 'Probe.Original.Identity<T>(Int32)' which has 'RequiresDynamicCodeAttribute' can break functionality when AOT compiling. genuine code contract.",
+            "Path": "/contract/unintercepted-unsafe.cs"
+          }
+        ],
+        "CorrectedAnalyzerDiagnostics": [
+          {
+            "Id": "IL2026",
+            "Message": "Using member 'Probe.Original.Identity<T>(Int32)' which has 'RequiresUnreferencedCodeAttribute' can break functionality when trimming application code. genuine trim contract.",
+            "Path": "/contract/unintercepted-unsafe.cs"
+          },
+          {
+            "Id": "IL3050",
+            "Message": "Using member 'Probe.Original.Identity<T>(Int32)' which has 'RequiresDynamicCodeAttribute' can break functionality when AOT compiling. genuine code contract.",
+            "Path": "/contract/unintercepted-unsafe.cs"
+          }
+        ],
+        "ActualResult": 11
+      }
+    ],
+    "Dataflow": [
+      {
+        "name": "parameter-removes-requirement",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+        "DirectExecutableOracleDiagnostics": [],
+        "CorrectedAnalyzerDiagnostics": [],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "parameter-adds-requirement",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+        "DirectExecutableOracleDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'Probe.Generated.Hooks.Map(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "CorrectedAnalyzerDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'Probe.Generated.Hooks.Map(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "return-adds-guarantee",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+        "DirectExecutableOracleDiagnostics": [],
+        "CorrectedAnalyzerDiagnostics": [],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "return-removes-guarantee",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map(System.Type)",
+        "DirectExecutableOracleDiagnostics": [
+          "IL2072: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'FlowProbe.Entry.Need(Type)'. The return value of method 'Probe.Generated.Hooks.Map(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "CorrectedAnalyzerDiagnostics": [
+          "IL2072: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'FlowProbe.Entry.Need(Type)'. The return value of method 'Probe.Generated.Hooks.Map(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "ref-replaces-contract",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(ref System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map(ref System.Type)",
+        "DirectExecutableOracleDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'FlowProbe.Entry.Need(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "CorrectedAnalyzerDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'FlowProbe.Entry.Need(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "out-replaces-contract",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map(out System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map(out System.Type)",
+        "DirectExecutableOracleDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'FlowProbe.Entry.Need(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "CorrectedAnalyzerDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'FlowProbe.Entry.Need(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "constructed-generic-return",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map<T>(System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map<int>(System.Type)",
+        "DirectExecutableOracleDiagnostics": [],
+        "CorrectedAnalyzerDiagnostics": [],
+        "EmittedWithoutErrors": true
+      },
+      {
+        "name": "constructed-generic-parameter",
+        "RoslynInterceptorDefinition": "Probe.Generated.Hooks.Map<T>(System.Type)",
+        "ExecutableInterceptor": "Probe.Generated.Hooks.Map<int>(System.Type)",
+        "DirectExecutableOracleDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'Probe.Generated.Hooks.Map<T>(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "CorrectedAnalyzerDiagnostics": [
+          "IL2067: 'value' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'Probe.Generated.Hooks.Map<T>(Type)'. The parameter 'value' of method 'FlowProbe.Entry.Run(Type)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+        ],
+        "EmittedWithoutErrors": true
+      }
+    ]
+  },
+  "prototypeAnalyzerSha256": "2974c1dab158b5b0d7d08f8fc1958df875ada93b469baaf22f44838b6aa85dd8",
+  "probeSha256": "d4b9d9d2f3cdf4e5c3eb54c23d01ed10726833bffe8568bb84aa5ae55ace90ef",
+  "changedSources": [],
+  "temporaryOutputsRemoved": true
+}

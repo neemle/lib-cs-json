@@ -512,6 +512,7 @@ namespace System.Text.Json
                     left._indentCharacter == right._indentCharacter &&
                     left._indentSize == right._indentSize &&
                     left._typeInfoResolver == right._typeInfoResolver &&
+                    left._useInferredMetadata == right._useInferredMetadata &&
                     left._allowDuplicateProperties == right._allowDuplicateProperties &&
                     CompareLists(left._converters, right._converters);
 
@@ -573,6 +574,7 @@ namespace System.Text.Json
                 AddHashCode(ref hc, options._indentCharacter);
                 AddHashCode(ref hc, options._indentSize);
                 AddHashCode(ref hc, options._typeInfoResolver);
+                AddHashCode(ref hc, options._useInferredMetadata);
                 AddHashCode(ref hc, options._allowDuplicateProperties);
                 AddListHashCode(ref hc, options._converters);
 

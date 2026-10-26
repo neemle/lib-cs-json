@@ -53,6 +53,7 @@ namespace System.Text.Json.SourceGeneration
                 ;
 
             context.RegisterSourceOutput(contextGenerationSpecs, ReportDiagnosticsAndEmitSource);
+            InitializeOrdinaryCalls(context);
         }
 
         private void ReportDiagnosticsAndEmitSource(SourceProductionContext sourceProductionContext, (ContextGenerationSpec? ContextGenerationSpec, ImmutableEquatableArray<DiagnosticInfo> Diagnostics) input)

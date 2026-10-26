@@ -1,0 +1,1368 @@
+{
+  "rawExternalBackend": true,
+  "backendManifestSha256": "45bfa027148fe3c4c0fd4bad2a8c6c08469003322eca45fcb3864c8e194cff12",
+  "runtimeVersion": "10.0.14",
+  "nativeAcceptance": false,
+  "normalPackageAcceptance": false,
+  "standaloneDistributionAcceptance": false,
+  "backendSha256": {
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/corelib/corelib/bin/Release/net10.0/System.Private.CoreLib.dll": "c195d617f6bade3cbcde488d47052c0e5140665fba81aa1db1fe9217d08efa01",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/corelib/corelib/bin/Release/net10.0/System.Private.CoreLib.pdb": "fc3dcb036084e55df416092cb7c9543254fd77b55f9a5fbf30db69f036efbd2e",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/generators/bin/Neemle.DBAL.RuntimeContracts/release/Neemle.DBAL.RuntimeContracts.dll": "0b93abd1ae33720295338cd403376806d865e40a57947ce9d131c4c45586a491",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.DependencyAnalysisFramework.pdb": "5cadd1e6ab7185a0ec3f6a894fddd4fae620ab1497b2d7717d1dfa4b4195659b",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.Compiler.dll": "0e97ea6d868e76903e9ebf4e9f75b61883855829a7160195d5fda4a1fb932761",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/libclrjit_unix_x64_arm64.dylib": "bc37174d9b0fa53687ba200e4986e5b4e5933a6827b920df1ce6351d7a0fb9f5",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/libjitinterface_arm64.dylib": "60c5bda0c951f339128971e20db783114028d208a998cb81fa4503f72dee0914",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ilc.runtimeconfig.json": "2a337a07fe83ffbb7bd9fe8da51b3388d5846b4eb485b66cf8d3daa0905478ed",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ilc.deps.json": "04f7a6a483816800c9f3d337fb99a970e37f05e85a974b62ac0743326f40c20d",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.DependencyAnalysisFramework.dll": "2de25d16809bffbb44bc8095401b67741f5f5bfbd9f6782c256a158d52c01da6",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.Compiler.pdb": "12e7393c659c75b7da34bdbe3071c90f2bd0d73f324ad75568361d2296272580",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.MetadataTransform.pdb": "41b595702e679cf4d8514851b83a7cb12f1c9ff2a2e42e1f11df7f85b2881b44",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/System.CommandLine.dll": "cd7fa6b61988d3151ef5764a59978c3fef9090dc58ef40323cc134aa31bbc410",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/libclrjit_win_x86_arm64.dylib": "f004ee9b7072e85bbacf0dfbb663cec97f1a11f4bec91cdba60411335383e0b9",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ilc.dll": "ee22ee50f985838c2f7367f982e73ceeafed14b6e2db7edc181f187818ddab14",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/libclrjit_universal_arm64_arm64.dylib": "ab7836a48806804fd3e91a9f38a5594dbcc9b1b82ba2fcfcd67281c98c08d67b",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.RyuJit.dll": "fa3730194fd35ed585ae5a1e861b784b76f808d13081397d46b5ddac570e8491",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/libclrjit_universal_arm_arm64.dylib": "9e1f4571cdfd3e637860dd8b0e7cf67324086d4168ee244357ec3f16ddbbb036",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.TypeSystem.dll": "75532fc13ce9bf8d1718829709aa0a24578ff688219db854d5eedad3f72ddca7",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.MetadataTransform.dll": "fbb9770649c671045dfbefdf0aa895becd0757d1e3067378bf6e0e0f81a4f9a0",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.RyuJit.pdb": "bb16a8d3983db917846ea6fd2734179c217acca98cca71a7f88ae235b6afd2d1",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ILCompiler.TypeSystem.pdb": "5fe948093863d6c3340fe835e9104a089e4d4585d818e7572f2ba3f1d0654181",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/libclrjit_win_x64_arm64.dylib": "221832904eea24bcfc5bce259b448ddaadf0d378750593be647d74a38c7410dd",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ilc.pdb": "c8ea4f9073d2ccb62f25f887bb8e2353a8a9869456b01905396175816ba01d44",
+    "/Users/para/work/xef/neemle/artifacts/current-runtime14/compiler/ILCompiler/bin/Release/net10.0/ilc": "a9212a0b6c1356a7c9650745bad05af35cb329cd9b4b6e3cd149dbd8821a0961",
+    "/Users/para/work/xef/neemle/docs/task-evidence/current-runtime-producers/result.json": "c3324c01abf153445ef1cbe805584c36badb82e38d19ba266854367609129e6f",
+    "/Users/para/work/xef/neemle/docs/task-evidence/current-sqlite-producer-r3/result.json": "68d5916816c035f9c13a27e5b9849b71f120a89659c4b4167ca71af8ed94e6bd"
+  },
+  "fixtureManualJsonTypeList": false,
+  "rawTargetsSha256": "a84f4087ce256c0d636d026504e1e63e1087a35ac9141289771a860337cfd151",
+  "projectSha256": "94ae2299d66595fe3c1a440bb07a66a3a584169d51cf94b230cfc1a050c06ee2",
+  "actualAnalyzerSha256": {
+    "/Users/para/.dotnet/sdk/10.0.403/Sdks/Microsoft.NET.Sdk/analyzers/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll": "e8456fabace9489d43e18093dbc842b4022e2f8802d2eff24dd6c9f932f4eb95",
+    "/Users/para/.dotnet/sdk/10.0.403/Sdks/Microsoft.NET.Sdk/analyzers/Microsoft.CodeAnalysis.NetAnalyzers.dll": "11554e693df565f3a8fee48e1bdea31ed776eef395efddae7a114b01578cad33",
+    "/Users/para/.nuget/packages/microsoft.net.illink.tasks/10.0.14/analyzers/dotnet/cs/ILLink.CodeFixProvider.dll": "80256cb40499087f87de0a5dab5b6d3598c5a8905c3b0321ecc8d3f6188b17bf",
+    "/Users/para/.dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/analyzers/dotnet/cs/Microsoft.Interop.ComInterfaceGenerator.dll": "5a8c98951c574a291d54d6c0973f4950e7256d5ce9203be77cbf1da87a28853d",
+    "/Users/para/.dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/analyzers/dotnet/cs/Microsoft.Interop.JavaScript.JSImportGenerator.dll": "ad9446e5a2926fd81b326f746b193c68725e3ad419f184d551bf50864e174e42",
+    "/Users/para/.dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/analyzers/dotnet/cs/Microsoft.Interop.LibraryImportGenerator.dll": "4b9a80ee25e00b5a8b2ef17054db035558abd3e2c3ee3e89672603e07274f589",
+    "/Users/para/.dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/analyzers/dotnet/cs/Microsoft.Interop.SourceGeneration.dll": "1584fd126577da58faf46232497d6cfe32e8db557252ba0eb7307530d8a59d80",
+    "/Users/para/.dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/analyzers/dotnet/cs/System.Text.RegularExpressions.Generator.dll": "fd3e72f57400296a842685b28f40b700a86b5fd98dde56b4a6cb2e351b3f3858",
+    "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/build/bin/System.Text.Json.SourceGeneration/release/System.Text.Json.SourceGeneration.dll": "263ee7ecf91666f0e9509e81d73db0f94baef2b7eb0d5d31c801ede374314917",
+    "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/build/bin/InterceptionAwareAnalyzer/release/Neemle.SystemTextJson.AotAnalysis.dll": "718415067a62fbf33aefde602705f42ebcb4bd413edc8e3bc5f07dbf19139a08"
+  },
+  "finalInputs": {
+    "responseSha256": "0dfd0db07e4b8eaa57a15aeb7d10a85851fc49cd0a131126486f6dc678e8d523",
+    "referenceSha256": {
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.CSharp.dll": "aefb7a4f33115e0b7706fe3ca2dc171786825c061a41f3d64bdb9babca5c223d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.VisualBasic.Core.dll": "000aabd3f82d461f0cf32029af8fab1fad06fb52c15754975d25adea385d92c1",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.VisualBasic.dll": "1b14a575c210b34e5c2472c1f829919fd53fa6017b3ef20753305e9f0190f16d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.Win32.Primitives.dll": "21011d02d026e6e3a8d0819e269c3068459a6ac17071b7e80b8d21232a70f541",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.Win32.Registry.dll": "5323d14c993e1a62553ae3f7d960653281b01ac469c7a67cdcb13494433aa69b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.AppContext.dll": "b6240c4f27562bb0b8b5c65ed84fe79794fec87b55c413ece285d9b4278eafe4",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Buffers.dll": "f1a98e6e82d7608c53946028cdc1b4303250a336e539e3df0ffc3b5f47305588",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Concurrent.dll": "2d06c3859cffc4409bab819d5106fe397ac4022e043179ee17a3a0c838b44384",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Immutable.dll": "a058c7c62a7f21db2ab486bf13778a174430727a53d23116f6ae2a10081a9985",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.NonGeneric.dll": "0e6b1e608f97dbb6a55191e2dab9a8af5a76dfbcb189dd46ccce3d8288378311",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Specialized.dll": "1d4e1a4376764105e998e93d17f892bd3e869f9990352f484031919b369f281b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.dll": "544a0c169ed3d5790d867b14ad3f9f9ed7a93662d1e15e5bc96cf94d6a2da504",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.Annotations.dll": "42ef30aa2c7ae3d3f7203753261524cd34fa2a38f3ca502abf6fa30e5751bd51",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.DataAnnotations.dll": "bea2a771a3e57c9a0fc700ca1f594b268a97f0360ac8473526d54437e1f6c6d4",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.EventBasedAsync.dll": "2b2dd341f56609d6d97ac8610e173cbabd9162d502b15df1e39384c912834163",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.Primitives.dll": "f8c7c99511bad7232376b7af5fe2ae144afd92fd9f9774c687ba186f6f642acf",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.TypeConverter.dll": "c4b1352c1a5088f3ea4f9d3d9ccb5faea28e2ecf73ef425880c426ae152364da",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.dll": "4a7cfd7d2181ff656c64daf61ff995ba2efdeafc50f9986faae86b2148293da5",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Configuration.dll": "dacfdb6be7740424b0d9eef72fe8b412aadb9fb8f209b7aa685b37d4588576ce",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Console.dll": "eae1f36c988f938024cfe41a847d1b9c9a7900adb67696bdc9ba68c96e1bed50",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Core.dll": "a6059ed7dd7bf7b26ec6eb1d6e83649aab32e82d26b601415c01135c67819905",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.Common.dll": "f4cc55c694ce91602ebf9d6e52d885663ec16dd74ff877cb04b6192eb65cea86",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.DataSetExtensions.dll": "16facf58b8dd0fc5ab17f94adf74cd5981056bbd87a485a954973cda3d9e0ba5",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.dll": "9d96f285ae19806ae96be2853e9751cb616b0fd31d3720d7fd134116fa911328",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Contracts.dll": "9327d37ee03c1912e3e24a81dbe046792beabb7fb28b8ad30f0ff15ccccc9141",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Debug.dll": "418d4eec4152b1b2965c826f86d1a6c2bab0e7982a17036a6b1d0fcaa24e0066",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.DiagnosticSource.dll": "85084d3e9b57009610153a5a5ba634e01f248aabf420657b84ffc7fa3267c51a",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.FileVersionInfo.dll": "8e12d8b1d757a7e93f59423289ee460e533d87610592af3d71d65f561a6f585c",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Process.dll": "92922752d676f36cabdae611fc6c887e8796045db116abd1103c4a96634085d9",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.StackTrace.dll": "ebf0ae8e6cc4d952ab014dc2b74e6e92e70ac5711763edbf9402743b0335b5da",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.TextWriterTraceListener.dll": "5356121b3cf53b832b5dcf9a7e06bf531e6ea8bcd7973c9a9c14f785469d8021",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Tools.dll": "b608f19cca5a6cf9b6299c7697ca8675f21159d9c38bbd05ddea08fcfabf8bd6",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.TraceSource.dll": "73196ce99fc59bb69c3aa5da8786f8d7881f17c101f0354ba2b607a9ad4f5f30",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Tracing.dll": "35c90fdf6a6ad9a062f60cc1a43fb95fe4a4d1388b6cf0e7546dacb98038a44b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Drawing.Primitives.dll": "12a0d2f9d39cc081e76806d56e75f5b7f623701ea749e304943b060093301562",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Drawing.dll": "a7badf418b8750d52333d1fff23d754aba3281ce84a1c218637a1f5b4c9a8c4b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Dynamic.Runtime.dll": "39312fa9ff8b213e16bd374274ddf15523617d260981d2dd4bddd186950d577e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Formats.Asn1.dll": "542ae3fe4ad3082a648680ca6b3dba6e7b78dabc9ff012bbb9cb4748afd5e754",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Formats.Tar.dll": "6d9291f5785a80da6b2ac9e10bf23a7698f3c9506f4f49fe5cdc1849b387f0e2",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.Calendars.dll": "f68cd76aa9ac1cd5be4c1111dfb98e52869fd6b774a009da1eaa89051b46b3b2",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.Extensions.dll": "2840cbf2d2ec1624bc06ea5c9d67d13df3dbe5ad90892e75477cf888f86429eb",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.dll": "599f561ad2fa0e0cd631ea51d9d7d4d55806e31e13f21e904b33f9646e2953b2",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.Brotli.dll": "99a4f48c06032e8793f9c62f2d87f0b5c5847f1c82a8fa2b127d351e0474c791",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.FileSystem.dll": "40dbbe4f8be427e24f74fe13faa7bf48f782f7f49129fee88cf367bb85f340b2",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.ZipFile.dll": "1ed06bc279babdd3168535b9a0b175bfb1c970697295e045d5493c8a6cb1e885",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.dll": "c39a721902caa295ae617ec6fa2daaae922051b7ea4c99183077f7697ee6c281",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.AccessControl.dll": "7921e0a65ba856b2b45875cba0e87e54bb01376e0ce79a1f15218525a9db47ed",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.DriveInfo.dll": "086767840f30f284f9a5ea962ca31d8021d944a849e547ef783abf34abb65402",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.Primitives.dll": "82db1a414b17ce4bb9605962cf4df8bca3ed41872056e0f283c1dca21654290e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.Watcher.dll": "309d905ea0f9cb82c3b0ef104d0d6c54a3d5f2a3abb1cd34045950e137694f05",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.dll": "ce1a2003fd8da1e736ef74c98b56b4c7d00118724596adb3b4b4d941d3b6152a",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.IsolatedStorage.dll": "1f9abed7bf3dce9dcaef90a55746f4d2cfb8fac63b6c714d4c5e82dcec7f16a5",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.MemoryMappedFiles.dll": "183d68b336093aa203ef3b8e6e0b9205d180c276025bea8f584efdfaf14912a1",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipelines.dll": "81a8b655a263da602022daaec2503d79e2c5f4fd6481e2093b65381ab97119c0",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipes.AccessControl.dll": "fc48fb8a886167cae54f65beb78d76986a3c0f788c51916b12cb5476963d4623",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipes.dll": "fa1dcf27e9800bec02911c572ec096eb3d293bfeed278315173afec62be06513",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.UnmanagedMemoryStream.dll": "341160946793f67478fef6ae79bde446dc71aaa786d8c6d7f1cb073a036e3480",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.dll": "45f974e48d8e5591aafaff97cc7b03751ede47c4a1f18ecc2262e6f2e3dd631b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.AsyncEnumerable.dll": "343f07c3ebbceb3849dbc70e2dca8a187c1484bfb666fbefb451b49817f7c9a4",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Expressions.dll": "1aa06699d70bb6ac6f54d6841db2afb697be049e88b232c9927be14039500a32",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Parallel.dll": "c11a72778f1523e06865308fbdc9317d7d8445dcf63c5b6508498e086d888d92",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Queryable.dll": "656fbd84a65f1203eb4b906e09d37f17670e5ec77bbe1537df88d49eb948ebf7",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.dll": "65fba915ed52218a707665154dc9de2fab64f5e92a6c01103b8df8a2e90e2470",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Memory.dll": "337d23501e53bf5df5698ae0e5efd48cc2b362b173bd1fcec5aca5663b4ec374",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Http.Json.dll": "a1fe947875325674a83160764d194fc3d68fb002100dfcb00f58aa4c5f173882",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Http.dll": "ce439ee73b3a78aaa7db68a73dd88d65cf96c0abe3ef87f498101cd5a2313514",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.HttpListener.dll": "fd4a71bdbe0b6a17cb621f343f81a399b2ee89fe1a5db04602cda04ebb2a0278",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Mail.dll": "a5cbf3773a1042b3567dfb0e5c0ea843d8f93f07c9e277942db583d406f98d77",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.NameResolution.dll": "bf5d8c6c004031dbcc6c8dda82ec1e706aeb862d4aa53418dd86113077ff287a",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.NetworkInformation.dll": "17143fc50fb97c835510a30760a9737f181fdcdccc30eb2b60a04529030ba240",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Ping.dll": "f7bf8c274f3d4ee590d44e37cd557955f39a59bc383ca30319d5a646a0797f13",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Primitives.dll": "6fbab9a89fe65b66487317c539d8bd93602765f733f36e6f21828ab8ce996ecd",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Quic.dll": "1e140855eef64ffbdbb680e58cdb6eedcaf0d091967fe0c41ba9f70d6296d99a",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Requests.dll": "d0a217c3590d39b299e54e7e326839fb89c4308bbb41cbe166935f98fe1f9cc6",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Security.dll": "53cb7e3471c180de675188a5c589a72422f36f77efbc0b193b4b09e797cfa671",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.ServerSentEvents.dll": "bc517ba0d15cbfc0515cec6e3d38eecc0362370f7b7fdf11a1408280ab6c43e1",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.ServicePoint.dll": "882f6d4afa228fe7991b421cc44367fd4bb29bc6f3df2bdb52613097a231a801",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Sockets.dll": "3c57717b26bf2337b9f44d016c9a55449a3bbb2f905f6052ed9eee006de92169",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebClient.dll": "07594a260875fdc911cf96fc8c36a0bbad723b2672206b0d8dedbef94e599be0",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebHeaderCollection.dll": "e3226cdaee0ff07de32ad57c705ec10a9bc24f5841c386646ab8729a3b27a07d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebProxy.dll": "0e097faf77fcec9ebb719b377c0870ee3c674cfb364e905ac45997be0a319a3c",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebSockets.Client.dll": "13fa73c6edae819edf3c07228ad401a29e2175a219c9b55940e2b3a908f91e3f",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebSockets.dll": "66f1304420d472a069197d28f5776a11f77423b20a71b69315adf2af9c2abed4",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.dll": "4596e5ee7e768c5de73e5543eaa9a539455b74335a11c2f569e17f23c0e342d0",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Numerics.Vectors.dll": "125353f84a030a1fd1d4939dff21c6e01c8a541cdc6ec5fab3688b37f1ae4199",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Numerics.dll": "e4d151711d80b35ec80128bb2ab2c10b86a556c2215e8f1d4a39b699d69376ac",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ObjectModel.dll": "eff8feff9588bd4dc97a4da9b2fd12898ea18ebcb59402743f859bb5cd664ada",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.DataContractSerialization.dll": "63547dff5449c8b32c8470abb8158d67462be2724d6c6c908dd327f6d53da207",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Uri.dll": "d6e285564f112319e2312a71f1a7e519d573378a15ef86bc6d7796f96b40df7c",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Xml.Linq.dll": "ce8aac059ac27b68a2505ff07d6454889baaf182e4769b25ab75c54cf67bbbef",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Xml.dll": "3a0f623f5fd49fe9b5c728872373f471179e2be5486eabac86991cf6c454147e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.DispatchProxy.dll": "8e489d619518457b9409874894a81bb7325ac8134c0efc21f5df12db8f7e9929",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.ILGeneration.dll": "0a1c8885662642d7cfacf160ffd33d7537e50c0009be4c24b28c097d22481cec",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.Lightweight.dll": "4650affd03cc07f0b73de807f186f85296fb5bdc1ac343065353bd26779fa175",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.dll": "d9805782fff7d37d345b050a1a0874baccc833928951acae893b674b31218ecc",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Extensions.dll": "eb8f45aa25b7fdd5247a3b98e2af79e7b7b9923f224c10058d95f3ec76138ca5",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Metadata.dll": "ecbfdaea7eacfdd7106ddd93c17ff7e1723883e77bb15748df4666ab825c3195",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Primitives.dll": "2957f284f87e1176738849dfecc84189dfe4ae13894f1d5cdd2ee470937e1537",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.TypeExtensions.dll": "a21d6f17781fed23a943d8bc10fdde5e391423f005b74681890a690c1305524c",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.dll": "9bac39fb7e3d60d8fb6c924a4bca61afe1d5bce31919e1ca690ee8a6b69f98b3",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.Reader.dll": "ed930cd36287bac7daf4ffbcea00111d334dce05afa04abb5f0a9ba43dc772ea",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.ResourceManager.dll": "06880e29ba04c6b902f03c0c76af834b282f3a23f696a4548ae14da9a6a36440",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.Writer.dll": "c455a019e9329f6e446dfd6d512923af0eae21f03fcd1ff4d2286f193231eb1f",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.CompilerServices.Unsafe.dll": "0f7b52f07e5c54e5f0d51c732b853680b85fb174bb8e52f486e1edc81eeb8d88",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.CompilerServices.VisualC.dll": "45449ef75da7f6f5e65799a21d2e51fcf8e3e9af66cea9a46c40c42d434147d6",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Extensions.dll": "94a25289afedfd29405f8dcd013e0a66324c9c7cf3ddd240ef0275b5b3912807",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Handles.dll": "e486edf170d635bf01502108b6366af83da7c3c2d40a4bc0055eaabd9b94f1f5",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.JavaScript.dll": "d6306bbca686026e39cd60d93912afbcdfa98544d3167b85fe45cfa594a2ccc7",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.RuntimeInformation.dll": "2de5c1eb6f4892a8ba3d3217aa9c2eff8ad083cc7c34bbc0e7638cd16d07360b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.dll": "894e475cfc52d04c97f7c208cd6eaf0a428f86de5086511900e0c96a29649836",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Intrinsics.dll": "06c8ca6875c201ab8a1cc8bd3eb4641119c764fd987c7ee00d7b0c1a24052235",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Loader.dll": "64d41a26302e6969b8065d2c2643ce2a70f96f8d96e7a4009ab7f21abeaef40b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Numerics.dll": "e2ccfe3261005e330541e0182f1307e1fa3ae54c5374e1dcae1b898d0e3ac431",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Formatters.dll": "6f237ea26151dac4d40f4e13c49ec099a67d105dfdf6f7b1efb90b4a20e1b954",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Json.dll": "ef82a10c038724ff48f968717eb51851aec0420107cc6c38e41152688ad529a9",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Primitives.dll": "47f189674b8df5cb08bbc1a41c16a6531fa44ed5b87202565fdf783221925e39",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Xml.dll": "a06dbe0c1c0e031978c47b0ccc32ab107b56710054cb6f79c28143f1f1e624ac",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.dll": "b28c65683be4397423690da613762d656b7334fa34cb191e1e2f14119521d337",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.dll": "c32d8e757bc2632f97b2c1256c2e04a59a81b6d25171c6b830d96f874d003a65",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.AccessControl.dll": "153b28fb39103c9035252a2c1f1d9314148bc936a3ad0918d53e188c996f992d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Claims.dll": "ca9b938e9bb66fa8f846331cd7aa0c95a2631ee3cd3367449cc64b2e513e1b38",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Algorithms.dll": "2447953a72068dbdafb134a9538e43c6b0548f6e3e0902d5137df7272e8ea207",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Cng.dll": "85f6156821887887a128f206422f17f7ab18f95102e46ce91882ae54713e0595",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Csp.dll": "5e0b9aea1ee6eb0e884fd3336d341c78faebadffe7d45ed41615ead1f24b9101",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Encoding.dll": "bcd75cd58de6e787d966c106a0735ae791bca95c0d65bc6d45626552b9fd351b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.OpenSsl.dll": "a644d45e7368e1ffde9dcdf03bd4a9b7d3db347f242c9d061668e3e320df0c45",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Primitives.dll": "ad4590074ade4556177160bcddd31fcbdc0fb4b7c1aa1aec14574bc19783d41b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.X509Certificates.dll": "52a69436074bf96118c6a8044ba22a7701e9d713f77bf555270148cdca085d07",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.dll": "b01384471f2ce67815c74c14f9438a61e6d7b4c3576f22cc60476beb9a02a395",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Principal.Windows.dll": "4723b2c9915f50cf740b62c0ae7177803b3131ebc191a8b94a818f4bf037a802",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Principal.dll": "c5d89c345498d40914ca0dc522063d7dbf2887fcfc16477dbd58b8ab2fcb2e4c",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.SecureString.dll": "02d383dc7deac0c8e7c14a6560eedb25b3783ea1b72032122f55a7425fdc62de",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.dll": "07e8076004f6defb5042d5e4f61e11ac8b26e4a43bbe3b38d1911a2fa1aca692",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ServiceModel.Web.dll": "0bece0fb3276b06bff068427c969af89ec3548138a870ea3d3fc32bcb03ce0f5",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ServiceProcess.dll": "5991736c7ef4acd5e0f08e757291000f4799fa9b2ca2bad1ddea3e1a722f8250",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.CodePages.dll": "defe6e61b7adb43df8277b9ee218093761440f711f19cbfb8b64b32ddffc0f16",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.Extensions.dll": "e5c23ceec3f8ffc5b3e2e2fc6da26f2513b33e155394c26c7296fe3c7d8a9724",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.dll": "66f0d4ac831cfc6bd238da5fbd830d9b7c18aa2cd714df7825acfd938a48dc5e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encodings.Web.dll": "bc2e95afe9b58a9d6e39443ca52629925cb98a2ac7b31890b9474aac89fb3054",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.RegularExpressions.dll": "398d4ea6a0adda105ff10acf8d2409d5a5ba9f2359ac4b045f9c96eb6b24efef",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.AccessControl.dll": "29441d736735f61daa27a4f0a8cd50d94bb19d67b7834a6a5e25a45c408bdb8b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Channels.dll": "4425b2e2f58c0e653d659f4cfefece4c014f63bc854d722e322b2cb1e29b6370",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Overlapped.dll": "962acc0c15eab13166083889cd7e9b17933624825ddfc17499576143db03a1e4",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Dataflow.dll": "ab6ca866888528f6f93452c079494be47f2ddd9784145f03177c5d99f307d768",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Extensions.dll": "69f8245362a7e96183a0b87d9feaf9155e1117394c2e660719fdb7a5610d2b94",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Parallel.dll": "5743c37294034b1173e815ef07988ee4b34186989f60315752af54f9df150baa",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.dll": "bc3786d93d452a6f84baeb24c0cfbdd8678234fafc63980b9dd4184bba5fbd4e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Thread.dll": "8dda8edb79c042363c1e29ff1ea2d5a9fa4240a7358ffe844190d450b1dae5fd",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.ThreadPool.dll": "92e5b03e68859b497d0fb2f8982630f1f5f2fd3343a80ce773416cab8fcb992d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Timer.dll": "c88b5636f73ce58c5f02c1db120c6f57de5287ad877729523866b9d7fc2127b7",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.dll": "e7b1e6ca2bdc866d5860012ae5b43be0f675eb00505776a5d3fb4cf50e0bdc4e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Transactions.Local.dll": "9bf571f2427ef3822c37f31e56ba83940a7480fcfc849fa9b6d7dbf3ee572326",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Transactions.dll": "67d84daf0ae7c30287db4f172838a1ecdf6199eedd9f86e4d6632d8dec93d0c9",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ValueTuple.dll": "fc0880dcff9bd3ef2fffe0000ca6aa7b90491f64d1de9f040e0c53972758023a",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Web.HttpUtility.dll": "3a2950736d71046d0d2ccc4b36222551c58940cc0ab3fdf4e711d6dff29cfb0c",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Web.dll": "da839f98cc31a6d1cfb7f4db3a19225a83227099cefcd40b4e706e55bb6a1065",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Windows.dll": "6fa01fe1a35fd73c0a0ac3dd0de6219a19f5d7fd5dd684fbe13878895a66320d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.Linq.dll": "d5c8f7b44b6f75b01c263b4446f7d7f0c1d809797769f1085faea8e0a969ea6e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.ReaderWriter.dll": "f33069027de17059c50d6ba52639478ff0716c185533c60a024edc41e25fedaf",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.Serialization.dll": "1758dbebe473e6b277d032fbbfb3ebd1a8aee9418a33683324cd0de04389e3cf",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XDocument.dll": "1ba67deb0723b5ef5a4d9b62cb82692a364a3783a9b0dcc7074a4519517fb5c9",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XPath.XDocument.dll": "19412bdae0811654fa7fa75730ab194fc383de49011fc93874f5f8761b91040a",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XPath.dll": "e98b17faad58c3d875c6ba086903fc6f858bee6805e657ebe3e52c0b9009c359",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XmlDocument.dll": "48d5169ca1725fc9f8625ca0c1b6ee900438804cab7287bd419118e310babb5d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XmlSerializer.dll": "e9461fb253512e39ec17ee160fac96c4eb55eaa166bb0803f65b0de1625ba63f",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.dll": "97bc251432e638e135d046bdfe76a02eddd255cc71a0cb44f11eacf14c322112",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.dll": "955397cb937a7666dda9261d9642863a6cb36233b78f5c0127110e8a4939ba9e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/WindowsBase.dll": "4fa5c53b211c0f465bcdbaca09c1d8f01a1a655bcb187206c22444905c34331d",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/mscorlib.dll": "0cc8516cf286f226acef656d525f244f97b4ce6750b55f7316e32aaebed8c18b",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/netstandard.dll": "cfdb27beeab936f6acf860eb9271df753b626f456cbceed1ffd930841c9d31f9",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.Reflection.Execution.dll": "f9fb78abb638acbbbe6b6d8dc0e55a7eaa7be369172223ffe9802aac5a9c9a6e",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.StackTraceMetadata.dll": "ffac440333f5ca8e57e6231566fc67b93fad1c3b73207220cd0662c76f592329",
+      "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.TypeLoader.dll": "87513a43bb4c573b40029657fa5af061a541768184c0e9da7e08fb8c880d525c",
+      "/Users/para/work/xef/neemle/artifacts/current-runtime14/corelib/corelib/bin/Release/net10.0/System.Private.CoreLib.dll": "c195d617f6bade3cbcde488d47052c0e5140665fba81aa1db1fe9217d08efa01",
+      "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/build/bin/System.Text.Json/release/System.Text.Json.dll": "32888cec6bcde2e82ee2424a16b422790467c188d2d4df1937399356cf70d328",
+      "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-consumer/Neemle.DBAL.TypeMetadataProbe.dll": "b401d9b887ec12fd7e3eb1a6e3bc580af5738fe2b6e99b882d06e6093776c48d",
+      "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-consumer/json-bridge/Neemle.DBAL.Inferred.0a496f88be5431deae046783.Queryable.dll": "d874c51a715a42fe9f5762a8d32ae2be0e076b5c3b75f1a05c0d528f862da727"
+    },
+    "entrySha256": "dbf7cda0ff292a4644a4cd4765f7e4dfb4208f8015f90b715a68b3ee17110c6a"
+  },
+  "actualResponseArguments": [
+    "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-build/obj/OrdinaryJson/release_osx-arm64/OrdinaryJson.dll",
+    "-o:/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-build/obj/OrdinaryJson/release_osx-arm64/native/OrdinaryJson.o",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.CSharp.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.VisualBasic.Core.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.VisualBasic.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.Win32.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.Win32.Registry.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.AppContext.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Buffers.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Concurrent.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Immutable.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.NonGeneric.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Specialized.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.Annotations.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.DataAnnotations.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.EventBasedAsync.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.TypeConverter.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Configuration.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Console.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Core.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.Common.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.DataSetExtensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Contracts.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Debug.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.DiagnosticSource.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.FileVersionInfo.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Process.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.StackTrace.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.TextWriterTraceListener.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Tools.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.TraceSource.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Tracing.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Drawing.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Drawing.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Dynamic.Runtime.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Formats.Asn1.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Formats.Tar.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.Calendars.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.Extensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.Brotli.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.FileSystem.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.ZipFile.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.AccessControl.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.DriveInfo.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.Watcher.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.IsolatedStorage.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.MemoryMappedFiles.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipelines.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipes.AccessControl.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipes.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.UnmanagedMemoryStream.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.AsyncEnumerable.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Expressions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Parallel.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Queryable.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Memory.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Http.Json.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Http.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.HttpListener.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Mail.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.NameResolution.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.NetworkInformation.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Ping.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Quic.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Requests.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Security.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.ServerSentEvents.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.ServicePoint.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Sockets.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebClient.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebHeaderCollection.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebProxy.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebSockets.Client.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebSockets.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Numerics.Vectors.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Numerics.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ObjectModel.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.DataContractSerialization.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Uri.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Xml.Linq.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Xml.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.DispatchProxy.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.ILGeneration.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.Lightweight.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Extensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Metadata.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.TypeExtensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.Reader.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.ResourceManager.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.Writer.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.CompilerServices.Unsafe.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.CompilerServices.VisualC.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Extensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Handles.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.JavaScript.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.RuntimeInformation.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Intrinsics.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Loader.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Numerics.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Formatters.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Json.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Xml.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.AccessControl.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Claims.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Algorithms.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Cng.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Csp.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Encoding.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.OpenSsl.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Primitives.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.X509Certificates.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Principal.Windows.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Principal.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.SecureString.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ServiceModel.Web.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ServiceProcess.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.CodePages.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.Extensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encodings.Web.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.RegularExpressions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.AccessControl.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Channels.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Overlapped.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Dataflow.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Extensions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Parallel.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Thread.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.ThreadPool.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Timer.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Transactions.Local.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Transactions.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ValueTuple.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Web.HttpUtility.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Web.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Windows.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.Linq.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.ReaderWriter.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.Serialization.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XDocument.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XPath.XDocument.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XPath.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XmlDocument.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XmlSerializer.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/WindowsBase.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/mscorlib.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/netstandard.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.Reflection.Execution.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.StackTraceMetadata.dll",
+    "-r:/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.TypeLoader.dll",
+    "-r:/Users/para/work/xef/neemle/artifacts/current-runtime14/corelib/corelib/bin/Release/net10.0/System.Private.CoreLib.dll",
+    "-r:/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/build/bin/System.Text.Json/release/System.Text.Json.dll",
+    "-r:/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-consumer/Neemle.DBAL.TypeMetadataProbe.dll",
+    "-r:/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-consumer/json-bridge/Neemle.DBAL.Inferred.0a496f88be5431deae046783.Queryable.dll",
+    "--targetos:osx",
+    "--targetarch:arm64",
+    "--dehydrate",
+    "-O",
+    "-g",
+    "--exportsfile:/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/native-build/obj/OrdinaryJson/release_osx-arm64/native/OrdinaryJson.exports",
+    "--export-dynamic-symbol:DotNetRuntimeDebugHeader",
+    "--initassembly:System.Private.CoreLib",
+    "--initassembly:System.Private.StackTraceMetadata",
+    "--initassembly:System.Private.TypeLoader",
+    "--initassembly:System.Private.Reflection.Execution",
+    "--directpinvoke:System.Native",
+    "--directpinvoke:System.Globalization.Native",
+    "--directpinvoke:System.IO.Compression.Native",
+    "--directpinvoke:System.Net.Security.Native",
+    "--directpinvoke:System.Security.Cryptography.Native.Apple",
+    "--feature:Microsoft.Extensions.DependencyInjection.VerifyOpenGenericServiceTrimmability=true",
+    "--feature:System.ComponentModel.DefaultValueAttribute.IsSupported=false",
+    "--feature:System.ComponentModel.Design.IDesignerHost.IsSupported=false",
+    "--feature:System.ComponentModel.TypeConverter.EnableUnsafeBinaryFormatterInDesigntimeLicenseContextSerialization=false",
+    "--feature:System.ComponentModel.TypeDescriptor.IsComObjectDescriptorSupported=false",
+    "--feature:System.Data.DataSet.XmlSerializationIsSupported=false",
+    "--feature:System.Diagnostics.Tracing.EventSource.IsSupported=false",
+    "--feature:System.Linq.Enumerable.IsSizeOptimized=true",
+    "--feature:System.Net.SocketsHttpHandler.Http3Support=false",
+    "--feature:System.Reflection.Metadata.MetadataUpdater.IsSupported=false",
+    "--feature:System.Resources.ResourceManager.AllowCustomResourceTypes=false",
+    "--feature:System.Resources.UseSystemResourceKeys=false",
+    "--feature:System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported=false",
+    "--feature:System.Runtime.InteropServices.BuiltInComInterop.IsSupported=false",
+    "--feature:System.Runtime.InteropServices.EnableConsumingManagedCodeFromNativeHosting=false",
+    "--feature:System.Runtime.InteropServices.EnableCppCLIHostActivation=false",
+    "--feature:System.Runtime.InteropServices.Marshalling.EnableGeneratedComInterfaceComImportInterop=false",
+    "--feature:System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization=false",
+    "--feature:System.StartupHookProvider.IsSupported=false",
+    "--feature:System.Text.Encoding.EnableUnsafeUTF7Encoding=false",
+    "--feature:System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault=false",
+    "--feature:System.Threading.Thread.EnableAutoreleasePool=false",
+    "--feature:System.Linq.Expressions.CanEmitObjectArrayDelegate=false",
+    "--runtimeknob:Microsoft.Extensions.DependencyInjection.VerifyOpenGenericServiceTrimmability=true",
+    "--runtimeknob:System.ComponentModel.DefaultValueAttribute.IsSupported=false",
+    "--runtimeknob:System.ComponentModel.Design.IDesignerHost.IsSupported=false",
+    "--runtimeknob:System.ComponentModel.TypeConverter.EnableUnsafeBinaryFormatterInDesigntimeLicenseContextSerialization=false",
+    "--runtimeknob:System.ComponentModel.TypeDescriptor.IsComObjectDescriptorSupported=false",
+    "--runtimeknob:System.Data.DataSet.XmlSerializationIsSupported=false",
+    "--runtimeknob:System.Diagnostics.Tracing.EventSource.IsSupported=false",
+    "--runtimeknob:System.Linq.Enumerable.IsSizeOptimized=true",
+    "--runtimeknob:System.Net.SocketsHttpHandler.Http3Support=false",
+    "--runtimeknob:System.Reflection.Metadata.MetadataUpdater.IsSupported=false",
+    "--runtimeknob:System.Resources.ResourceManager.AllowCustomResourceTypes=false",
+    "--runtimeknob:System.Resources.UseSystemResourceKeys=false",
+    "--runtimeknob:System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported=false",
+    "--runtimeknob:System.Runtime.InteropServices.BuiltInComInterop.IsSupported=false",
+    "--runtimeknob:System.Runtime.InteropServices.EnableConsumingManagedCodeFromNativeHosting=false",
+    "--runtimeknob:System.Runtime.InteropServices.EnableCppCLIHostActivation=false",
+    "--runtimeknob:System.Runtime.InteropServices.Marshalling.EnableGeneratedComInterfaceComImportInterop=false",
+    "--runtimeknob:System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization=false",
+    "--runtimeknob:System.StartupHookProvider.IsSupported=false",
+    "--runtimeknob:System.Text.Encoding.EnableUnsafeUTF7Encoding=false",
+    "--runtimeknob:System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault=false",
+    "--runtimeknob:System.Threading.Thread.EnableAutoreleasePool=false",
+    "--runtimeknob:System.Linq.Expressions.CanEmitObjectArrayDelegate=false",
+    "--runtimeknob:RUNTIME_IDENTIFIER=osx-arm64",
+    "--stacktracedata",
+    "--scanreflection",
+    "--methodbodyfolding:generic",
+    "--nowarn:\";1701;1702;8002\"",
+    "--warnaserror",
+    "--warnaserr:\";NU1605;SYSLIB0011\"",
+    "--singlewarn",
+    "--nosinglewarnassembly:OrdinaryJson",
+    "--resilient",
+    "--generateunmanagedentrypoints:System.Private.CoreLib,HIDDEN",
+    "--feature:System.Diagnostics.Debugger.IsSupported=false"
+  ],
+  "rawPePdbChecks": [
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.CSharp.dll",
+      "pdbSha256": "9f5bfb3f3688a1bd1e5bb7ef4ae1d0d40eef055b57c295b6ddb06b8d230b0220",
+      "identity": "02c803ede2bcbe2e47b93e5c8086edb411a83e04"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.VisualBasic.Core.dll",
+      "pdbSha256": "7eb9d771464d5154c3b86ab6bd3f54aefdae40efa72a0f33463272cbd994ad10",
+      "identity": "fd402597a4588939a4d96c4f575514b788ce107c"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.VisualBasic.dll",
+      "pdbSha256": "f1e8895dfb441f3a736388b1394a22a28843f988d7ea9beed33b41bd437c5b42",
+      "identity": "faef0f8ad45d2c4f929d8ad6d973b7609494269d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.Win32.Primitives.dll",
+      "pdbSha256": "1fde78cf104b945d2f2790e2af81e918e5f8edfa7f5a895784e193b85dcd282a",
+      "identity": "13fde5dcf095500c442748fbda0182cf51418027"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/Microsoft.Win32.Registry.dll",
+      "pdbSha256": "7b33694e0173ec63b7b91d08e33f1dce31d93f5949109aed44cb315b2d7131ce",
+      "identity": "46c7d2b1d02d3c458399939478c655e5628d4393"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.AppContext.dll",
+      "pdbSha256": "18d5f230fef833a6c594b96b50d21670e2002d873ee42951a6e8c72b60d4f1ef",
+      "identity": "a98ae8c4849a3149beeae9045cfe7edcbca40deb"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Buffers.dll",
+      "pdbSha256": "cfedf167fe7347ec4b62f86c9b9e7c7555674fe22067476fb83e8658c649fdc9",
+      "identity": "77e8e8d05304de47981c92c5e00860352b6cf4a2"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Concurrent.dll",
+      "pdbSha256": "fea68e0a3edf448443dc79b2c5d3529495dcedf98c4d725e7838a2135076bcfb",
+      "identity": "d5da16b0bb45f7f5cfeb1477f8ab543dd56c9e47"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Immutable.dll",
+      "pdbSha256": "40f0cc3a819fe66639955d00c37424efb2a82f8dc7d218fa346ed4499a8915fc",
+      "identity": "609fdda71b8af3d8fb1084fe1f9c0fda0fcc8590"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.NonGeneric.dll",
+      "pdbSha256": "92db079317263364127d21e926e8bc6c192aa77440da60c87e40868f8d71cf94",
+      "identity": "62c04060777eac5458396188687685e068274774"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.Specialized.dll",
+      "pdbSha256": "30bce888f89f52a38c90e9d27742d4b45da8203306f4a415968112b50b4706bb",
+      "identity": "4518c3700035ab670859fb6f5638837be7aedf2c"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Collections.dll",
+      "pdbSha256": "dcb4b911cdd8a636015c9c38b120574160c30cc37a50a638641bcc2c20e2c146",
+      "identity": "880492a2c5a40515fb9f5073b653bfe8b401fc56"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.Annotations.dll",
+      "pdbSha256": "3c86a262d74402ca5c8d26d86f1878b50f93d00c75fc80ac361155a8c0a4e6a6",
+      "identity": "9b20ea3d38fa0c18a56cf570f3f0093822b07c59"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.DataAnnotations.dll",
+      "pdbSha256": "245a302eb14e1f3bfe9b105087a5a63240ffcd06986b265d1c74352589414832",
+      "identity": "6c8abfbae6be5e488224769fb376b1272a6d1ffc"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.EventBasedAsync.dll",
+      "pdbSha256": "b17c898cd068442f9a307be0ae8bf988846bf9c0b63763b0197e09b246df5e3b",
+      "identity": "95643b4a238fca82036b5e143bb06d3253b09d58"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.Primitives.dll",
+      "pdbSha256": "77b739b4bca589ee0370d20615a5f54dadc123201d803c7651aaf443c812093b",
+      "identity": "5eefe0cae207375d23d1e34e38396f66ca73a702"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.TypeConverter.dll",
+      "pdbSha256": "72c2c64b176871e7eb6dc3a6bb0bb53a2cb629a0c3aec02eaabbd92b669caa30",
+      "identity": "e5c105750c7c2fea3e2f0cf26daddcfd5ab0cb7a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ComponentModel.dll",
+      "pdbSha256": "72aa95f2ac312c6f0af57e3932f6bcf8da9747ed5c99fd5541ea7f7cfa5ed451",
+      "identity": "8013261e441339cfd137251bc9ee60da279ef299"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Configuration.dll",
+      "pdbSha256": "593141f96af795b240bd4388b519001c069b1219249726a57991d118aa5fd71d",
+      "identity": "dc871736e9019448bc5a9ef2cfc87c8359dcb5b9"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Console.dll",
+      "pdbSha256": "1388f9a12e31d5a8b9cf37412f235ebd7948c4723b7f226dc78b825f494ab3a0",
+      "identity": "3468e352adee444b4996bd2b6c9698018653ca00"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Core.dll",
+      "pdbSha256": "a7f5261278307239c0501100063ad3130506acf756826e1b3987eb511f9c579c",
+      "identity": "00b9a4dcb8e20a428174236460561150a61c2d80"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.Common.dll",
+      "pdbSha256": "75a35f22ffba67d2beb046bb797a03dc03eba6a1e1c608a34261a4f1e02a00ad",
+      "identity": "3310afbeca1ce15b2d03f306cbf3c792dc812233"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.DataSetExtensions.dll",
+      "pdbSha256": "34f0d90449d9fa2b85a7bdb656d2154104f97d2d107664c7889eb58bbf9999c2",
+      "identity": "5e4c8cc3c608134ea4ab9d982751929b694f66b4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Data.dll",
+      "pdbSha256": "65ec616db2fdb17c6aa409c37ef5feca1954ccc3aa4dfa7eb2919c9059c8e8fc",
+      "identity": "b99a94a0f2de52439d9180286c87d6870791dec2"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Contracts.dll",
+      "pdbSha256": "91de24aa574d2bb5739822a44af8a4e815fac506facbadc88849db5952336139",
+      "identity": "c5aa5efd2aeb3f3d1d384f6efb1c1ccb3ccd1286"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Debug.dll",
+      "pdbSha256": "a22a4792775eac6a16d1371c6a6c21cd6bd08caaf1e4903f7b00d8ef33eca2c1",
+      "identity": "74316f627d3931449646f035e474261f20f870cd"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.DiagnosticSource.dll",
+      "pdbSha256": "d488ef3d4bf136b1cd43f83d41877522415bad6cf4fe81a09bce73561a0aa4ed",
+      "identity": "59ee4ea593338173abc15051dc3b7a04e768499f"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.FileVersionInfo.dll",
+      "pdbSha256": "9ee2bed068445afb0ed5a29faa1124afc4729090cc6eed090aae569538ca3661",
+      "identity": "efa6ec35acd90d61b17e732312ed59ee1f78d751"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Process.dll",
+      "pdbSha256": "ffa5a5c821813c217dd923c4288d21dc2f1a986fd3cb69678f9059157c75cce5",
+      "identity": "2be1c0c56545a2846fe6f832646bdf0a08be230e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.StackTrace.dll",
+      "pdbSha256": "ff728c6d7363ce20e79f8f8e83b489a9376873d6cfc1c896d813d44e14531a8d",
+      "identity": "d738445a208c6d8958f1a7521b2414d9082773a6"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.TextWriterTraceListener.dll",
+      "pdbSha256": "d635b590cca5adc9ad58d7638a2e038f9e143d193ebbcd345d5ab17545028324",
+      "identity": "abbbdd79441ccf9ff0801b9e9a95e91d457f1a0d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Tools.dll",
+      "pdbSha256": "b9d8d263d834f854f8558ff178738e70cf17242a056b3454225cff8235a75660",
+      "identity": "a978966725b51c469c86c9ea952584f977037cc7"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.TraceSource.dll",
+      "pdbSha256": "362750e7bbcd039c403e623642ad3adb4b9d947eaf645467fbee4b5c63ff3788",
+      "identity": "d454aa427bf33783d74521dc67dff5000e2d23c3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Diagnostics.Tracing.dll",
+      "pdbSha256": "bafbff36d341907ef1b072ff0a27a15757fc2fffb4f2ccf6a90a9f336a12f46f",
+      "identity": "0e3eb313d2a9c40b9cd492cdd83d4c0ae455d8be"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Drawing.Primitives.dll",
+      "pdbSha256": "581708f2d001339a414402faab6b53a035cb5a2876925a838c71a4c27977a493",
+      "identity": "ab2a1e9e7948180283a45369430deacb41191f25"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Drawing.dll",
+      "pdbSha256": "8d600ec1235c8ba40f97b67863c86ef3cdbfbe0c60a27e7334aca5a054e38c51",
+      "identity": "81ce1e6c30278d48995cd14c825f5242a0ccbaff"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Dynamic.Runtime.dll",
+      "pdbSha256": "7b40a607215b74c0de158c6e52e5e4d66447f5126e91ae9d2e60f36946042f8a",
+      "identity": "3aeccab9979c8b48bc08b68e308b075a62c1389e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Formats.Asn1.dll",
+      "pdbSha256": "74f1bbded728e657ee314acb3808b0ab8eeb9b1e91e4031a5c19fab9d9452120",
+      "identity": "8a4571dc380f1c5b7fbee11276c2b49fd58d6b3e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Formats.Tar.dll",
+      "pdbSha256": "8035079b5087e164f2df1e547da9e64723acb431fc6ed3284873d75abd753531",
+      "identity": "3e6fa5b10be6d56dcc6602400f9625051912f489"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.Calendars.dll",
+      "pdbSha256": "701fc5f7be124d7a8d17ac15d1bb3f6e045e5e30b211046a1e7dcfc3a81a1039",
+      "identity": "bddcb2108f153f4d84e05bb939ee99a404a472bd"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.Extensions.dll",
+      "pdbSha256": "b532c126ab224de6ddfec6e588236d9d7d8cd11153f8e8a33b3472e4457d4465",
+      "identity": "a1e77a94e8468149a3b4e6b15c4d9e303ccbd59c"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Globalization.dll",
+      "pdbSha256": "b74097e537c7054dfce19dfa4c26835dd36712f877d9251553b4e1f6703f1fd4",
+      "identity": "ea755948ff7a484d83b3a86f39eca99c0081a3aa"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.Brotli.dll",
+      "pdbSha256": "27ab95b1725194c5fa8e96dd3a2421ba37b8d2c992d1a09988e19a1df73c890c",
+      "identity": "cee5f7da72e33bb6683467ab28b5002e2e5e506a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.FileSystem.dll",
+      "pdbSha256": "fae9f179b54038f9fb96d3a0f823b58ed83717329679e5d2a920f96f4b07bd0b",
+      "identity": "ea57c61fbe063a47a6e6faf268a2ed613b884991"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.ZipFile.dll",
+      "pdbSha256": "8f953b2b33f7941174ef794bf241f01de2588a4fd3f6d4ea769bf83f2fec8c45",
+      "identity": "c8a778d50ac6b0b65ad6e6f6ffea5fabf750ae62"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Compression.dll",
+      "pdbSha256": "453cc9d6b3f83d03a13521aafce0e7d3042f3c97f009496f36dd50bd5cdbdd87",
+      "identity": "3c8649ec93f5097b65e6b20eb20be066bfeafe19"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.AccessControl.dll",
+      "pdbSha256": "31256bc2c89b1aea5dff91f97d3e950abe13ecdaf2704672d235b009da88b007",
+      "identity": "556d5c89cdf12f419ebe9d285e7e9227958e63cc"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.DriveInfo.dll",
+      "pdbSha256": "4b1925361aa4ef0d55c9f0f905b4afe4f962c8112f3463be3445babe92c9dab3",
+      "identity": "59143375d43298e2408f0028ec7953915f4f702d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.Primitives.dll",
+      "pdbSha256": "192b62b6e4f893e0a0f15340a522a4e9e341b4eec6618803bf595e12ecff7247",
+      "identity": "bc75801c2845934db210802fcc2d775736f5c0f0"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.Watcher.dll",
+      "pdbSha256": "75686cdddc348d2cee1c29f628b529c5f5527b6b1c02bc12a233c85d3b01b3d6",
+      "identity": "bebe8af7dec6d0da9ea81f40d010937dd3b6ce41"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.FileSystem.dll",
+      "pdbSha256": "796d3bd5ed71dfe890086b689567a548ff4b24a511cd44a2aa9a2649e3e35400",
+      "identity": "76f58af700492144a85a6b3e495c9657a25ea79c"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.IsolatedStorage.dll",
+      "pdbSha256": "55625bbd3f655dd2884cc6888864a484618b173b9f594f1171456cd29bf4a668",
+      "identity": "dd6d4664888afd1ef135b0ba436d0fc518c8da8a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.MemoryMappedFiles.dll",
+      "pdbSha256": "91b109b642dd373e1d5c23361bacb04a7a525e05ed618c236f92d2866fa57ee1",
+      "identity": "90ca05c208c28cfa6fe42f2176588d7751b14383"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipelines.dll",
+      "pdbSha256": "a407a4376810e5651929dbf7dddb807a020e31f83ba0ae67918565038618aa95",
+      "identity": "6f1c556bbc2afe98b29a0f6ed0436e14c1b984f3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipes.AccessControl.dll",
+      "pdbSha256": "2d238be356a314250d98722482953afa0b4092dac188ebf2d22f9d4f8e24816b",
+      "identity": "589c6f7cd79686498f083cec9e69dd4eb62b2ed3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.Pipes.dll",
+      "pdbSha256": "e10dafa4e9836c2ff570ba7a501f8126b981f59a8f3ce7c81e2c9b7b23c15f06",
+      "identity": "89ab7fb0e47ca907e61f38d359bb5fc49d2c016f"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.UnmanagedMemoryStream.dll",
+      "pdbSha256": "f8d1c551e4a04a97401c802a0619e02f7d81716aaf4160980a57905d12c0673b",
+      "identity": "677e5e0f4cde0147b9e6970fa129ec017ac818d4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.IO.dll",
+      "pdbSha256": "8473042e404edd130b2348ade7a6cf533ce06e8a67abafdd33688f94f63cec83",
+      "identity": "8663d71a00c6874f8f241349faaf1eb995411a96"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.AsyncEnumerable.dll",
+      "pdbSha256": "adee184871aa86bd29e29912451a3ccc7d8aa3e31e60bb40ed62ff6fb5179110",
+      "identity": "49c73c8961df4c447c1967f10abd0a48211e0711"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Expressions.dll",
+      "pdbSha256": "9314437c170c2045526fc78b9413f9631d1b5f29cdb7dd91e16587ef8a392c69",
+      "identity": "9c78626edd93ea5d9a7eb40577fa709eacb83c34"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Parallel.dll",
+      "pdbSha256": "484976e6eaf854f37110cf875a7df58e3795fd193dce2efab12367278db35311",
+      "identity": "eb7c4919a86f815bba28d075f967253b337388a1"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.Queryable.dll",
+      "pdbSha256": "a0543e63fc99b63d837dad148e4b79e9cb114a6b9c17a2e303d42138c8f79b6f",
+      "identity": "3e7b52c6e8292c6a7974baf086ba1054c7192e32"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Linq.dll",
+      "pdbSha256": "dcd94268ae71c64f57b919fb9eb3f9fbcbfdeb68b679d778238de9c9579de38e",
+      "identity": "7937054b7c221ac8a324c4c5aab42f81b2b4a07d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Memory.dll",
+      "pdbSha256": "87c3bc1178bced8f8f6597c7d4098af2e0d7d67dfbdc6d705cc80527a473524b",
+      "identity": "736056ef75545d1f4469b73a4198fc7d9717a0b9"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Http.Json.dll",
+      "pdbSha256": "4175b1aac2331f7b1881ba28843a3ab2acb82feaa02f248c4dd516d0b4b89ae5",
+      "identity": "a2f01e4473d8731c67a976796aad3a4c892a5502"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Http.dll",
+      "pdbSha256": "ce726336f691e46cfeae93ab9aa427d1c322da0329a104e2ec537c4b29cdca56",
+      "identity": "a79a671552dc1ba4471ef1329090e9adf3cab9cd"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.HttpListener.dll",
+      "pdbSha256": "c9fe48272859324b03ea05714aeb69c5b2d64e18c86b0609eba1f082a32b5881",
+      "identity": "92115b165459159ec1b2d5e31eaebd35a07b4e2f"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Mail.dll",
+      "pdbSha256": "f13abeff353fc4f3a273ed0b8401724b691d4f007f44ba534e84b7c7c01bff6e",
+      "identity": "366160fa1f31d4c701842cda68273043b37f2a0b"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.NameResolution.dll",
+      "pdbSha256": "b858708584fbb42ab36153fba44f19d95d0f4eadd8bf68b78cfeb6d0174ef283",
+      "identity": "2b2d088530c482773ffcef8ff7bec178f963a7af"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.NetworkInformation.dll",
+      "pdbSha256": "d75c389596927ccea0dbd8bd95f471e72facfa7955bc235d043d3881d733c071",
+      "identity": "6ee9e852b13acad2da6e29acc4a9b4b56c6497ac"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Ping.dll",
+      "pdbSha256": "5695b431bc1d779ee52c2fe403cdaef0b47842c63a5b957fa177c43f7c604634",
+      "identity": "6ff894563b147293be7f690bf21c1d39ae13966e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Primitives.dll",
+      "pdbSha256": "88d76d2cdf21583f0757c06bdbe0734ee8330f7a074ef0d697bcb964e0e82b17",
+      "identity": "f07e6fec9f55fe89422003df157329bd61837b89"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Quic.dll",
+      "pdbSha256": "715b80580b052e99ebd67fa895eefd459d439447f4ec4875ff43160cb5ca6476",
+      "identity": "425332a2ed36a6c538ec8dfd731eaf83fea6b829"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Requests.dll",
+      "pdbSha256": "de74c7b3846fc499000994066d069a6eeeecebc2de0645e106cb25fb34647927",
+      "identity": "0d80001208f7dc3644dba2344d5c9ee689978cff"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Security.dll",
+      "pdbSha256": "f2c805f86e83999d5a842db7321b27631792dc7954cbb155655a87bb5bfe4d6a",
+      "identity": "32ad5c2c86449d1d4862562023d3aadf90558be3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.ServerSentEvents.dll",
+      "pdbSha256": "699b43379db9d18595a9fed046c2d57e8ca82cb26f10287907f88be4d92c13d1",
+      "identity": "2589448189dfd0e37f34fd045846213ff3c9db46"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.ServicePoint.dll",
+      "pdbSha256": "8dbeac670faf963edda251d00fcb0542c254f2d0d0e4dc45d2a107f9e04bbaf7",
+      "identity": "ae9689b7c758584ebf916e8250b17cc21197c8fa"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.Sockets.dll",
+      "pdbSha256": "e4884cb42a09a9d3463317282e8e0b5711669a4d694da02d97ca55cfc7ffca60",
+      "identity": "e18cb223c219b2931aab9da69ec94fec6b7bd1af"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebClient.dll",
+      "pdbSha256": "46682f240a8e710348e252772ab4c551eb0497bbb0f2f3bcadebdd7fb4ae98d7",
+      "identity": "5adaacf24aa6d38b1f54f252ed3418ec9457212a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebHeaderCollection.dll",
+      "pdbSha256": "d300e346e2ad0609ca1474f4f4569e57d7f3df35420a1cec66017181be35b5b8",
+      "identity": "e49221ae3ce62515d906ddc4d50949d997e29f36"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebProxy.dll",
+      "pdbSha256": "c6c709f0a4a0458fcf942066b756b11bca5f918b8020c1d5ceaefac9acc96073",
+      "identity": "28c817da1a1ce07fd79d176cb7518cc30bd75049"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebSockets.Client.dll",
+      "pdbSha256": "d5e78ba25b92e55a52ded043362b689450acce7cd4bd19f1f68a33d71698e6c1",
+      "identity": "b9051116d3fb26e99eaaa9136bda7ef718d8ff5e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.WebSockets.dll",
+      "pdbSha256": "4f7087159e624c91f2e70a1ca47dd2ecf05c8222161fd4e6f2472992e4bace25",
+      "identity": "da87d1b07ea590ce45b3d9119cfc676480c521db"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Net.dll",
+      "pdbSha256": "4fc756abec9e009dba311e09ccd306199cc0d3e74c4dc2c1694f12f0c7575d37",
+      "identity": "14e4ab8e8fb47b49913ad1afb1c35ecb40ef79d3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Numerics.Vectors.dll",
+      "pdbSha256": "d1d8dfc0b4ae33836eec934ddc37eba5a5634dfd70500181d411c417224a0873",
+      "identity": "b871e878b1513d39d04d17842f04cae0dc3ccd20"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Numerics.dll",
+      "pdbSha256": "e43e2a2517567705363bfd668561347cefd053bb042f5465e520aca152c31d85",
+      "identity": "2a7fea09bf938248a1267915841400b638023af4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ObjectModel.dll",
+      "pdbSha256": "351eb43c461c065f1da57a87ffb23d8c99e61b64fa22af037fa005623ec41cba",
+      "identity": "cb9f85d23897fe188a11c9d028eb93b195355e47"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.DataContractSerialization.dll",
+      "pdbSha256": "2ed9aee54bd7b39a16a684f40f67447c038b7f75edec4a4a384ebfead8e512bc",
+      "identity": "339f4292e3c4304bb1696d89045f485dab593ddd"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Uri.dll",
+      "pdbSha256": "e83b41ec84991b6f95eb0f9243d88e2bc3a01343dc8f72d3705683ec3aeabff3",
+      "identity": "82b8438ffd55144a09f8e7e2a0d01d583a4e4aca"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Xml.Linq.dll",
+      "pdbSha256": "9ea7940387e85b9bc79c38cbc18423f45aa6547600be730880cb4e88e1b5ea8d",
+      "identity": "f59da18b893ea9f88ea9df0cd617975d1e0eb0b9"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Private.Xml.dll",
+      "pdbSha256": "5c38d5aab291a758f23acf9f84252d05e1ca3b7ef5593091419c41f54ce97693",
+      "identity": "20b235de9bbafd69e38eede009927b84a8ccd641"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.DispatchProxy.dll",
+      "pdbSha256": "4a0096bccb22f703372bfce5055f1300c678c14ab31037c3fb50745d9cc91e3e",
+      "identity": "3c510d94c508e2036645d0ea9b7414da4ede1b9f"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.ILGeneration.dll",
+      "pdbSha256": "d482246af152cc8cc1be197c4b0bea699a2568a1d8a6ba494a9dc9b8cf768d60",
+      "identity": "829220782148fceb9675693724cea1da656f5155"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.Lightweight.dll",
+      "pdbSha256": "210d55c2dd1eca59932bed12bd2141ebfb3562811353ee6aa3a8f6e59ce219d5",
+      "identity": "f1e4d5ab4913f370ac571cdb22f99382372f5d48"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Emit.dll",
+      "pdbSha256": "d02f49efdd5dbf4c33e3e9f3c9fc75f2675cf4bbba82d695aabb8b550fde824a",
+      "identity": "09e5b56a57c11434b389fa761b68f3e1224cb80d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Extensions.dll",
+      "pdbSha256": "3cc6ae257a9e9406db90584f84a9259498e77f3f8efd9f2057878652222ea310",
+      "identity": "5355921bba7c4c4d9f8064e748500597f4e23ad4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Metadata.dll",
+      "pdbSha256": "9b56d8cf530158ba0c2e1b04fcfb3884895a0f3479ac588c4f4b2b2183583a87",
+      "identity": "132617e56e364b6e6d5f265db0d688d9fe03f381"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.Primitives.dll",
+      "pdbSha256": "657808997fa81af05eb18451e628d1a5b4987edfb283222de3d46430b07a6ce2",
+      "identity": "a491b05c86d639fe02fa158bd24946f29569e55b"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.TypeExtensions.dll",
+      "pdbSha256": "3e1970120ed5bb131de7cf0fef48fd6dc0341f5554ce1df6b772c4d46cb28154",
+      "identity": "8526f7a9d5207caceb96a03b431b9106802c75ca"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Reflection.dll",
+      "pdbSha256": "f4666ab3d272307f5c61f39a1a2c4589cafdfd3ccf14c6bcc8ef16a0531069a0",
+      "identity": "6e7deff4d0cb6e44b77e494f18263488ed71db97"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.Reader.dll",
+      "pdbSha256": "c47773339544cbc4260c1f0f404b9e9c7975bea1919a4a306cf30edf0ce32711",
+      "identity": "1f86716671ab1e4b84c198456f415aa1d9a5a5ce"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.ResourceManager.dll",
+      "pdbSha256": "8ca79309eac0f9ac2e256058fd6fe9354a906b34e65d207c7fb73a7290c24861",
+      "identity": "9577f998766a564aae5d9a1df42beb4f3f9ad598"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Resources.Writer.dll",
+      "pdbSha256": "1acdab92971ba6eb53bb0c065823a7b22815dabf5444c4d7b74e48c1fa6c3a05",
+      "identity": "c76ee97e4fdf3aaee93776b92ce0ce1e4aa11791"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.CompilerServices.Unsafe.dll",
+      "pdbSha256": "c389a540ae0756c76434fc5d1efde350d4d1e183e2d56085e2cfe8205cdf6204",
+      "identity": "ba48e811f1d5fe44a62b204fac670fbf60a1bcad"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.CompilerServices.VisualC.dll",
+      "pdbSha256": "df06ea7466fca9c38cfc63bb533702b1be19661789a4bd2a001d424d6166bfd9",
+      "identity": "924a8a861c81160b0704a80f600b43e83dbafa9d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Extensions.dll",
+      "pdbSha256": "ea6bb3ae3f5e00d25c118a154726d82834cc60ca7a1706121dfa9810aeec83f3",
+      "identity": "b70e544d11dca049a26b0270a9aff339462fb393"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Handles.dll",
+      "pdbSha256": "f8dac03628fe41d7754c8a4a56ca1a9a5b4aa5f470d37f4da61e0d50650f8d39",
+      "identity": "8f16c8f76cb166439fc9308b9d7e86f4fba736e5"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.JavaScript.dll",
+      "pdbSha256": "65d7a867fe30e1df91812aaa2f40ed6d029826b18e9e1f7435ab0bc9fb2ca71e",
+      "identity": "102657423df29b459dff73bc37828dcb132c2bc1"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.RuntimeInformation.dll",
+      "pdbSha256": "8aef5ff7c08ca554a05001e0430a7b12cb93c9482a389257243825c59a3e459b",
+      "identity": "7f8737130cdeb844a63c8d991d4808f9b8eebd93"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.InteropServices.dll",
+      "pdbSha256": "8b9677d97434d0b9d1b021dc5c4208467b2490fbb42ccaaf85bf7cad9d073b9b",
+      "identity": "3e2b76cd3d089c8b91aa16fbe3b7cb7cdf63585e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Intrinsics.dll",
+      "pdbSha256": "8767941fa4b3f46e3e749396dbae09a91a198eb96e2dc531a969cb62e4755f7f",
+      "identity": "320cc534af69339c637adff37123d5389df04ad2"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Loader.dll",
+      "pdbSha256": "64ed5a38ed7acb077f93c3c8e59b2f71c4a8df316d15b43cbb4dbeecb36a8cd2",
+      "identity": "38333fe8b0179d6cac9200d6369145e9b4bdf13b"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Numerics.dll",
+      "pdbSha256": "b23adfce412fc5fc9bf7abc4bd20f64a7b8f8d52427e3d8b306221aa6b1af633",
+      "identity": "0c5963b87201e5d1e0e577209c17a26780e39d19"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Formatters.dll",
+      "pdbSha256": "f3ef6f9b19465b1f6b3151567d2ceb9cedcd50cd6bc8ff571495382a9a2acb79",
+      "identity": "6751bc2ac883dc0cf532a11312a91313870f1d23"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Json.dll",
+      "pdbSha256": "b0ae23296b9f4041cedf498a0778ecbeda7286c208f322d9ccdb1c2a96467be5",
+      "identity": "39a184a8299afd058a5ed0b3a2327f9391fd7416"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Primitives.dll",
+      "pdbSha256": "5da19fd0033d12cf875fa654cc3ffcf474f9d7f7b57acb0a0d7e7f1a77e82f5c",
+      "identity": "07a4e9919906058e9f88d3db4dff0ed8a3ea94d9"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.Xml.dll",
+      "pdbSha256": "675e67856212659d1997e204b5402d2ba65de480497b9f580eac4c04be395236",
+      "identity": "d28b95ccb0887ba23bc079ade2bfd9036587057a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.Serialization.dll",
+      "pdbSha256": "0cebca595714c64bba072a19e396fd482bfd57ed065ab4bc3aedc01baeb00d00",
+      "identity": "568cb1285c839e49b5e31f2956a3cf01b8eadbf3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Runtime.dll",
+      "pdbSha256": "c12bef466981a9b812aaa8d0dbcaed813173c44e4d14e28254d01d31187c1da4",
+      "identity": "a90bb154e37db66067bfa75ddb1ee6c262a717f6"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.AccessControl.dll",
+      "pdbSha256": "6539c9fe554aedf68bb29785610c2dc7ac9715fda96eed8b024589436ea6df82",
+      "identity": "9191b8514e064e40bef79d277e3db37b45c97ba1"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Claims.dll",
+      "pdbSha256": "1a63b8f86d88e3db76b6c0a56bc640dbabf60de8059e4a47b9f8a21076f7809a",
+      "identity": "d9e2717bcee9770160567bc98c2a88a3053c8942"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Algorithms.dll",
+      "pdbSha256": "f6449ff1deb9f9d931867a76997284fbe4cacc2bb32b41681abb1af02324f85f",
+      "identity": "33248427575bb248b82f6d5ac312c4b433e2bd97"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Cng.dll",
+      "pdbSha256": "fd1c8ce19c3439afee6daedfd7a227dcc765c0bd5d300d4a69baf3dacfd2edaf",
+      "identity": "f5fb327ef457b54ba0007a73917c578276b20887"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Csp.dll",
+      "pdbSha256": "e44c9a98c5c597bbae007dda3be49e6d09f6c6effdc708a3a314d759d1b55676",
+      "identity": "2253ee53094e2e459c933293a112e1d9f9810cb8"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Encoding.dll",
+      "pdbSha256": "52321d28098a26ec1f9565649477353663ed690251616604599081a03ee4fe58",
+      "identity": "da2d82762c4638458f716400fbff39dc9f2f299d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.OpenSsl.dll",
+      "pdbSha256": "8d4ef22683275bf014cb31c7e7663ec846763c9aaa8434337262a5ce7cb4bd84",
+      "identity": "289d2ce02275fa4687026c8586165ec66bc544ed"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.Primitives.dll",
+      "pdbSha256": "fe87362b8c26cab64c8a4b3a57a20b124aa95ccaed6d0fad239c24db0473f574",
+      "identity": "04ae923af2cbf848bcad45bf01d40f852715dbf6"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.X509Certificates.dll",
+      "pdbSha256": "ce03f99a0913ab779a596b95edb1a9b3ec0b7811c3f48f9bd971cdc402121993",
+      "identity": "c5b0abeda5690b4ca31aef85b6ba9a758a1f90b2"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Cryptography.dll",
+      "pdbSha256": "1b0dbdf4c81fc86db21c180bae29cfe1fd46637c87e004f38779dcbaefe1192d",
+      "identity": "3a01a8dafeeff7519f34521538fc12ec01adff07"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Principal.Windows.dll",
+      "pdbSha256": "e2bf216220d4a72cc0501ce7797966be272100673d52a85a2d63041dedc61ddf",
+      "identity": "ba2e00c557ec1740aaa09ac35851fdec5718e4b7"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.Principal.dll",
+      "pdbSha256": "5986acc6a38b624908d6e28ce2185a6e2be69454dc32e768424889deccb6890c",
+      "identity": "0e95ba299e17454cbde53f8ad0858882aa502c87"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.SecureString.dll",
+      "pdbSha256": "4016d5be1f8e46274b77527332d15954b7a93fdc599eb75ae8a8103c1bcf5d0a",
+      "identity": "5061f47afd062e4d8511c3bd64db07020d0776da"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Security.dll",
+      "pdbSha256": "df751693e3ca61fc4a04296c744009643a81fb01fd576267509e971e31554981",
+      "identity": "4b02a0c606f8564b98d3123ae2804313d60f788e"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ServiceModel.Web.dll",
+      "pdbSha256": "66407be0e27b86f022bd825e32c01407d1e0354716ed7c1962a95f8ab26e8a13",
+      "identity": "a94a148acf49a940898fa8696cca72182b4c9fd0"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ServiceProcess.dll",
+      "pdbSha256": "6a195dafcac5b1560389c3f51401066d92f715d57e88a5de603b047492e008e4",
+      "identity": "5c3f93a4699f064091c96b4aaae0554d59b25a88"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.CodePages.dll",
+      "pdbSha256": "104354cc9fb116380bbd3a76d7ec0e2a7b7cfd0d223ae71566e7d1bf396f682f",
+      "identity": "afe398063b1f50f593a5a9ea09387781115bf42d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.Extensions.dll",
+      "pdbSha256": "aac820c832313cfc723f9f7a1ad328e7321ec1fdffc48c2d1abd3e9eaf36b823",
+      "identity": "b447a3fea9d270db993e9d8131f83dff816ae4a4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encoding.dll",
+      "pdbSha256": "7613d7fc2d92772001f6dcaae8d9ce36e758ebf2579c4a4a6b6ecd3ff21a84ca",
+      "identity": "931da3dfa6a3094e8333ee0f53848f4a128d85bb"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.Encodings.Web.dll",
+      "pdbSha256": "5e77ad3732877da510dbd3fcfaf0b79d75573a9b190a77ca8a9f337d4d9b7747",
+      "identity": "9412d4386348e0e3a007bb907ecdcbc5bd7d0442"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Text.RegularExpressions.dll",
+      "pdbSha256": "bedbe01bc9372554fee1f4367444db7ca916b1c58253b0e0624d64f7dce99a8b",
+      "identity": "5fbc99405fe64878eadb52afdeb14fae63db9aee"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.AccessControl.dll",
+      "pdbSha256": "0f4b8cd0ed2667ac7d4d16b696c50fec476ae1a28055fdfcb978dd134a3a061b",
+      "identity": "64cbe19171e8244da56cb2111f73b2440afa2ec6"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Channels.dll",
+      "pdbSha256": "a4f5e59a9bb2ff899d6a0a8dc0da28a74a68a613649c74addf582d72bd095537",
+      "identity": "48a5d81162383d64dbc67df4787040f5e6a36830"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Overlapped.dll",
+      "pdbSha256": "f1f254e8ef4d1d072ccb970474ee7d9b972b269c425e606160f5cbacb4717f92",
+      "identity": "3a173093effa65c0097e79b8aef8e0c24ea5c5f8"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Dataflow.dll",
+      "pdbSha256": "9030732703397fbff3b963cd896c7afd3345ecf6e084502c84a0bb34667539b3",
+      "identity": "b76367fbc1d8194ee347d8594fd653eb90b472a0"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Extensions.dll",
+      "pdbSha256": "9fffd05d59ec5d3f662e718211c890d765a65d8b51bc54a73b9cfa840b54a060",
+      "identity": "caa8bfae4d32404dbbff6b1487d3b47da18c8cce"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.Parallel.dll",
+      "pdbSha256": "bbefada773a22da210294203cd513f1b31389d2fe23e9f25b079047a47187812",
+      "identity": "5feea2ae068f4b71309e7ecd8962cd050c973d5f"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Tasks.dll",
+      "pdbSha256": "8a7f6ad42353358d1ac6f29ea4814a2af4206e596548cec0636b1ee2dc8da251",
+      "identity": "74aca74b4c02cd4aaaabe3a3165862f2ebc1cfef"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Thread.dll",
+      "pdbSha256": "5c414eceed94fc38048a2a20c19bc7740ba18dfedfeaa560149aaf48d9aa8550",
+      "identity": "8ef6227fbe85df73b554c39ae41a3f8e248f864c"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.ThreadPool.dll",
+      "pdbSha256": "5630e14b7179b815be4ab0d3028b8501c93319931f9808b480c794aaea322860",
+      "identity": "d2d0a0df40a0c2c7b046d867caf261bdc1d0d1d9"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.Timer.dll",
+      "pdbSha256": "d2741788a40d0fa1b92b13ea116358de07bf759c826b4117cf52074ebc67b7e9",
+      "identity": "04f3f4ba4bd3d14ba83ea05fcf88154b81e9148d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Threading.dll",
+      "pdbSha256": "8f197a2dcf301f93fb7ddfbe688e148621e914b64b5d80da208795f8b2dfb48e",
+      "identity": "12a82e44748b096dfd3cd9544aab026e97aa126d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Transactions.Local.dll",
+      "pdbSha256": "354a0a5ee5167d72320b7abd2a89f81d098d3a4b204be92c799ba0cfc92c0a7a",
+      "identity": "7f66f0e2df09a87a45d0c928c6ed7a355f9be0dc"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Transactions.dll",
+      "pdbSha256": "48929761f29a84d2291d3e13a44aef2595591a2a661155ec37a00d17b491b61e",
+      "identity": "de76af41c3052a4ba420066115244673306895d1"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.ValueTuple.dll",
+      "pdbSha256": "bf8a2bc3e47efe8a7a02382f0365cdba69fffc8a6832c0b407b91274f6635a5d",
+      "identity": "c2254bfb266eb74c8425c72d06638de70ad6a6cd"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Web.HttpUtility.dll",
+      "pdbSha256": "24aaf867fbc54c6ef82df2edf1977df8e368fb8235e17f064d2fab56161ca5fb",
+      "identity": "ed27f3053d1abae46e7ce1ac4894c2239b3f36f5"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Web.dll",
+      "pdbSha256": "a986e6f2ac86d0719e35890f693c77f053920ccf385c4fb79bd7f6e7905f74a5",
+      "identity": "b7471df2ce00cd43aa677c92c5cf2ab433d70f8a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Windows.dll",
+      "pdbSha256": "00ea6566748ec8b8adc9adbcf8771b878dd10a88958a2103a5f3f19c75120b48",
+      "identity": "f4b5a7334b55fe438a947f1bd4ad889351266688"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.Linq.dll",
+      "pdbSha256": "65f1c8e6718b1c2d4840dafbd1c0e0bef314c690cb2e15c4662a3951d12eea74",
+      "identity": "c4e13b76ee865a479862cb4bb89c2f0fc559cdb3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.ReaderWriter.dll",
+      "pdbSha256": "c5202847b1be8d11611ee29d9ed940cd59bf28e9d72ba23b86e5ececf1a316f5",
+      "identity": "eb7479884ef4a34f7b3d20b19826cd87cf9f4866"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.Serialization.dll",
+      "pdbSha256": "946a545a85481ebdf2574c69df18e5f2d8c9295417b08b2a48c5a2ce038564dd",
+      "identity": "44eaf2fed267f8438f41395b8d295eb05a682bd4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XDocument.dll",
+      "pdbSha256": "33562993847a769c34268da008887755444be1dc906fa487f07ef7c2320f24dd",
+      "identity": "28bd7d7a7400b17482adcf704d44352a85584aa3"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XPath.XDocument.dll",
+      "pdbSha256": "51ff51426725d46f53ee0505d93a8ecdc8ec6c2a9315020dd4824c87d15f8c29",
+      "identity": "54750dd4471a6d4dda08c20227b6925af56581b5"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XPath.dll",
+      "pdbSha256": "d6b7df3ebb30653a565ac7a9906a06f9ccb1c5c3bcf49ff82657aa1350a45609",
+      "identity": "31cd6b0e9dca023f7f00fcfbf318a8b73743f25b"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XmlDocument.dll",
+      "pdbSha256": "1476c78ad8d35c10ba7030920d8e3016dd9a70ac11d30a08c651bf5938fb9c5d",
+      "identity": "b7d27f861bda034d89c4f875bb7fcb3c737818e4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.XmlSerializer.dll",
+      "pdbSha256": "9a74b8205d136edc622c629d070660c9711048f02ae75b6675c99c60cc01f6c3",
+      "identity": "6d63089f9fa8f6732d2fac3731e9d688e2f1a857"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.Xml.dll",
+      "pdbSha256": "b3d763775744d3ac4809c761dedfc43407b067fd58627e0ac084d89cdbf7b9cb",
+      "identity": "1a82344504562c4f8c538e24397d649700ceeb93"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/System.dll",
+      "pdbSha256": "6a5af37ece39e408e7454155c41d23f513dd6e52ae62e993b943a6a87d36113d",
+      "identity": "484d8deea2c67d40bdd673dee3691435a5402fe2"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/WindowsBase.dll",
+      "pdbSha256": "8989bfdbb0036cdb363ec5cf97acdd1f263bf874f28d8df5cd81a2a1f503f673",
+      "identity": "b1ed6c2d061d7948a7d617b6edf7966127186797"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/mscorlib.dll",
+      "pdbSha256": "7318785a058f759f55542ab1d6c74534e578d7943a66701f0feadf614644e846",
+      "identity": "50c147a3a1b25847a3708c64ac9e2da80baa12d4"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/lib/net10.0/netstandard.dll",
+      "pdbSha256": "3aee81dea92bcabd2f51abec298eea46ebb324f9425a500079c10e2de6dbb582",
+      "identity": "249f74e9fec0f84591f32446d88d941e42f8038a"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.Reflection.Execution.dll",
+      "pdbSha256": "7c70ea95ad110d474ce54cdcb6270db3eb9c841f00cf2702b09560ce2ca57b33",
+      "identity": "9cc8e9ca0d4eea4a8671f0e19a19451fb3992a9d"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.StackTraceMetadata.dll",
+      "pdbSha256": "c27c284acc04f95b3a156fdb6afc320627bb2b44e8c99f4a6bb5fe1f9598769b",
+      "identity": "b3e4380ca5cfe84da18c0fde666225ece221fab2"
+    },
+    {
+      "path": "/Users/para/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.osx-arm64/10.0.14/runtimes/osx-arm64/native/System.Private.TypeLoader.dll",
+      "pdbSha256": "0d48d23d5400dc471288f3039d1280cceaffdfe720dd2e3b274418ef8ee31763",
+      "identity": "067b048b3cd4434a9a2556396305efd90c37da8b"
+    },
+    {
+      "path": "/Users/para/work/xef/neemle/artifacts/current-runtime14/corelib/corelib/bin/Release/net10.0/System.Private.CoreLib.dll",
+      "pdbSha256": "fc3dcb036084e55df416092cb7c9543254fd77b55f9a5fbf30db69f036efbd2e",
+      "identity": "eed4bb283a98a04a99b99d8318dd05f5787819ec"
+    },
+    {
+      "path": "/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-5uw99xk1/build/bin/System.Text.Json/release/System.Text.Json.dll",
+      "pdbSha256": "a40d8bef0bd856b73a1c1da3f9a6b7946e39d80f2decc6725bb856825d407f70",
+      "identity": "04e6bfe7372cd341be1b58b9e99da073826bf0db"
+    }
+  ],
+  "actualEntryJitOutputSha256": "c9525d192a5eb3f6eee36f664bc2e9e6e1406d011321cf0c2b9a33a1101fbd3f"
+}

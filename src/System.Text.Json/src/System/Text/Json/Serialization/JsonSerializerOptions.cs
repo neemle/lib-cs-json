@@ -21,6 +21,9 @@ namespace System.Text.Json
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed partial class JsonSerializerOptions
     {
+        private static JsonSerializerOptions? s_defaultOptions;
+        private bool _useInferredMetadata;
+
         internal const int BufferSizeDefault = 16 * 1024;
 
         // For backward compatibility the default max depth for JsonSerializer is 64,
@@ -39,7 +42,7 @@ namespace System.Text.Json
         {
             [RequiresUnreferencedCode(JsonSerializer.SerializationUnreferencedCodeMessage)]
             [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
-            get => field ?? GetOrCreateSingleton(ref field, JsonSerializerDefaults.General);
+            get => s_defaultOptions ?? GetOrCreateSingleton(ref s_defaultOptions, JsonSerializerDefaults.General);
         }
 
         /// <summary>
@@ -251,6 +254,7 @@ namespace System.Text.Json
                 }
 
                 _typeInfoResolver = value;
+                _useInferredMetadata = false;
             }
         }
 
@@ -1025,7 +1029,7 @@ namespace System.Text.Json
                 return null;
             }
 
-            JsonTypeInfo? info = resolver.GetTypeInfo(type, this);
+            JsonTypeInfo? info = (_useInferredMetadata ? Neemle.SystemTextJson.InferredJsonOperations.Resolver : resolver).GetTypeInfo(type, this);
 
             if (info != null)
             {
@@ -1162,8 +1166,48 @@ namespace System.Text.Json
                 if (_options is not null)
                 {
                     _options._typeInfoResolver = this;
+                    _options._useInferredMetadata = false;
                 }
             }
+        }
+
+        // Generated operation entry points use the same default instance without rooting reflection.
+        internal static JsonSerializerOptions GetInferredDefault()
+        {
+            if (s_defaultOptions is JsonSerializerOptions existing)
+            {
+                return existing;
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                TypeInfoResolver = JsonTypeInfoResolver.Empty,
+                _isReadOnly = true,
+                _useInferredMetadata = true,
+            };
+            return Interlocked.CompareExchange(ref s_defaultOptions, options, null) ?? options;
+        }
+
+        internal void ConfigureForInferredJsonSerializer()
+        {
+            if (_isConfiguredForJsonSerializer)
+            {
+                return;
+            }
+
+            if (_typeInfoResolver is null)
+            {
+                // A missing resolver is populated; custom resolvers are never replaced or followed.
+                _typeInfoResolver = Neemle.SystemTextJson.InferredJsonOperations.Resolver;
+            }
+
+            if (!_useInferredMetadata && _typeInfoResolver is EmptyJsonTypeInfoResolver)
+            {
+                ThrowHelper.ThrowInvalidOperationException_JsonSerializerIsReflectionDisabled();
+            }
+
+            _isReadOnly = true;
+            _isConfiguredForJsonSerializer = true;
         }
 
         [RequiresUnreferencedCode(JsonSerializer.SerializationUnreferencedCodeMessage)]
@@ -1183,6 +1227,7 @@ namespace System.Text.Json
                     : JsonTypeInfoResolver.Empty,
 
                 _isReadOnly = true,
+                _useInferredMetadata = !JsonSerializer.IsReflectionEnabledByDefault && Neemle.SystemTextJson.InferredJsonOperations.HasRegistrations,
             };
 
             return Interlocked.CompareExchange(ref location, options, null) ?? options;
