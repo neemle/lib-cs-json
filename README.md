@@ -13,6 +13,10 @@ and import records are in `provenance/`; generated outputs are ignored by Git.
 Additional finite attribute, constructor and inference regression sources are
 preserved under `tests/RegressionSources`, with explicit source-only provenance.
 
+The [Linux/musl Native AOT demo](samples/MuslAotDemo/README.md) exercises ordinary
+JSON calls and documents static executable checks for x64 and ARM64, including
+the current validation results and remaining blockers.
+
 ## Build and JIT checks
 
 Install .NET SDK 10.0.402, then set `DOTNET_ROOT` to its directory. Alternatively,
