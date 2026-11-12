@@ -13,8 +13,12 @@ static class CodecApiEmitter
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(),
             "options", @default: Cs.Literal(null)).Body(Cs.Tree(
             UsingMemoryStream(),
-            Using("w", Cs.Symbol(new() { Type = Cs.Type("Utf8JsonWriter"), AsNew = true,
-                Arguments = Cs.Compound(Cs.Symbol("ms"), WriterOptions()) })),
+            Using("w", Cs.Symbol(new()
+            {
+                Type = Cs.Type("Utf8JsonWriter"),
+                AsNew = true,
+                Arguments = Cs.Compound(Cs.Symbol("ms"), WriterOptions())
+            })),
             NodeCall($"Write_{i}", Cs.Symbol("w"), Cs.Symbol("value"), Cs.Symbol("options"), Cs.Value("$")),
             NodeCall("w.Flush"), Return(NodeCall("Encoding.UTF8.GetString", NodeCall("ms.ToArray"))))).End();
         foreach (string inputType in new[] { "string", "byte[]" })
@@ -42,10 +46,18 @@ static class CodecApiEmitter
             if (async) method.Async().Parameter(Cs.Type("CancellationToken"), "cancellationToken",
                 @default: new CsExpression(ExpressionKind.Default, "", []));
             CsNode[] args = async ? [Cs.Symbol("bytes"), Cs.Symbol("cancellationToken")] : [Cs.Symbol("bytes")];
-            var write = Cs.Symbol(async ? "WriteAsync" : "Write", new() { Target = Cs.Symbol("stream"),
-                AsCall = true, Await = async, Arguments = Cs.Compound(args) });
-            method.Body(Cs.Tree(Cs.Symbol("bytes", new() { AsVar = true,
-                    Value = NodeCall($"EncodeBytes_{i}", Cs.Symbol("value"), Cs.Symbol("options")) }),
+            var write = Cs.Symbol(async ? "WriteAsync" : "Write", new()
+            {
+                Target = Cs.Symbol("stream"),
+                AsCall = true,
+                Await = async,
+                Arguments = Cs.Compound(args)
+            });
+            method.Body(Cs.Tree(Cs.Symbol("bytes", new()
+            {
+                AsVar = true,
+                Value = NodeCall($"EncodeBytes_{i}", Cs.Symbol("value"), Cs.Symbol("options"))
+            }),
                 write)).End();
         }
         EmitStreamReadApi(i, name, root);
@@ -61,8 +73,13 @@ static class CodecApiEmitter
             if (async) method.Async().Parameter(Cs.Type("CancellationToken"), "cancellationToken",
                 @default: new CsExpression(ExpressionKind.Default, "", []));
             CsNode[] args = async ? [Cs.Symbol("ms"), Cs.Symbol("cancellationToken")] : [Cs.Symbol("ms")];
-            var copy = Cs.Symbol(async ? "CopyToAsync" : "CopyTo", new() { Target = Cs.Symbol("stream"),
-                AsCall = true, Await = async, Arguments = Cs.Compound(args) });
+            var copy = Cs.Symbol(async ? "CopyToAsync" : "CopyTo", new()
+            {
+                Target = Cs.Symbol("stream"),
+                AsCall = true,
+                Await = async,
+                Arguments = Cs.Compound(args)
+            });
             method.Body(Cs.Tree(UsingMemoryStream(),
                 copy,
                 Return(NodeCall($"Decode_{i}", NodeCall("ms.ToArray"), Cs.Symbol("options"))))).End();
@@ -70,10 +87,10 @@ static class CodecApiEmitter
     }
 
     private static CsSymbol UsingMemoryStream() => Using("ms", Cs.Symbol(new()
-        { Type = Cs.Type("MemoryStream"), AsNew = true }));
+    { Type = Cs.Type("MemoryStream"), AsNew = true }));
 
     private static CsSymbol Using(string name, CsNode value) => Cs.Symbol(name, new()
-        { AsVar = true, Using = true, Value = value });
+    { AsVar = true, Using = true, Value = value });
 
     private static void EmitDeclaredTypeApi(int i, string name, TypeBuilder<FileBuilder> root)
     {
@@ -86,12 +103,12 @@ static class CodecApiEmitter
                 .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
             CsNode argument = encode ? Cast(name, NonNull(Cs.Symbol("value"))) : Cs.Symbol("json");
             builder.Body(Cs.Tree(Cs.Instruction(InstructionKind.If, new()
-                {
-                    Condition = NodeBinary(CsOperator.NotEqual, Cs.Symbol("declared"),
+            {
+                Condition = NodeBinary(CsOperator.NotEqual, Cs.Symbol("declared"),
                         TypeOf(name)),
-                    Body = Cs.Tree(Cs.Instruction(InstructionKind.Throw, new()
-                        { Value = Cs.Symbol(new() { Type = Cs.Type("NotSupportedException"), AsNew = true }) }))
-                }), Return(NodeCall(method, argument,
+                Body = Cs.Tree(Cs.Instruction(InstructionKind.Throw, new()
+                { Value = Cs.Symbol(new() { Type = Cs.Type("NotSupportedException"), AsNew = true }) }))
+            }), Return(NodeCall(method, argument,
                     Cs.Symbol("options"))))).End();
         }
     }
@@ -102,19 +119,30 @@ static class CodecApiEmitter
 
     private static CsSymbol WriterOptions()
     {
-        CsNode Option(string name) => Cs.Symbol(name, new() { Target = Cs.Symbol("options"),
-            ConditionalAccess = true });
+        CsNode Option(string name) => Cs.Symbol(name, new()
+        {
+            Target = Cs.Symbol("options"),
+            ConditionalAccess = true
+        });
         var indented = NodeBinary(CsOperator.Coalesce, Option("WriteIndented"), Cs.Value(false));
-        return Cs.Symbol(new() { AsNew = true, Type = Cs.Type("JsonWriterOptions"), Initializer = Cs.Symbol(new()
-        { AsInitializer = true, Parts = new CsNode[] { NodeAssign(Cs.Symbol("Indented"), indented),
-            NodeAssign(Cs.Symbol("Encoder"), Option("Encoder")) } }) });
+        return Cs.Symbol(new()
+        {
+            AsNew = true,
+            Type = Cs.Type("JsonWriterOptions"),
+            Initializer = Cs.Symbol(new()
+            {
+                AsInitializer = true,
+                Parts = new CsNode[] { NodeAssign(Cs.Symbol("Indented"), indented),
+            NodeAssign(Cs.Symbol("Encoder"), Option("Encoder")) }
+            })
+        });
     }
 
     internal static CsInstruction Return(CsNode value) =>
         Cs.Instruction(InstructionKind.Return, new() { Value = value });
 
     internal static CsSymbol NodeNew(string type, params CsNode[] args) => Cs.Symbol(new()
-        { Type = NodeType(type), AsNew = true, Arguments = Cs.Compound(args) });
+    { Type = NodeType(type), AsNew = true, Arguments = Cs.Compound(args) });
 
     internal static CsType NodeType(string name) => TypeSyntaxNode(SyntaxFactory.ParseTypeName(name));
 
@@ -143,46 +171,53 @@ static class CodecApiEmitter
     }
 
     internal static CsSymbol Index(CsNode target, params CsNode[] indices) => Cs.Symbol(new()
-        { AsIndex = true, Target = target, Arguments = Cs.Compound(indices) });
+    { AsIndex = true, Target = target, Arguments = Cs.Compound(indices) });
 
     internal static CsSymbol Cast(string type, CsNode value) => Cs.Symbol(new()
-        { AsCast = true, Type = NodeType(type), Value = value });
+    { AsCast = true, Type = NodeType(type), Value = value });
 
     internal static CsSymbol TypeOf(string type) => Cs.Symbol(new()
-        { AsTypeOf = true, Type = NodeType(type) });
+    { AsTypeOf = true, Type = NodeType(type) });
+
+    internal static string TypeName(ITypeSymbol type) =>
+        type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
     internal static CsSymbol DefaultValue() => Cs.Symbol(new() { AsDefault = true });
 
     internal static CsSymbol NonNull(CsNode value) => Cs.Symbol(new()
-        { Operation = SymbolOperation.NullForgiving, Value = value });
+    { Operation = SymbolOperation.NullForgiving, Value = value });
 
     internal static CsSymbol Arg(ArgumentModifier modifier, CsNode value) => Cs.Symbol(new()
-        { Operation = SymbolOperation.Argument, ArgumentModifier = modifier, Value = value });
+    { Operation = SymbolOperation.Argument, ArgumentModifier = modifier, Value = value });
 
     internal static CsSymbol OutVar(string name) => Arg(ArgumentModifier.Out,
         Cs.Symbol(name, new() { Operation = SymbolOperation.Declaration, AsVar = true }));
 
     internal static CsSymbol TypeRef(string name) => Cs.Symbol(new()
-        { Operation = SymbolOperation.TypeReference, Type = NodeType(name) });
+    { Operation = SymbolOperation.TypeReference, Type = NodeType(name) });
 
     internal static CsSymbol NullTest(CsNode value, bool negate = false) => Cs.Symbol(new()
-        { AsIs = true, Value = value, Pattern = negate ? Cs.NotPattern(Cs.ConstantPattern(Cs.Literal(null))) :
-            Cs.ConstantPattern(Cs.Literal(null)) });
+    {
+        AsIs = true,
+        Value = value,
+        Pattern = negate ? Cs.NotPattern(Cs.ConstantPattern(Cs.Literal(null))) :
+            Cs.ConstantPattern(Cs.Literal(null))
+    });
 
     internal static CsSymbol NodeVar(string name, CsNode value) => Cs.Symbol(name, new()
-        { AsVar = true, Value = value });
+    { AsVar = true, Value = value });
 
     internal static CsSymbol NodeAssign(CsNode target, CsNode value) => Cs.Symbol(new()
-        { Target = target, AsAssignment = true, Value = value });
+    { Target = target, AsAssignment = true, Value = value });
 
     internal static CsSymbol NodeMember(CsNode target, string name) => Cs.Symbol(name, new() { Target = target });
 
     internal static CsSymbol NodeBinary(CsOperator op, CsNode left, CsNode right) => Cs.Symbol(new()
-        { Operator = op, Parts = new CsNode[] { left, right } });
+    { Operator = op, Parts = new CsNode[] { left, right } });
 
     internal static CsInstruction NodeEach(string name, CsNode values, params CsNode[] body) =>
         Cs.Instruction(InstructionKind.ForEach, new()
-            { Symbol = Cs.Symbol(name, new() { AsVar = true }), Value = values, Body = Cs.Tree(body) });
+        { Symbol = Cs.Symbol(name, new() { AsVar = true }), Value = values, Body = Cs.Tree(body) });
 
     internal static CsInstruction NodeIf(CsNode condition, params CsNode[] body) =>
         Cs.Instruction(InstructionKind.If, new() { Condition = condition, Body = Cs.Tree(body) });

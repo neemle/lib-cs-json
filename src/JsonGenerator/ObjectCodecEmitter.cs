@@ -26,11 +26,21 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         bool parameterless = UsesParameterless(type, properties);
         body.Add(NodeCall("RequireObject", Cs.Symbol("e")));
         PopulateEmitter.EmitValidation(body, properties);
-        body.Add(Cs.Symbol("result", new() { Type = NodeType(name),
-            Value = parameterless ? NodeNew(name) : NonNull(DefaultValue()) }));
-        body.Add(Cs.Symbol("state", new() { Type = Cs.Type("object").Nullable().Array(), Value = Cs.Symbol(new()
-            { AsArray = true, Type = Cs.Type("object").Nullable(),
-                Arguments = Cs.Compound(Cs.Value(properties.Length * 2)) }) }));
+        body.Add(Cs.Symbol("result", new()
+        {
+            Type = NodeType(name),
+            Value = parameterless ? NodeNew(name) : NonNull(DefaultValue())
+        }));
+        body.Add(Cs.Symbol("state", new()
+        {
+            Type = Cs.Type("object").Nullable().Array(),
+            Value = Cs.Symbol(new()
+            {
+                AsArray = true,
+                Type = Cs.Type("object").Nullable(),
+                Arguments = Cs.Compound(Cs.Value(properties.Length * 2))
+            })
+        }));
         string read = parameterless ? "ReadEntry_" : "ReadMembers_";
         body.Add(ReadEntries(read + index));
         body.Add(NodeCall($"ValidateMembers_{index}", Cs.Symbol("state")));
@@ -54,9 +64,12 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
             PopulateEmitter.CanHandleReadonly(p));
 
     private static CsSymbol Construction(IPropertySymbol[] properties, string name) => NodeNew(name,
-        properties.Select((property, index) => Cs.Symbol(new() { AsCall = true,
+        properties.Select((property, index) => Cs.Symbol(new()
+        {
+            AsCall = true,
             Target = Cs.Symbol("GetSlot", new() { TypeArguments = new[] { NodeType(TypeName(property.Type)) } }),
-            Arguments = Cs.Compound(Cs.Symbol("state"), Cs.Value(index)) })).ToArray());
+            Arguments = Cs.Compound(Cs.Symbol("state"), Cs.Value(index))
+        })).ToArray());
 
     internal void EmitObjectHelpers(TypeBuilder<FileBuilder> root, INamedTypeSymbol type, int index)
     {
@@ -87,8 +100,12 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
             NodeCall("entry.Value.WriteTo", Cs.Symbol("w")));
         root.Method(Cs.Void, $"WriteExtra_{index}").Private().Static()
             .Parameter(Cs.Type("Utf8JsonWriter"), "w").Parameter(NodeType(type), "value")
-            .Body(Cs.Tree(NodeIf(Cs.Symbol(new() { AsIs = true, Value = NodeMember(Cs.Symbol("value"), name),
-                Pattern = new CsPattern(PatternKind.Recursive) { HasProperties = true, Name = "extra" } }), loop)))
+            .Body(Cs.Tree(NodeIf(Cs.Symbol(new()
+            {
+                AsIs = true,
+                Value = NodeMember(Cs.Symbol("value"), name),
+                Pattern = new CsPattern(PatternKind.Recursive) { HasProperties = true, Name = "extra" }
+            }), loop)))
             .End();
     }
 
@@ -119,7 +136,9 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
                 Path(Cs.Symbol(name)))];
         CsNode? condition = IgnoreCondition(property) switch
         {
-            2 => NonDefaultExpression(property), 3 => NullTest(Cs.Symbol(value), true), _ => null
+            2 => NonDefaultExpression(property),
+            3 => NullTest(Cs.Symbol(value), true),
+            _ => null
         };
         if (condition is null) body.AddRange(statements);
         else body.Add(NodeIf(condition, statements));
@@ -175,8 +194,12 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
             var condition = NodeBinary(CsOperator.Equal, NodeMember(Cs.Symbol(input), "ValueKind"),
                 NodeMember(Cs.Symbol("JsonValueKind"), "String"));
             var parse = NodeCall("ParseInt32", Cs.Symbol(input), path);
-            body.Add(Cs.Instruction(InstructionKind.If, new() { Condition = condition,
-                Body = Cs.Tree(NodeAssign(target, parse)), Else = Cs.Tree(NodeAssign(target, read)) }));
+            body.Add(Cs.Instruction(InstructionKind.If, new()
+            {
+                Condition = condition,
+                Body = Cs.Tree(NodeAssign(target, parse)),
+                Else = Cs.Tree(NodeAssign(target, read))
+            }));
         }
         else body.Add(NodeAssign(target, read));
     }
@@ -253,13 +276,19 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
     private static void EmitDispatchMethod(TypeBuilder<FileBuilder> root, string name, string type,
         IEnumerable<string> methods, string kind)
     {
-        var method = kind switch { "write" => Writer(root, name, type), "read" => Reader(root, name, type),
-            _ => Validator(root, name) };
-        CsNode[] args = kind switch {
+        var method = kind switch
+        {
+            "write" => Writer(root, name, type),
+            "read" => Reader(root, name, type),
+            _ => Validator(root, name)
+        };
+        CsNode[] args = kind switch
+        {
             "write" => [Cs.Symbol("w"), Cs.Symbol("value"), Cs.Symbol("options"), Cs.Symbol("path")],
             "read" => [Cs.Symbol("entry"), Arg(ArgumentModifier.Ref, Cs.Symbol("result")), Cs.Symbol("state"),
                 Cs.Symbol("options"), Cs.Symbol("path")],
-            _ => [Cs.Symbol("state")] };
+            _ => [Cs.Symbol("state")]
+        };
         method.Body(Cs.Tree(methods.Select(item => NodeCall(item, args)).ToArray())).End();
     }
 
@@ -274,13 +303,24 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         body.Add(NodeCall($"ReadFields_{index}", args));
         var extension = ExtensionProperty(type);
         if (extension is not null)
-            body.Add(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts =
+            body.Add(NodeIf(Cs.Symbol(new()
+            {
+                Operator = CsOperator.Not,
+                Parts =
                 new CsNode[] { NodeCall($"IsKnown_{index}", NodeMember(Cs.Symbol("entry"), "Name"),
-                    Cs.Symbol("options")) } }),
-                NodeAssign(Index(Cs.Symbol(new() { AsParenthesized = true, Value = Cs.Symbol(new()
-                    { AsAssignment = true, Operator = CsOperator.Coalesce,
+                    Cs.Symbol("options")) }
+            }),
+                NodeAssign(Index(Cs.Symbol(new()
+                {
+                    AsParenthesized = true,
+                    Value = Cs.Symbol(new()
+                    {
+                        AsAssignment = true,
+                        Operator = CsOperator.Coalesce,
                         Target = NodeMember(Cs.Symbol("result"), extension.Name),
-                        Value = Cs.Symbol(new() { AsNew = true }) }) }), NodeMember(Cs.Symbol("entry"), "Name")),
+                        Value = Cs.Symbol(new() { AsNew = true })
+                    })
+                }), NodeMember(Cs.Symbol("entry"), "Name")),
                     NodeCall("entry.Value.Clone"))));
         Reader(root, (parameterless ? "ReadEntry_" : "ReadRemaining_") + index, typeName)
             .Body(Cs.Tree(body.ToArray())).End();

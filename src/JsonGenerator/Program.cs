@@ -177,8 +177,11 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter) : CSharpSynt
 
     private static string OperationName(string name) => name switch
     {
-        "Serialize" => "Encode_", "Deserialize" => "Decode_", "SerializeToUtf8Bytes" => "EncodeBytes_",
-        "SerializeAsync" => "EncodeAsync_", _ => "DecodeAsync_"
+        "Serialize" => "Encode_",
+        "Deserialize" => "Decode_",
+        "SerializeToUtf8Bytes" => "EncodeBytes_",
+        "SerializeAsync" => "EncodeAsync_",
+        _ => "DecodeAsync_"
     };
 
     private IArgumentOperation[] ValidateOptions(IInvocationOperation operation)
@@ -318,9 +321,15 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter) : CSharpSynt
                 if (identifier.Parent is ObjectCreationExpressionSyntax creation && creation.Type == identifier &&
                     creation.Parent is ArgumentSyntax argument && argument.Parent?.Parent is
                         InvocationExpressionSyntax invocation &&
-                    invocation.Expression is MemberAccessExpressionSyntax { Name.Identifier.ValueText:
-                        "Add", Expression: MemberAccessExpressionSyntax { Name.Identifier.ValueText:
-                        "Converters" } }) continue;
+                    invocation.Expression is MemberAccessExpressionSyntax
+                    {
+                        Name.Identifier.ValueText:
+                        "Add", Expression: MemberAccessExpressionSyntax
+                        {
+                            Name.Identifier.ValueText:
+                        "Converters"
+                        }
+                    }) continue;
                 return false;
             }
         }

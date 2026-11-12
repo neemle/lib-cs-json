@@ -104,17 +104,23 @@ sealed class CodecEmitter
 
     internal static string? IntegralGetter(SpecialType type) => type switch
     {
-        SpecialType.System_Byte => "GetByte", SpecialType.System_SByte => "GetSByte",
-        SpecialType.System_Int16 => "GetInt16", SpecialType.System_UInt16 => "GetUInt16",
-        SpecialType.System_Int32 => "GetInt32", SpecialType.System_UInt32 => "GetUInt32",
-        SpecialType.System_Int64 => "GetInt64", SpecialType.System_UInt64 => "GetUInt64",
+        SpecialType.System_Byte => "GetByte",
+        SpecialType.System_SByte => "GetSByte",
+        SpecialType.System_Int16 => "GetInt16",
+        SpecialType.System_UInt16 => "GetUInt16",
+        SpecialType.System_Int32 => "GetInt32",
+        SpecialType.System_UInt32 => "GetUInt32",
+        SpecialType.System_Int64 => "GetInt64",
+        SpecialType.System_UInt64 => "GetUInt64",
         _ => null
     };
 
     private static string? FloatingGetter(SpecialType type) => type switch
     {
-        SpecialType.System_Single => "GetSingle", SpecialType.System_Double => "GetDouble",
-        SpecialType.System_Decimal => "GetDecimal", _ => null
+        SpecialType.System_Single => "GetSingle",
+        SpecialType.System_Double => "GetDouble",
+        SpecialType.System_Decimal => "GetDecimal",
+        _ => null
     };
 
     private static Shape GetShape(ITypeSymbol type) => ScalarShape(type.SpecialType) ?? CompositeShape(type);
@@ -145,8 +151,11 @@ sealed class CodecEmitter
         if (HierarchyMembers(named).OfType<IPropertySymbol>().Count(p => p.GetAttributes()
             .Any(a => IsJsonAttribute(a, "JsonExtensionDataAttribute"))) > 1) return false;
         var extension = ExtensionProperty(named);
-        if (extension is not null && (extension.SetMethod is not { DeclaredAccessibility: Accessibility
-            .Public, IsInitOnly: false } ||
+        if (extension is not null && (extension.SetMethod is not
+            {
+                DeclaredAccessibility: Accessibility
+            .Public, IsInitOnly: false
+            } ||
             extension.Type is not INamedTypeSymbol extType || extType.OriginalDefinition.ToDisplayString()
                 != "System.Collections.Generic.Dictionary<TKey, TValue>" ||
             extType.TypeArguments[0].SpecialType != SpecialType.System_String || extType.TypeArguments[1]
@@ -158,8 +167,11 @@ sealed class CodecEmitter
     {
         bool parameterless = named.InstanceConstructors.Any(c => c.DeclaredAccessibility == Accessibility
             .Public && c.Parameters.Length == 0);
-        bool settable = members.All(p => p.SetMethod is { DeclaredAccessibility: Accessibility.Public,
-            IsInitOnly: false } || PopulateEmitter.CanHandleReadonly(p));
+        bool settable = members.All(p => p.SetMethod is
+        {
+            DeclaredAccessibility: Accessibility.Public,
+            IsInitOnly: false
+        } || PopulateEmitter.CanHandleReadonly(p));
         bool positional = Constructor(named, members) is not null;
         var marked = named.InstanceConstructors.Where(IsJsonConstructor).ToArray();
         if (marked.Length > 1 || marked.Length == 1 && (marked[0].DeclaredAccessibility != Accessibility.Public ||
@@ -251,9 +263,13 @@ sealed class CodecEmitter
             if (!isEnum) method.Parameter(converterType, "converter");
             var factory = Cs.Lambda(new CsExpression(ExpressionKind.New, "", []) { Type = Cs.Type($"Holder_{i}") },
                 Cs.LambdaParameter("_"))
-                with { IsStatic = true };
-            var condition = Cs.Symbol(new() { Operator = CsOperator.Not,
-                Parts = new CsNode[] { NodeMember(Cs.Symbol("holder"), "Registered") } });
+                with
+            { IsStatic = true };
+            var condition = Cs.Symbol(new()
+            {
+                Operator = CsOperator.Not,
+                Parts = new CsNode[] { NodeMember(Cs.Symbol("holder"), "Registered") }
+            });
             method.Body(Cs.Tree(NodeVar("holder", NodeCall($"Table_{i}.GetValue", Cs.Symbol("options"), factory)),
                 NodeIf(condition, NodeAssign(NodeMember(Cs.Symbol("holder"), isEnum ? "StringEnum" : "Converter"),
                         isEnum ? Cs.Value(true) : Cs.Symbol("converter")),
@@ -303,8 +319,11 @@ sealed class CodecEmitter
 
     private void EmitNullableWriter(List<CsNode> body, INamedTypeSymbol type)
     {
-        body.Add(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not,
-            Parts = new CsNode[] { NodeMember(Cs.Symbol("value"), "HasValue") } }), NodeCall("w.WriteNullValue"),
+        body.Add(NodeIf(Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[] { NodeMember(Cs.Symbol("value"), "HasValue") }
+        }), NodeCall("w.WriteNullValue"),
             Cs.Instruction(InstructionKind.Return)));
         body.Add(NodeCall($"Write_{Register(type.TypeArguments[0])}", Cs.Symbol("w"),
             NodeMember(Cs.Symbol("value"), "Value"), Cs.Symbol("options"), Cs.Symbol("path")));
@@ -335,8 +354,11 @@ sealed class CodecEmitter
             body.Add(NodeIf(NodeBinary(CsOperator.Equal, NodeMember(Cs.Symbol("e"), "ValueKind"),
                 NodeMember(Cs.Symbol("JsonValueKind"), "Null")), Return(NonNull(DefaultValue()))));
         body.Add(NodeIf(NodeCall($"TryReadCustom_{i}", Cs.Symbol("e"), Cs.Symbol("options"), Cs.Symbol("path"),
-            Arg(ArgumentModifier.Out, Cs.Symbol("customValue", new() { Operation = SymbolOperation.Declaration,
-                Type = NodeType(name) }))), Return(Cs.Symbol("customValue"))));
+            Arg(ArgumentModifier.Out, Cs.Symbol("customValue", new()
+            {
+                Operation = SymbolOperation.Declaration,
+                Type = NodeType(name)
+            }))), Return(Cs.Symbol("customValue"))));
         EmitReadBody(type, i, name, body);
         root.Method(NodeType(name), $"Read_{i}").Private().Static().Parameter(Cs.Type("JsonElement"), "e")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options").Parameter(Cs.Type("string"), "path")
@@ -361,15 +383,19 @@ sealed class CodecEmitter
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options").Parameter(Cs.Type("string"), "path")
             .Parameter(NodeType(name), "value", "out")
             .Body(Cs.Tree(Cs.Instruction(InstructionKind.If, new()
-                { Condition = ConverterCondition(i), Body = custom }),
+            { Condition = ConverterCondition(i), Body = custom }),
                 NodeAssign(Cs.Symbol("value"), NonNull(DefaultValue())), Return(Cs.Value(false)))).End();
     }
 
     private static CsSymbol ConverterCondition(int i) => NodeBinary(CsOperator.AndAlso,
         NodeBinary(CsOperator.AndAlso, NullTest(Cs.Symbol("options"), true),
             NodeCall($"Table_{i}.TryGetValue", Cs.Symbol("options"), OutVar("custom"))),
-        Cs.Symbol(new() { AsIs = true, Value = NodeMember(Cs.Symbol("custom"), "Converter"),
-            Pattern = new CsPattern(PatternKind.Recursive) { HasProperties = true, Name = "converter" } }));
+        Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = NodeMember(Cs.Symbol("custom"), "Converter"),
+            Pattern = new CsPattern(PatternKind.Recursive) { HasProperties = true, Name = "converter" }
+        }));
 
     private void EmitReadBody(ITypeSymbol type, int i, string name, List<CsNode> body)
     {
@@ -385,17 +411,21 @@ sealed class CodecEmitter
                 body.Add(Return(NodeCall($"Read_{index}", Cs.Symbol("e"), Cs.Symbol("options"), Cs.Symbol("path"))));
                 break;
             case Shape.List: EmitListReader(body, name, (INamedTypeSymbol)type); break;
-            case Shape.Enum: body.Add(EnumOption(i));
+            case Shape.Enum:
+                body.Add(EnumOption(i));
                 body.Add(Return(NodeCall($"ReadEnum_{i}", Cs.Symbol("e"), Cs.Symbol("stringEnum")))); break;
             case Shape.Map: EmitMapReader(body, name, (INamedTypeSymbol)type); break;
             default: objectEmitter.EmitObjectReader(body, (INamedTypeSymbol)type, i); break;
         }
     }
 
-    private static CsSymbol EnumOption(int i) => Cs.Symbol("stringEnum", new() { Type = Cs.Bool,
+    private static CsSymbol EnumOption(int i) => Cs.Symbol("stringEnum", new()
+    {
+        Type = Cs.Bool,
         Value = NodeBinary(CsOperator.AndAlso, NodeBinary(CsOperator.AndAlso, NullTest(Cs.Symbol("options"), true),
             NodeCall($"Table_{i}.TryGetValue", Cs.Symbol("options"), OutVar("entry"))),
-            NodeMember(Cs.Symbol("entry"), "StringEnum")) });
+            NodeMember(Cs.Symbol("entry"), "StringEnum"))
+    });
 
     private void EmitListReader(List<CsNode> body, string name, INamedTypeSymbol type)
     {
@@ -456,8 +486,6 @@ sealed class CodecEmitter
     private static CsStatement Assign(CsExpression target, CsExpression value) =>
         Cs.Statement(Cs.Assign(target, value));
 
-    internal static string TypeName(ITypeSymbol type) =>
-        type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
     private static CsExpression LegacyArgument(ArgumentModifier modifier, string name) =>
         new(ExpressionKind.Argument, "", new[] { Cs.Id(name) }) { ArgumentModifier = modifier };
     private static string JsonName(ISymbol p) => p.GetAttributes()
@@ -467,10 +495,18 @@ sealed class CodecEmitter
     {
         if (p.GetAttributes().Any(a => IsJsonAttribute(a, "JsonPropertyNameAttribute")))
             return Cs.Value(JsonName(p));
-        var policy = Cs.Symbol("PropertyNamingPolicy", new() { Target = Cs.Symbol("options"),
-            ConditionalAccess = true });
-        var convert = Cs.Symbol("ConvertName", new() { Target = policy, ConditionalAccess = true,
-            AsCall = true, Arguments = Cs.Compound(Cs.Value(p.Name)) });
+        var policy = Cs.Symbol("PropertyNamingPolicy", new()
+        {
+            Target = Cs.Symbol("options"),
+            ConditionalAccess = true
+        });
+        var convert = Cs.Symbol("ConvertName", new()
+        {
+            Target = policy,
+            ConditionalAccess = true,
+            AsCall = true,
+            Arguments = Cs.Compound(Cs.Value(p.Name))
+        });
         return NodeBinary(CsOperator.Coalesce, convert, Cs.Value(p.Name));
     }
     internal static bool IsRequired(IPropertySymbol p) => p.IsRequired ||

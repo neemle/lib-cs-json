@@ -45,11 +45,15 @@ static class PopulateEmitter
         if (elementReadIndex < 0) throw new ArgumentOutOfRangeException(nameof(elementReadIndex));
         CsNode condition = ExplicitHandling(property) switch
         {
-            1 => Cs.Literal(true), 0 => Cs.Literal(false),
+            1 => Cs.Literal(true),
+            0 => Cs.Literal(false),
             _ => NodeBinary(CsOperator.Equal, Cs.Symbol("PreferredObjectCreationHandling", new()
-                { Target = Cs.Symbol("options"), ConditionalAccess = true }),
-                NodeMember(Cs.Symbol(new() { Operation = SymbolOperation.TypeReference,
-                    Type = NodeType("global::System.Text.Json.Serialization.JsonObjectCreationHandling") }),
+            { Target = Cs.Symbol("options"), ConditionalAccess = true }),
+                NodeMember(Cs.Symbol(new()
+                {
+                    Operation = SymbolOperation.TypeReference,
+                    Type = NodeType("global::System.Text.Json.Serialization.JsonObjectCreationHandling")
+                }),
                     "Populate"))
         };
         string member = SyntaxFacts.GetKeywordKind(property.Name) == SyntaxKind.None

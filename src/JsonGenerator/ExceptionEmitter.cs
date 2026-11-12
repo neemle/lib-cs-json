@@ -9,10 +9,13 @@ internal static class ExceptionEmitter
     {
         root.Method(Cs.Type("NotSupportedException"), "ConverterNotSupported").Private().Static()
             .Parameter(Cs.Type("NotSupportedException"), "error").Parameter(Cs.Type("string"), "path")
-            .Body(Cs.Tree(Cs.Instruction(InstructionKind.Return, new() { Value = NodeNew("NotSupportedException",
+            .Body(Cs.Tree(Cs.Instruction(InstructionKind.Return, new()
+            {
+                Value = NodeNew("NotSupportedException",
                 NodeBinary(CsOperator.Add, NodeBinary(CsOperator.Add,
                     NodeBinary(CsOperator.Add, NodeMember(Cs.Symbol("error"), "Message"), Cs.Value(" Path: ")),
-                    Cs.Symbol("path")), Cs.Value(".")), Cs.Symbol("error")) })))
+                    Cs.Symbol("path")), Cs.Value(".")), Cs.Symbol("error"))
+            })))
             .End();
         root.Method(Cs.Type("void"), "RequireObject").Private().Static()
             .Parameter(Cs.Type("JsonElement"), "element")
@@ -31,9 +34,12 @@ internal static class ExceptionEmitter
             .End();
         root.Method(Cs.Type("JsonException"), "InvalidScalar").Private().Static()
             .Parameter(Cs.Type("Exception"), "error").Parameter(Cs.Type("string"), "path")
-            .Body(Cs.Tree(Cs.Instruction(InstructionKind.Return, new() { Value = NodeNew("JsonException",
+            .Body(Cs.Tree(Cs.Instruction(InstructionKind.Return, new()
+            {
+                Value = NodeNew("JsonException",
                 NodeMember(Cs.Symbol("error"), "Message"), Cs.Symbol("path"), Cs.Value(null), Cs.Value(null),
-                Cs.Symbol("error")) })))
+                Cs.Symbol("error"))
+            })))
             .End();
         var catches = new[] { "FormatException", "OverflowException" }.Select(type =>
             Cs.Catch(Cs.Type(type), Cs.Body(Cs.Throw(Cs.Call(Cs.Id("InvalidScalar"),

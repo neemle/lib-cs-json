@@ -5,6 +5,8 @@
       >$([System.IO.Path]::GetRelativePath('$(_JsonRepoRoot)', '$(MSBuildProjectDirectory)'))</_ProjectRelativePath>
     <BaseIntermediateOutputPath
       >$(_JsonRepoRoot).dev-temp/obj/$(_ProjectRelativePath)/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <BaseOutputPath Condition="'$(BaseOutputPath)' == ''"
+      >$(_JsonRepoRoot).dev-temp/bin/$(_ProjectRelativePath)/$(MSBuildProjectName)/</BaseOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

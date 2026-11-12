@@ -1,18 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework><OutputType>Exe</OutputType>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RollForward>Major</RollForward>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Neemle.SystemTextJson</PackageId>
+    <Version>0.9.7</Version>
+    <Authors>Neemle</Authors>
+    <Description>Compile-time JSON generation for .NET NativeAOT.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Program.cs;GeneratedCodeLayout.cs;CodecEmitter.cs;ObjectCodecEmitter.cs;CodecApiEmitter.cs" />
-    <Compile Include="EnumEmitter.cs;PopulateEmitter.cs;ExceptionEmitter.cs" />
-    <PackageReference Include="Neemle.CSharpComposer" Version="0.5.0" />
-    <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>$(MSBuildToolsPath)/Roslyn/bincore/Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>$(MSBuildToolsPath)/Roslyn/bincore/Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Neemle.CSharpComposer" Version="0.5.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Neemle.SystemTextJson.targets" Pack="true" PackagePath="buildTransitive/" />
+    <None Include="$(OutputPath)JsonGenerator.dll" Pack="true" PackagePath="tools/" />
+    <None Include="$(OutputPath)JsonGenerator.deps.json" Pack="true" PackagePath="tools/" />
+    <None Include="$(OutputPath)JsonGenerator.runtimeconfig.json" Pack="true" PackagePath="tools/" />
+    <None Include="$(OutputPath)Neemle.CSharpComposer.dll" Pack="true" PackagePath="tools/" />
+    <None Include="$(OutputPath)Microsoft.CodeAnalysis.dll" Pack="true" PackagePath="tools/" />
+    <None Include="$(OutputPath)Microsoft.CodeAnalysis.CSharp.dll" Pack="true" PackagePath="tools/" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE.TXT" Pack="true" PackagePath="/" />
+    <None Include="Roslyn.LICENSE.txt" Pack="true" PackagePath="tools/" />
+    <None Include="$(BaseIntermediateOutputPath)package/_._" Pack="true" PackagePath="lib/net10.0/" />
+  </ItemGroup>
+  <Target Name="CreatePackagePlaceholder" BeforeTargets="GenerateNuspec">
+    <MakeDir Directories="$(BaseIntermediateOutputPath)package" />
+    <Touch Files="$(BaseIntermediateOutputPath)package/_._" AlwaysCreate="true" />
+  </Target>
 </Project>

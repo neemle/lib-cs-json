@@ -80,14 +80,15 @@ static class EnumEmitter
         Initializer = Cs.Symbol("i", new() { AsVar = true, Value = Cs.Value(0) }),
         Condition = NodeBinary(CsOperator.LessThan, Cs.Symbol("i"),
             NodeMember(Cs.Symbol($"Enum{table}_{index}"), "Length")),
-        Iterators = Cs.Compound(Cs.PostIncrement(Cs.Id("i"))), Body = body
+        Iterators = Cs.Compound(Cs.PostIncrement(Cs.Id("i"))),
+        Body = body
     });
 
     private static CsSymbol Call(string name, CsNode target, params CsNode[] args) =>
         Cs.Symbol(name, new() { Target = target, AsCall = true, Arguments = Cs.Compound(args) });
 
     private static CsInstruction ThrowJson() => Cs.Instruction(InstructionKind.Throw, new()
-        { Value = Cs.Symbol(new() { AsNew = true, Type = Cs.Type("JsonException") }) });
+    { Value = Cs.Symbol(new() { AsNew = true, Type = Cs.Type("JsonException") }) });
 
     private static CsSymbol Kind(string name) => NodeBinary(CsOperator.Equal,
         NodeMember(Cs.Symbol("e"), "ValueKind"), NodeMember(Cs.Symbol("JsonValueKind"), name));
@@ -104,6 +105,9 @@ static class EnumEmitter
         ?.ConstructorArguments.FirstOrDefault().Value as string ?? field.Name;
 
     private static CsExpression ArrayInitializer(CsType type, CsExpression[] values) =>
-        new(ExpressionKind.Array, "", []) { Type = type,
-            Initializer = new CsExpression(ExpressionKind.Initializer, "", values) };
+        new(ExpressionKind.Array, "", [])
+        {
+            Type = type,
+            Initializer = new CsExpression(ExpressionKind.Initializer, "", values)
+        };
 }

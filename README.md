@@ -1,27 +1,28 @@
 # Neemle.SystemTextJson
 
-A compile-time JSON generator for .NET 10 NativeAOT applications on Linux musl
-(x64 and ARM64). The package uses the .NET SDK's `System.Text.Json` reader and
-writer and generates direct serialization code for supported source types.
+A compile-time JSON generator for .NET 10 NativeAOT on Linux musl (ARM64 and x64).
+It generates serialization code for supported types using `System.Text.Json`.
 
-Build the package and run the console demo inside Microsoft's official image:
+Build the NuGet package with a stable .NET SDK version 10 or later:
 
 ```sh
-docker run --rm --platform linux/arm64 -v "$PWD:/work" -w /work \
-  -e DEMO_RID=linux-musl-arm64 \
-  mcr.microsoft.com/dotnet/sdk:10.0.403-alpine3.24-aot \
-  sh -ec 'apk add --no-cache bash >/dev/null; bash eng/build.sh'
+dotnet build Neemle.SystemTextJson.slnx -c Release
+dotnet pack src/JsonGenerator/JsonGenerator.csproj -c Release -o .dev-temp/packages
 ```
 
-Use `linux-musl-x64` on x64. The package is written to the project root; set
-`PACKAGE_OUTPUT_DIR` to choose another directory and `PACKAGE_VERSION` to choose
-the version. Omit `DEMO_RID` to build only the package. To push it, supply both
-`NUGET_SOURCE` and `NUGET_API_KEY` to the container.
+To build and run the demo on a Linux musl ARM64 machine or in Microsoft's
+`mcr.microsoft.com/dotnet/sdk:10.0.403-alpine3.24-aot` image:
 
-The package rewrites supported calls before C# compilation and reports an error
-for unsupported types, options, and converter usages. It does not yet provide
-full System.Text.Json API or behavioral compatibility. The demo builds without
-reflection metadata, with invariant globalization and fatal warnings; it checks
-its results and prints `JSON_DEMO_PASS` on success.
+```sh
+dotnet restore samples/JsonAotDemo/JsonAotDemo.csproj -r linux-musl-arm64 \
+  --source .dev-temp/packages --source https://api.nuget.org/v3/index.json
+dotnet publish samples/JsonAotDemo/JsonAotDemo.csproj -c Release -r linux-musl-arm64 --no-restore
+.dev-temp/bin/samples/JsonAotDemo/JsonAotDemo/Release/net10.0/linux-musl-arm64/publish/JsonAotDemo
+```
+
+Use `linux-musl-x64` for x64. The package generates code during compilation and
+reports unsupported types, options and converter usages. It does not yet provide
+full System.Text.Json compatibility. The demo uses invariant globalization,
+no reflection metadata and fatal warnings; it prints `JSON_DEMO_PASS` on success.
 
 MIT. See [LICENSE.TXT](LICENSE.TXT).
