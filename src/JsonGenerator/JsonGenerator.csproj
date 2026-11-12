@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework><OutputType>Exe</OutputType>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs;GeneratedCodeLayout.cs;CodecEmitter.cs;ObjectCodecEmitter.cs;CodecApiEmitter.cs" />
+    <Compile Include="EnumEmitter.cs;PopulateEmitter.cs;ExceptionEmitter.cs" />
+    <PackageReference Include="Neemle.CSharpComposer" Version="0.5.0" />
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>$(MSBuildToolsPath)/Roslyn/bincore/Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>$(MSBuildToolsPath)/Roslyn/bincore/Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

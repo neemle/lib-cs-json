@@ -1,1 +1,21 @@
-<Project><PropertyGroup><TreatWarningsAsErrors>true</TreatWarningsAsErrors><Deterministic>true</Deterministic><IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion><ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally><UseSharedCompilation>false</UseSharedCompilation></PropertyGroup></Project>
+<Project>
+  <PropertyGroup Condition="'$(BaseIntermediateOutputPath)' == ''">
+    <_JsonRepoRoot>$(MSBuildThisFileDirectory)</_JsonRepoRoot>
+    <_ProjectRelativePath
+      >$([System.IO.Path]::GetRelativePath('$(_JsonRepoRoot)', '$(MSBuildProjectDirectory)'))</_ProjectRelativePath>
+    <BaseIntermediateOutputPath
+      >$(_JsonRepoRoot).dev-temp/obj/$(_ProjectRelativePath)/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <DebugType>portable</DebugType>
+    <ProvideCommandLineArgs>true</ProvideCommandLineArgs>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <UseSharedCompilation>false</UseSharedCompilation>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**;**/.dev-temp/**</DefaultItemExcludes>
+  </PropertyGroup>
+</Project>

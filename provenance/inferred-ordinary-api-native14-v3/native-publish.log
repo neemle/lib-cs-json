@@ -1,4 +1,0 @@
-  OrdinaryJson -> /private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-zo92kktg/native-build/bin/OrdinaryJson/release_osx-arm64/OrdinaryJson.dll
-  Generating native code
-  Native input changed: /private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-zo92kktg/native-build/obj/OrdinaryJson/release_osx-arm64/native/OrdinaryJson.ilc.rsp
-/Users/para/.nuget/packages/microsoft.dotnet.ilcompiler/10.0.14/build/Microsoft.NETCore.Native.targets(330,5): error MSB3073: The command ""/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-zo92kktg/native-consumer/compiler/ilc" @"/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-zo92kktg/native-build/obj/OrdinaryJson/release_osx-arm64/native/OrdinaryJson.ilc.rsp"" exited with code 1. [/private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-zo92kktg/native-consumer/OrdinaryJson.csproj]

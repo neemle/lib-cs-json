@@ -1,9 +1,0 @@
-  Determining projects to restore...
-  Restored /Users/para/work/system-text-json/src/System.Text.Json.SourceGeneration/System.Text.Json.SourceGeneration.csproj (in 28 ms).
-  System.Text.Json.SourceGeneration -> /private/var/folders/27/dp5hyyp534sbswt4pcm1mlqc0000gn/T/stj-inferred-json-f0365_0y/build/bin/System.Text.Json.SourceGeneration/release/System.Text.Json.SourceGeneration.dll
-
-Build succeeded.
-    0 Warning(s)
-    0 Error(s)
-
-Time Elapsed 00:00:01.28
