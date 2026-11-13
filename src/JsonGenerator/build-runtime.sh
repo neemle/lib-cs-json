@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 
+# The runtime repository otherwise selects a different package cache from the SDK.
+NUGET_PACKAGES=${NUGET_PACKAGES:-${HOME}/.nuget/packages}
+export NUGET_PACKAGES
+
 runtime_version=$1
 output=$2
 work_parent=$3

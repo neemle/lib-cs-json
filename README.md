@@ -14,7 +14,7 @@ system, such as an Alpine Linux container, and you want to keep using the usual
 Add the package to your application project:
 
 ```xml
-<PackageReference Include="Neemle.SystemTextJson" Version="0.9.183" />
+<PackageReference Include="Neemle.SystemTextJson" Version="0.9.184" />
 ```
 
 Then use `System.Text.Json` normally:
