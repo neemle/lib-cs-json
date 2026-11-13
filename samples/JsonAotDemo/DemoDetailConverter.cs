@@ -7,5 +7,5 @@ internal sealed class DemoDetailConverter : JsonConverter<Detail>
         JsonSerializerOptions options) => new() { Enabled = reader.GetBoolean() };
 
     public override void Write(Utf8JsonWriter writer, Detail value, JsonSerializerOptions options)
-        => writer.WriteBooleanValue(value.Enabled);
+        => writer.WriteBooleanValue(value.Enabled || options.WriteIndented);
 }

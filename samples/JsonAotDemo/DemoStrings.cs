@@ -2,12 +2,13 @@ using System.Text.Json;
 
 internal static class DemoStrings
 {
+    internal const string Expected = "{\"display_name\":\"Ada\",\"Number\":7,"
+        + "\"Tags\":[\"one\",\"two\"],\"Details\":{\"Enabled\":true}}";
+
     internal static string Run(Message message)
     {
-        const string expected = "{\"display_name\":\"Ada\",\"Number\":7,"
-            + "\"Tags\":[\"one\",\"two\"],\"Details\":{\"Enabled\":true}}";
         string json = JsonSerializer.Serialize(message);
-        DemoCheck.Expect("encode.string", json == expected, json);
+        DemoCheck.Expect("encode.string", json == Expected, json);
         Message value = JsonSerializer.Deserialize<Message>(json)
             ?? throw new InvalidOperationException("Deserialization returned null.");
         DemoCheck.Expect("decode.string", value.Name == "Ada" && value.Number == 7,
@@ -26,7 +27,8 @@ internal static class DemoStrings
             ?? throw new InvalidOperationException("Deserialization returned null.");
         DemoCheck.Expect("decode.attributes", parsed.Name == "Ганна" && parsed.Number == 8
             && parsed.Details is null, $"name={parsed.Name}, number={parsed.Number}, details=null");
-        CheckTypeOperations(message, json, expected);
+        CheckTypeOperations(message, json, Expected);
+        DeclaredErrors();
         return json;
     }
 
@@ -37,5 +39,29 @@ internal static class DemoStrings
         object? typeValue = JsonSerializer.Deserialize(json, typeof(Message));
         DemoCheck.Expect("decode.type", typeValue is Message { Name: "Ada", Number: 7 },
             typeValue is Message typed ? $"name={typed.Name}, number={typed.Number}" : "unexpected type");
+    }
+
+    private static void DeclaredErrors()
+    {
+        string nullable = JsonSerializer.Serialize((object?)null, typeof(int?));
+        DemoCheck.Expect("declared.nullable", nullable == "null", nullable);
+        try
+        {
+            JsonSerializer.Serialize((object?)null, typeof(int));
+            DemoCheck.Expect("declared.null-value", false, "accepted null");
+        }
+        catch (JsonException)
+        {
+            DemoCheck.Expect("declared.null-value", true, "rejected");
+        }
+        try
+        {
+            JsonSerializer.Serialize((object)"wrong", typeof(int));
+            DemoCheck.Expect("declared.wrong-type", false, "accepted wrong type");
+        }
+        catch (ArgumentException)
+        {
+            DemoCheck.Expect("declared.wrong-type", true, "rejected");
+        }
     }
 }

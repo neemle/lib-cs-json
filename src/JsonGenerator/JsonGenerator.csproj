@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Neemle.SystemTextJson</PackageId>
-    <Version>0.9.7</Version>
+    <Version>0.9.183</Version>
     <Authors>Neemle</Authors>
     <Description>Compile-time JSON generation for .NET NativeAOT.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Neemle.SystemTextJson.targets" Pack="true" PackagePath="buildTransitive/" />
+    <None Include="JsonRuntime.patch" Pack="true" PackagePath="tools/" />
+    <None Include="build-runtime.sh" Pack="true" PackagePath="tools/" />
     <None Include="$(OutputPath)JsonGenerator.dll" Pack="true" PackagePath="tools/" />
     <None Include="$(OutputPath)JsonGenerator.deps.json" Pack="true" PackagePath="tools/" />
     <None Include="$(OutputPath)JsonGenerator.runtimeconfig.json" Pack="true" PackagePath="tools/" />

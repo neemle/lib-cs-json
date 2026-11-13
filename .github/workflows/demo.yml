@@ -1,0 +1,98 @@
+name: JSON demo
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  demo:
+    name: ${{ matrix.arch }} / ${{ matrix.mode }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [arm64, x64]
+        mode: [jit, aot]
+        include:
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+            rid: linux-musl-arm64
+          - arch: x64
+            runner: ubuntu-24.04
+            rid: linux-musl-x64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run demo
+        env:
+          RID: ${{ matrix.rid }}
+          MODE: ${{ matrix.mode }}
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e RID -e MODE \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot sh -c '
+              set -eu
+              mkdir -p .dev-temp/ci
+              dotnet pack src/JsonGenerator/JsonGenerator.csproj -c Release -o /work/.dev-temp/packages
+              if [ "$MODE" = jit ]; then
+                dotnet restore samples/JsonAotDemo/JsonAotDemo.csproj -r "$RID" \
+                  -p:PublishAot=false --source /work/.dev-temp/packages --source https://api.nuget.org/v3/index.json
+                dotnet build samples/JsonAotDemo/JsonAotDemo.csproj --no-restore -c Release -r "$RID" \
+                  -p:PublishAot=false -o /work/.dev-temp/ci/bin
+                if ! dotnet /work/.dev-temp/ci/bin/JsonAotDemo.dll > /work/.dev-temp/ci/output.txt; then
+                  cat /work/.dev-temp/ci/output.txt
+                  exit 1
+                fi
+              else
+                dotnet restore samples/JsonAotDemo/JsonAotDemo.csproj -r "$RID" \
+                  --source /work/.dev-temp/packages --source https://api.nuget.org/v3/index.json
+                dotnet publish samples/JsonAotDemo/JsonAotDemo.csproj --no-restore -c Release -r "$RID" \
+                  -o /work/.dev-temp/ci/bin
+                response="/work/.dev-temp/obj/samples/JsonAotDemo/JsonAotDemo/Release/net10.0/$RID/native/JsonAotDemo.ilc.rsp"
+                grep -Fxq -- --reflectiondata:none "$response"
+                grep -Fxq -- --warnaserror "$response"
+                readelf -h /work/.dev-temp/ci/bin/JsonAotDemo > /dev/null
+                if readelf -l /work/.dev-temp/ci/bin/JsonAotDemo | grep -q INTERP || \
+                   readelf -d /work/.dev-temp/ci/bin/JsonAotDemo | grep -q NEEDED; then
+                  echo "The AOT executable is not statically linked." >&2
+                  exit 1
+                fi
+                if ! /work/.dev-temp/ci/bin/JsonAotDemo > /work/.dev-temp/ci/output.txt; then
+                  cat /work/.dev-temp/ci/output.txt
+                  exit 1
+                fi
+              fi
+              grep -Fxq JSON_DEMO_PASS /work/.dev-temp/ci/output.txt
+            '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demo-${{ matrix.arch }}-${{ matrix.mode }}
+          path: .dev-temp/ci/output.txt
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  compare:
+    name: Compare JIT and AOT / ${{ matrix.arch }}
+    needs: demo
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64, x64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: demo-${{ matrix.arch }}-jit
+          path: jit
+      - uses: actions/download-artifact@v4
+        with:
+          name: demo-${{ matrix.arch }}-aot
+          path: aot
+      - name: Compare complete output
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot \
+            dotnet run --file .github/CompareDemo.cs -- jit/output.txt aot/output.txt

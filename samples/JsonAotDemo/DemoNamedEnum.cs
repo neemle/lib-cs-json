@@ -11,5 +11,9 @@ internal static class DemoNamedEnum
         DemoCheck.Expect("enum.encode-name", json == "\"True\"", json);
         JsonValueKind value = JsonSerializer.Deserialize<JsonValueKind>(json, options);
         DemoCheck.Expect("enum.decode-name", value == JsonValueKind.True, $"value={(int)value}");
+        var conflicting = new JsonSerializerOptions();
+        conflicting.Converters.Add(new JsonStringEnumConverter<DemoCaseEnum>());
+        var caseValue = JsonSerializer.Deserialize<DemoCaseEnum>("\"first\"", conflicting);
+        DemoCheck.Expect("enum.case-conflict", caseValue == DemoCaseEnum.first, $"value={(int)caseValue}");
     }
 }

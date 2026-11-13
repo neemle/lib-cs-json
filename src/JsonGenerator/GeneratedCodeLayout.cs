@@ -25,9 +25,19 @@ internal static class GeneratedCodeLayout
         var groups = SplitCodecs(type);
         var parts = new List<(string Name, List<MemberDeclarationSyntax> Members)>();
         foreach (var (name, members) in groups) PartitionGroup(root, type, name, members, parts);
-        var names = parts.Select(part => part.Name).ToArray();
-        return parts.Select(part => Validate(FormatWithImports(root, type, part.Name, part.Members, names))).ToList();
+        var owners = parts.SelectMany(part => part.Members.SelectMany(MemberNames)
+            .Select(member => (Member: member, Owner: part.Name))).ToLookup(item => item.Member, item => item.Owner);
+        return parts.Select(part => Validate(FormatWithImports(root, type, part.Name, part.Members, owners))).ToList();
     }
+
+    private static IEnumerable<string> MemberNames(MemberDeclarationSyntax member) => member switch
+    {
+        MethodDeclarationSyntax method => [method.Identifier.ValueText],
+        FieldDeclarationSyntax field => field.Declaration.Variables.Select(variable => variable.Identifier.ValueText),
+        TypeDeclarationSyntax type => [type.Identifier.ValueText],
+        PropertyDeclarationSyntax property => [property.Identifier.ValueText],
+        _ => []
+    };
 
     private static Dictionary<string, List<MemberDeclarationSyntax>> SplitCodecs(ClassDeclarationSyntax type)
     {
@@ -52,16 +62,21 @@ internal static class GeneratedCodeLayout
     {
         var members = new List<MemberDeclarationSyntax>();
         int part = 0;
+        int overhead = TypeLineCount(Format(root, type, PartName(name, part), []));
+        int lines = overhead;
         foreach (var member in group)
         {
+            int memberLines = TypeLineCount(Format(root, type, PartName(name, part), [member])) - overhead;
+            if (memberLines + overhead > MaxTypeLines)
+                throw new InvalidOperationException("Generated type member exceeds 500 lines.");
+            if (lines + memberLines > MaxTypeLines)
+            {
+                parts.Add((PartName(name, part++), [.. members]));
+                members.Clear();
+                lines = overhead;
+            }
             members.Add(member);
-            string candidate = Format(root, type, PartName(name, part), members);
-            if (TypeLineCount(candidate) <= MaxTypeLines) continue;
-            members.RemoveAt(members.Count - 1);
-            if (members.Count == 0) throw new InvalidOperationException("Generated type member exceeds 500 lines.");
-            parts.Add((PartName(name, part++), [.. members]));
-            members.Clear();
-            members.Add(member);
+            lines += memberLines;
         }
         if (members.Count != 0) parts.Add((PartName(name, part), members));
     }
@@ -84,9 +99,11 @@ internal static class GeneratedCodeLayout
     }
 
     private static string FormatWithImports(CompilationUnitSyntax root, ClassDeclarationSyntax type,
-        string name, List<MemberDeclarationSyntax> members, string[] names)
+        string name, List<MemberDeclarationSyntax> members, ILookup<string, string> owners)
     {
-        var imports = names.Where(other => other != name).Select(StaticImport);
+        var imports = members.SelectMany(member => member.DescendantNodesAndSelf().OfType<SimpleNameSyntax>())
+            .SelectMany(identifier => owners[identifier.Identifier.ValueText]).Where(owner => owner != name)
+            .Distinct().Select(StaticImport);
         return Format(root.WithUsings(root.Usings.AddRange(imports)), type, name, members);
     }
 

@@ -1,0 +1,818 @@
+diff --git a/src/libraries/Common/src/System/SR.cs b/src/libraries/Common/src/System/SR.cs
+index 8213e00..9441958 100644
+--- a/src/libraries/Common/src/System/SR.cs
++++ b/src/libraries/Common/src/System/SR.cs
+@@ -64,6 +64,9 @@ static string GetResourceString(string resourceKey, string defaultString)
+ 
+         internal static string Format(string resourceFormat, object? p1)
+         {
++#if NEEMLE_STATIC_JSON
++            p1 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p1);
++#endif
+             if (UsingResourceKeys())
+             {
+                 return string.Join(", ", resourceFormat, p1);
+@@ -74,6 +77,10 @@ internal static string Format(string resourceFormat, object? p1)
+ 
+         internal static string Format(string resourceFormat, object? p1, object? p2)
+         {
++#if NEEMLE_STATIC_JSON
++            p1 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p1);
++            p2 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p2);
++#endif
+             if (UsingResourceKeys())
+             {
+                 return string.Join(", ", resourceFormat, p1, p2);
+@@ -84,6 +91,11 @@ internal static string Format(string resourceFormat, object? p1, object? p2)
+ 
+         internal static string Format(string resourceFormat, object? p1, object? p2, object? p3)
+         {
++#if NEEMLE_STATIC_JSON
++            p1 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p1);
++            p2 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p2);
++            p3 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p3);
++#endif
+             if (UsingResourceKeys())
+             {
+                 return string.Join(", ", resourceFormat, p1, p2, p3);
+@@ -96,6 +108,9 @@ internal static string Format(string resourceFormat, params object?[]? args)
+         {
+             if (args != null)
+             {
++#if NEEMLE_STATIC_JSON
++                args = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArguments(args);
++#endif
+                 if (UsingResourceKeys())
+                 {
+                     return resourceFormat + ", " + string.Join(", ", args);
+@@ -109,6 +124,9 @@ internal static string Format(string resourceFormat, params object?[]? args)
+ 
+         internal static string Format(IFormatProvider? provider, string resourceFormat, object? p1)
+         {
++#if NEEMLE_STATIC_JSON
++            p1 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p1);
++#endif
+             if (UsingResourceKeys())
+             {
+                 return string.Join(", ", resourceFormat, p1);
+@@ -119,6 +137,10 @@ internal static string Format(IFormatProvider? provider, string resourceFormat,
+ 
+         internal static string Format(IFormatProvider? provider, string resourceFormat, object? p1, object? p2)
+         {
++#if NEEMLE_STATIC_JSON
++            p1 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p1);
++            p2 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p2);
++#endif
+             if (UsingResourceKeys())
+             {
+                 return string.Join(", ", resourceFormat, p1, p2);
+@@ -129,6 +151,11 @@ internal static string Format(IFormatProvider? provider, string resourceFormat,
+ 
+         internal static string Format(IFormatProvider? provider, string resourceFormat, object? p1, object? p2, object? p3)
+         {
++#if NEEMLE_STATIC_JSON
++            p1 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p1);
++            p2 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p2);
++            p3 = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArgument(p3);
++#endif
+             if (UsingResourceKeys())
+             {
+                 return string.Join(", ", resourceFormat, p1, p2, p3);
+@@ -141,6 +168,9 @@ internal static string Format(IFormatProvider? provider, string resourceFormat,
+         {
+             if (args != null)
+             {
++#if NEEMLE_STATIC_JSON
++                args = System.Text.Json.Serialization.StaticTypeMetadata.NormalizeArguments(args);
++#endif
+                 if (UsingResourceKeys())
+                 {
+                     return resourceFormat + ", " + string.Join(", ", args);
+diff --git a/src/libraries/System.Text.Json/src/System.Text.Json.csproj b/src/libraries/System.Text.Json/src/System.Text.Json.csproj
+index e8106e1..6f39dd8 100644
+--- a/src/libraries/System.Text.Json/src/System.Text.Json.csproj
++++ b/src/libraries/System.Text.Json/src/System.Text.Json.csproj
+@@ -1,6 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
++    <DefineConstants>$(DefineConstants);NEEMLE_STATIC_JSON</DefineConstants>
+     <TargetFrameworks>$(NetCoreAppCurrent);$(NetCoreAppPrevious);$(NetCoreAppMinimum);netstandard2.0;$(NetFrameworkMinimum)</TargetFrameworks>
+     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+     <!-- For this project, we want warnings if there are public APIs/types without properly formatted XML comments. -->
+@@ -248,6 +249,7 @@ The System.Text.Json library is built-in as part of the shared framework in .NET
+     <Compile Include="System\Text\Json\Serialization\Converters\Value\VersionConverter.cs" />
+     <Compile Include="System\Text\Json\Serialization\IgnoreReferenceHandler.cs" />
+     <Compile Include="System\Text\Json\Serialization\JsonConverter.cs" />
++    <Compile Include="System\Text\Json\Serialization\StaticTypeMetadata.cs" />
+     <Compile Include="System\Text\Json\Serialization\JsonConverter.MetadataHandling.cs" />
+     <Compile Include="System\Text\Json\Serialization\JsonConverterFactory.cs" />
+     <Compile Include="System\Text\Json\Serialization\JsonConverterOfT.ReadCore.cs" />
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/CastingConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/CastingConverter.cs
+index a49efe3..f03547a 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/CastingConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/CastingConverter.cs
+@@ -14,6 +14,7 @@ namespace System.Text.Json.Serialization.Converters
+     /// </summary>
+     internal sealed class CastingConverter<T> : JsonConverter<T>
+     {
++        internal override bool IsInternalConverterType => true;
+         private readonly JsonConverter _sourceConverter;
+         internal override Type? KeyType => _sourceConverter.KeyType;
+         internal override Type? ElementType => _sourceConverter.ElementType;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IAsyncEnumerableConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IAsyncEnumerableConverterFactory.cs
+index ffa2629..9328edb 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IAsyncEnumerableConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IAsyncEnumerableConverterFactory.cs
+@@ -15,6 +15,7 @@ namespace System.Text.Json.Serialization
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class IAsyncEnumerableConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         public IAsyncEnumerableConverterFactory() { }
+ 
+         public override bool CanConvert(Type typeToConvert) => GetAsyncEnumerableInterface(typeToConvert) is not null;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IEnumerableConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IEnumerableConverterFactory.cs
+index 59b2591..ef4c096 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IEnumerableConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/IEnumerableConverterFactory.cs
+@@ -18,6 +18,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class IEnumerableConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         private static readonly IDictionaryConverter<IDictionary> s_converterForIDictionary = new IDictionaryConverter<IDictionary>();
+         private static readonly IEnumerableConverter<IEnumerable> s_converterForIEnumerable = new IEnumerableConverter<IEnumerable>();
+         private static readonly IListConverter<IList> s_converterForIList = new IListConverter<IList>();
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/MemoryConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/MemoryConverterFactory.cs
+index 0c2fe8d..ca64c73 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/MemoryConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Collection/MemoryConverterFactory.cs
+@@ -10,6 +10,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class MemoryConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool CanConvert(Type typeToConvert)
+         {
+             if (!typeToConvert.IsGenericType || !typeToConvert.IsValueType)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpOptionConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpOptionConverter.cs
+index 905da12..fbf7b7e 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpOptionConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpOptionConverter.cs
+@@ -11,6 +11,7 @@ namespace System.Text.Json.Serialization.Converters
+     internal sealed class FSharpOptionConverter<TOption, TElement> : JsonConverter<TOption>
+         where TOption : class
+     {
++        internal override bool IsInternalConverterType => true;
+         internal override Type? ElementType => typeof(TElement);
+         internal override JsonConverter? NullableElementConverter => _elementConverter;
+         // 'None' is encoded using 'null' at runtime and serialized as 'null' in JSON.
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpTypeConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpTypeConverterFactory.cs
+index d2b20e2..6205f9e 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpTypeConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpTypeConverterFactory.cs
+@@ -11,6 +11,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(FSharpCoreReflectionProxy.FSharpCoreUnreferencedCodeMessage)]
+     internal sealed class FSharpTypeConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         [RequiresUnreferencedCode(FSharpCoreReflectionProxy.FSharpCoreUnreferencedCodeMessage)]
+         public FSharpTypeConverterFactory() { }
+ 
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpValueOptionConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpValueOptionConverter.cs
+index b74d89a..fbe4d95 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpValueOptionConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/FSharp/FSharpValueOptionConverter.cs
+@@ -11,6 +11,7 @@ namespace System.Text.Json.Serialization.Converters
+     internal sealed class FSharpValueOptionConverter<TValueOption, TElement> : JsonConverter<TValueOption>
+         where TValueOption : struct, IEquatable<TValueOption>
+     {
++        internal override bool IsInternalConverterType => true;
+         internal override Type? ElementType => typeof(TElement);
+         internal override JsonConverter? NullableElementConverter => _elementConverter;
+         // 'ValueNone' is encoded using 'default' at runtime and serialized as 'null' in JSON.
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonArrayConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonArrayConverter.cs
+index 2fbb638..2a1c970 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonArrayConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonArrayConverter.cs
+@@ -9,6 +9,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class JsonArrayConverter : JsonConverter<JsonArray?>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override void Write(Utf8JsonWriter writer, JsonArray? value, JsonSerializerOptions options)
+         {
+             if (value is null)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverter.cs
+index 5a69deb..54ac940 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverter.cs
+@@ -13,6 +13,7 @@ namespace System.Text.Json.Serialization.Converters
+     /// </summary>
+     internal sealed class JsonNodeConverter : JsonConverter<JsonNode?>
+     {
++        internal override bool IsInternalConverterType => true;
+         internal static JsonNodeConverter Instance { get; } = new JsonNodeConverter();
+ 
+         public override void Write(Utf8JsonWriter writer, JsonNode? value, JsonSerializerOptions options)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverterFactory.cs
+index 5b622da..b38cc1c 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonNodeConverterFactory.cs
+@@ -9,6 +9,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class JsonNodeConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         private static readonly JsonArrayConverter s_arrayConverter = new JsonArrayConverter();
+         private static readonly JsonObjectConverter s_objectConverter = new JsonObjectConverter();
+         private static readonly JsonValueConverter s_valueConverter = new JsonValueConverter();
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonObjectConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonObjectConverter.cs
+index fb97edc..18aed9c 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonObjectConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonObjectConverter.cs
+@@ -10,6 +10,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class JsonObjectConverter : JsonConverter<JsonObject?>
+     {
++        internal override bool IsInternalConverterType => true;
+         internal override void ConfigureJsonTypeInfo(JsonTypeInfo jsonTypeInfo, JsonSerializerOptions options)
+         {
+             jsonTypeInfo.CreateObjectForExtensionDataProperty = () => new JsonObject(options.GetNodeOptions());
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonValueConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonValueConverter.cs
+index ff76082..09ddb55 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonValueConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Node/JsonValueConverter.cs
+@@ -9,6 +9,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class JsonValueConverter : JsonConverter<JsonValue?>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override void Write(Utf8JsonWriter writer, JsonValue? value, JsonSerializerOptions options)
+         {
+             if (value is null)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverter.cs
+index b650e92..354ccba 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverter.cs
+@@ -10,6 +10,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal abstract class ObjectConverter : JsonConverter<object?>
+     {
++        internal override bool IsInternalConverterType => true;
+         private protected override ConverterStrategy GetDefaultConverterStrategy() => ConverterStrategy.Object;
+ 
+         public ObjectConverter()
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverterFactory.cs
+index b82733f..98382d1 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Object/ObjectConverterFactory.cs
+@@ -17,6 +17,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class ObjectConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         // Need to toggle this behavior when generating converters for F# struct records.
+         private readonly bool _useDefaultConstructorInUnannotatedStructs;
+ 
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ByteArrayConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ByteArrayConverter.cs
+index 3f0f871..6370ace 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ByteArrayConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ByteArrayConverter.cs
+@@ -7,6 +7,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class ByteArrayConverter : JsonConverter<byte[]?>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override byte[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+         {
+             if (reader.TokenType == JsonTokenType.Null)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/EnumConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/EnumConverterFactory.cs
+index f6826db..0428f3f 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/EnumConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/EnumConverterFactory.cs
+@@ -10,6 +10,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class EnumConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         public EnumConverterFactory()
+         {
+         }
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonDocumentConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonDocumentConverter.cs
+index 8c0f44b..24c0492 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonDocumentConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonDocumentConverter.cs
+@@ -8,6 +8,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class JsonDocumentConverter : JsonConverter<JsonDocument?>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool HandleNull => true;
+ 
+         public override JsonDocument Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonElementConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonElementConverter.cs
+index b959e88..9386ddb 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonElementConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonElementConverter.cs
+@@ -8,6 +8,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class JsonElementConverter : JsonConverter<JsonElement>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override JsonElement Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+         {
+             return JsonElement.ParseValue(ref reader, options.AllowDuplicateProperties);
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonPrimitiveConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonPrimitiveConverter.cs
+index cb839ea..cfcd85f 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonPrimitiveConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/JsonPrimitiveConverter.cs
+@@ -13,6 +13,7 @@ namespace System.Text.Json.Serialization.Converters
+     /// </summary>
+     internal abstract class JsonPrimitiveConverter<T> : JsonConverter<T>
+     {
++        internal override bool IsInternalConverterType => true;
+         public sealed override void WriteAsPropertyName(Utf8JsonWriter writer, [DisallowNull] T value, JsonSerializerOptions options)
+         {
+             ArgumentNullException.ThrowIfNull(value);
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/MemoryByteConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/MemoryByteConverter.cs
+index 3d71937..a10bad1 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/MemoryByteConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/MemoryByteConverter.cs
+@@ -8,6 +8,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class MemoryByteConverter : JsonConverter<Memory<byte>>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool HandleNull => true;
+ 
+         public override Memory<byte> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverter.cs
+index 54d824b..8fb9d5a 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverter.cs
+@@ -7,6 +7,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class NullableConverter<T> : JsonConverter<T?> where T : struct // Do not rename FQN (legacy schema generation)
+     {
++        internal override bool IsInternalConverterType => true;
+         internal override Type? ElementType => typeof(T);
+         internal override JsonConverter? NullableElementConverter => _elementConverter;
+         public override bool HandleNull => true;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverterFactory.cs
+index c5f6c93..339b7d7 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/NullableConverterFactory.cs
+@@ -11,6 +11,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class NullableConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool CanConvert(Type typeToConvert)
+         {
+             return typeToConvert.IsNullableOfT();
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ReadOnlyMemoryByteConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ReadOnlyMemoryByteConverter.cs
+index 5139026..e38cd00 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ReadOnlyMemoryByteConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/ReadOnlyMemoryByteConverter.cs
+@@ -8,6 +8,7 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class ReadOnlyMemoryByteConverter : JsonConverter<ReadOnlyMemory<byte>>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool HandleNull => true;
+ 
+         public override ReadOnlyMemory<byte> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverter.cs
+index 37281cd..8785687 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverter.cs
+@@ -8,11 +8,12 @@ namespace System.Text.Json.Serialization.Converters
+ {
+     internal sealed class UnsupportedTypeConverter<T> : JsonConverter<T>
+     {
++        internal override bool IsInternalConverterType => true;
+         private readonly string? _errorMessage;
+ 
+         public UnsupportedTypeConverter(string? errorMessage = null) => _errorMessage = errorMessage;
+ 
+-        public string ErrorMessage => _errorMessage ?? SR.Format(SR.SerializeTypeInstanceNotSupported, typeof(T).FullName);
++        public string ErrorMessage => _errorMessage ?? SR.Format(SR.SerializeTypeInstanceNotSupported, StaticTypeMetadata.GetName(typeof(T)));
+ 
+         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+             throw new NotSupportedException(ErrorMessage);
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverterFactory.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverterFactory.cs
+index 82c3216..f353b4a 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverterFactory.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UnsupportedTypeConverterFactory.cs
+@@ -11,6 +11,7 @@ namespace System.Text.Json.Serialization.Converters
+     [RequiresDynamicCode(JsonSerializer.SerializationRequiresDynamicCodeMessage)]
+     internal sealed class UnsupportedTypeConverterFactory : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool CanConvert(Type type)
+         {
+             // If a type is added, also add to the SourceGeneration project.
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverter.cs
+index 1a0e007..99af070 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverter.cs
+@@ -15,9 +15,10 @@ namespace System.Text.Json.Serialization
+     /// </summary>
+     public abstract partial class JsonConverter
+     {
++        internal virtual bool IsInternalConverterType => false;
+         internal JsonConverter()
+         {
+-            IsInternalConverter = GetType().Assembly == typeof(JsonConverter).Assembly;
++            IsInternalConverter = IsInternalConverterType;
+             ConverterStrategy = GetDefaultConverterStrategy();
+         }
+ 
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverterOfT.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverterOfT.cs
+index 3a9684f..9c7a1d5 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverterOfT.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonConverterOfT.cs
+@@ -19,7 +19,7 @@ public abstract partial class JsonConverter<T> : JsonConverter
+         /// </summary>
+         protected internal JsonConverter()
+         {
+-            IsValueType = typeof(T).IsValueType;
++            IsValueType = Array.Empty<T>() is not object[];
+ 
+             if (HandleNull)
+             {
+@@ -211,7 +211,7 @@ internal bool TryRead(ref Utf8JsonReader reader, Type typeToConvert, JsonSeriali
+ 
+             if (
+ #if NET
+-                !typeof(T).IsValueType &&
++                Array.Empty<T>() is object[] &&
+ #endif
+                 CanBePolymorphic)
+             {
+@@ -365,7 +365,7 @@ internal bool TryWrite(Utf8JsonWriter writer, in T? value, JsonSerializerOptions
+             if (
+ #if NET
+                 // Short-circuit the check against "is not null"; treated as a constant by recent versions of the JIT.
+-                !typeof(T).IsValueType &&
++                Array.Empty<T>() is object[] &&
+ #else
+                 !IsValueType &&
+ #endif
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonNumberEnumConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonNumberEnumConverter.cs
+index 4f299a7..4391eeb 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonNumberEnumConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonNumberEnumConverter.cs
+@@ -17,6 +17,7 @@ namespace System.Text.Json.Serialization
+     public sealed class JsonNumberEnumConverter<TEnum> : JsonConverterFactory
+         where TEnum : struct, Enum
+     {
++        internal override bool IsInternalConverterType => true;
+         /// <summary>
+         /// Initializes a new instance of <see cref="JsonNumberEnumConverter{TEnum}"/>.
+         /// </summary>
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonResumableConverterOfT.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonResumableConverterOfT.cs
+index 0c0430b..9cea124 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonResumableConverterOfT.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonResumableConverterOfT.cs
+@@ -12,6 +12,7 @@ namespace System.Text.Json.Serialization
+     /// <typeparam name="T"></typeparam>
+     internal abstract class JsonResumableConverter<T> : JsonConverter<T>
+     {
++        internal override bool IsInternalConverterType => true;
+         public override bool HandleNull => false;
+ 
+         public sealed override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Helpers.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Helpers.cs
+index 43a5719..0a0fae6 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Helpers.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Helpers.cs
+@@ -139,6 +139,13 @@ static void ThrowUnableToCastValue(object? value)
+                 ThrowHelper.ThrowJsonException_DeserializeUnableToConvertValue(typeof(T));
+             }
+ 
++            if (value is not null && value is not T)
++            {
++                throw new InvalidCastException("Unable to cast object of type '" +
++                    StaticTypeMetadata.GetName(value.GetType()) + "' to type '" +
++                    StaticTypeMetadata.GetName(typeof(T)) + "'.");
++            }
++
+             return (T?)value;
+         }
+ 
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs
+index dba810d..6b472e4 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs
+@@ -515,7 +515,7 @@ internal static void ValidateMetadataForArrayConverter(JsonConverter converter,
+ 
+         internal static T ResolveReferenceId<T>(ref ReadStack state)
+         {
+-            Debug.Assert(!typeof(T).IsValueType);
++            Debug.Assert((Array.Empty<T>() is object[]));
+             Debug.Assert(state.ReferenceId != null);
+ 
+             string referenceId = state.ReferenceId;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializerOptions.Caching.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializerOptions.Caching.cs
+index 8fda42b..d79d67a 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializerOptions.Caching.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializerOptions.Caching.cs
+@@ -593,7 +593,7 @@ static void AddListHashCode<TValue>(ref HashCode hc, ConfigurationList<TValue>?
+ 
+                 static void AddHashCode<TValue>(ref HashCode hc, TValue? value)
+                 {
+-                    if (typeof(TValue).IsSealed)
++                    if (typeof(TValue) == typeof(string) || Array.Empty<TValue>() is not object[])
+                     {
+                         hc.Add(value);
+                     }
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
+index 54f79db..00afb39 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
+@@ -16,6 +16,7 @@ namespace System.Text.Json.Serialization
+     public class JsonStringEnumConverter<TEnum> : JsonConverterFactory
+         where TEnum : struct, Enum
+     {
++        internal override bool IsInternalConverterType => GetType() == typeof(JsonStringEnumConverter<TEnum>);
+         private readonly JsonNamingPolicy? _namingPolicy;
+         private readonly EnumConverterOptions _converterOptions;
+ 
+@@ -72,6 +73,7 @@ public JsonStringEnumConverter(JsonNamingPolicy? namingPolicy = null, bool allow
+         "Applications should use the generic JsonStringEnumConverter<TEnum> instead.")]
+     public class JsonStringEnumConverter : JsonConverterFactory
+     {
++        internal override bool IsInternalConverterType => GetType() == typeof(JsonStringEnumConverter);
+         private readonly JsonNamingPolicy? _namingPolicy;
+         private readonly EnumConverterOptions _converterOptions;
+ 
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
+index cacd6f8..dca4eb4 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
+@@ -477,7 +477,7 @@ private void ValidateAndCachePropertyName()
+             Debug.Assert(Name != null);
+ 
+             if (Options.ReferenceHandlingStrategy is JsonKnownReferenceHandler.Preserve &&
+-                this is { DeclaringType.IsValueType: false, IsIgnored: false, IsExtensionData: false } &&
++                !StaticTypeMetadata.HasFlag(DeclaringType, StaticTypeMetadata.ValueType) && this is { IsIgnored: false, IsExtensionData: false } &&
+                 Name is JsonSerializer.IdPropertyName or JsonSerializer.RefPropertyName)
+             {
+                 // Validate potential conflicts with reference preservation metadata property names.
+@@ -636,7 +636,7 @@ private void DetermineEffectiveObjectCreationHandlingForProperty()
+                     preferredCreationHandling == JsonObjectCreationHandling.Populate &&
+                     EffectiveConverter.CanPopulate &&
+                     Get != null &&
+-                    (!PropertyType.IsValueType || Set != null) &&
++                    (!StaticTypeMetadata.HasFlag(PropertyType, StaticTypeMetadata.ValueType) || Set != null) &&
+                     !DeclaringTypeInfo.SupportsPolymorphicDeserialization &&
+                     !(Set == null && IgnoreReadOnlyMember);
+ 
+@@ -654,7 +654,7 @@ private void DetermineEffectiveObjectCreationHandlingForProperty()
+                     ThrowHelper.ThrowInvalidOperationException_ObjectCreationHandlingPropertyMustHaveAGetter(this);
+                 }
+ 
+-                if (PropertyType.IsValueType && Set == null)
++                if (StaticTypeMetadata.HasFlag(PropertyType, StaticTypeMetadata.ValueType) && Set == null)
+                 {
+                     ThrowHelper.ThrowInvalidOperationException_ObjectCreationHandlingPropertyValueTypeMustHaveASetter(this);
+                 }
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfoOfT.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfoOfT.cs
+index de34a5b..2c38ee0 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfoOfT.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfoOfT.cs
+@@ -174,7 +174,7 @@ internal override bool GetMemberAndWriteJson(object obj, ref WriteStack state, U
+ 
+             if (
+ #if NET
+-                !typeof(T).IsValueType && // treated as a constant by recent versions of the JIT.
++                (Array.Empty<T>() is object[]) && // treated as a constant by recent versions of the JIT.
+ #else
+                 !EffectiveConverter.IsValueType &&
+ #endif
+@@ -337,7 +337,7 @@ internal override bool ReadJsonAndSetMember(object obj, scoped ref ReadStack sta
+                     success = EffectiveConverter.TryRead(ref reader, PropertyType, Options, ref state, out T? value, out bool populatedValue);
+                     if (success)
+                     {
+-                        if (typeof(T).IsValueType || !populatedValue)
++                        if ((Array.Empty<T>() is not object[]) || !populatedValue)
+                         {
+                             // note: populatedValue value may be different than when CreationHandling is Populate
+                             //       i.e. when initial value of property is null
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfo.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfo.cs
+index 10e6db0..3906705 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfo.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfo.cs
+@@ -1240,7 +1240,7 @@ internal void PopulatePolymorphismMetadata()
+         {
+             Debug.Assert(!IsReadOnly);
+ 
+-            JsonPolymorphismOptions? options = JsonPolymorphismOptions.CreateFromAttributeDeclarations(Type);
++            JsonPolymorphismOptions? options = StaticTypeMetadata.GetPolymorphism(Type);
+             if (options != null)
+             {
+                 options.DeclaringTypeInfo = this;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfoOfT.WriteHelpers.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfoOfT.WriteHelpers.cs
+index 6dcbdb5..57eb1f5 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfoOfT.WriteHelpers.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonTypeInfoOfT.WriteHelpers.cs
+@@ -38,7 +38,7 @@ internal void Serialize(
+             }
+             else if (
+ #if NET
+-                !typeof(T).IsValueType &&
++                (Array.Empty<T>() is object[]) &&
+ #endif
+                 Converter.CanBePolymorphic &&
+                 rootValue is not null &&
+@@ -134,7 +134,7 @@ private async Task SerializeAsync(
+             }
+             else if (
+ #if NET
+-                !typeof(T).IsValueType &&
++                (Array.Empty<T>() is object[]) &&
+ #endif
+                 Converter.CanBePolymorphic &&
+                 rootValue is not null &&
+@@ -284,7 +284,7 @@ internal void Serialize(
+             }
+             else if (
+ #if NET
+-                !typeof(T).IsValueType &&
++                (Array.Empty<T>() is object[]) &&
+ #endif
+                 Converter.CanBePolymorphic &&
+                 rootValue is not null &&
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/PolymorphicTypeResolver.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/PolymorphicTypeResolver.cs
+index 075ea31..7e12535 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/PolymorphicTypeResolver.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/PolymorphicTypeResolver.cs
+@@ -37,7 +37,7 @@ public PolymorphicTypeResolver(JsonSerializerOptions options, JsonPolymorphismOp
+                 Debug.Assert(typeDiscriminator is null or int or string);
+ 
+                 if (!IsSupportedDerivedType(BaseType, derivedType) ||
+-                    (derivedType.IsAbstract && UnknownDerivedTypeHandling != JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor))
++                    (StaticTypeMetadata.HasFlag(derivedType, StaticTypeMetadata.Abstract) && UnknownDerivedTypeHandling != JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor))
+                 {
+                     ThrowHelper.ThrowInvalidOperationException_DerivedTypeNotSupported(BaseType, derivedType);
+                 }
+@@ -184,8 +184,8 @@ public bool TryGetDerivedJsonTypeInfo(object typeDiscriminator, [NotNullWhen(tru
+ 
+         public static bool IsSupportedPolymorphicBaseType(Type? type) =>
+             type != null &&
+-            (type.IsClass || type.IsInterface) &&
+-            !type.IsSealed &&
++            (StaticTypeMetadata.HasFlag(type, StaticTypeMetadata.Class) || StaticTypeMetadata.HasFlag(type, StaticTypeMetadata.Interface)) &&
++            !StaticTypeMetadata.HasFlag(type, StaticTypeMetadata.Sealed) &&
+             !type.IsGenericTypeDefinition &&
+             !type.IsPointer &&
+             type != JsonTypeInfo.ObjectType;
+@@ -198,7 +198,7 @@ public static bool IsSupportedDerivedType(Type baseType, Type? derivedType) =>
+                             "already declared as derived types of the polymorphic base type.")]
+         private DerivedJsonTypeInfo? CalculateNearestAncestor(Type type)
+         {
+-            Debug.Assert(!type.IsAbstract);
++            Debug.Assert(!StaticTypeMetadata.HasFlag(type, StaticTypeMetadata.Abstract));
+             Debug.Assert(BaseType.IsAssignableFrom(type));
+             Debug.Assert(UnknownDerivedTypeHandling == JsonUnknownDerivedTypeHandling.FallBackToNearestAncestor);
+ 
+@@ -222,7 +222,7 @@ public static bool IsSupportedDerivedType(Type baseType, Type? derivedType) =>
+ 
+             // Interface hierarchies admit the possibility of diamond ambiguities in type discriminators.
+             // Examine all interface implementations and identify potential conflicts.
+-            if (BaseType.IsInterface)
++            if (StaticTypeMetadata.HasFlag(BaseType, StaticTypeMetadata.Interface))
+             {
+                 foreach (Type interfaceTy in type.GetInterfaces())
+                 {
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/StaticTypeMetadata.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/StaticTypeMetadata.cs
+new file mode 100644
+index 0000000..8b7d452
+--- /dev/null
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/StaticTypeMetadata.cs
+@@ -0,0 +1,54 @@
++using System.Collections.Generic;
++using System.Text.Json.Serialization.Metadata;
++
++namespace System.Text.Json.Serialization
++{
++    internal static class StaticTypeMetadata
++    {
++        internal const int ValueType = 1;
++        internal const int Class = 2;
++        internal const int Interface = 4;
++        internal const int Abstract = 8;
++        internal const int Sealed = 16;
++        internal const int OverridesToString = 32;
++
++        private const string TypesKey = "Neemle.SystemTextJson.NativeTypeMetadata";
++        private const string PolymorphismKey = "Neemle.SystemTextJson.NativePolymorphism";
++
++        internal static bool HasFlag(Type type, int flag) => (GetTypeInfo(type).Item1 & flag) != 0;
++        internal static string GetName(Type type) => GetTypeInfo(type).Item2;
++        internal static string GetObjectString(object? value)
++        {
++            if (value is null) return "<null>";
++            Type type = value.GetType();
++            return HasFlag(type, OverridesToString) ? value.ToString() ?? string.Empty : GetName(type);
++        }
++        internal static object? NormalizeArgument(object? value) => value is Type type ? GetName(type) : value;
++        internal static object?[] NormalizeArguments(object?[] values)
++        {
++            var result = (object?[])values.Clone();
++            for (int i = 0; i < result.Length; i++) result[i] = NormalizeArgument(result[i]);
++            return result;
++        }
++
++        private static (int, string) GetTypeInfo(Type type)
++        {
++            lock (typeof(JsonSerializer))
++            {
++                if (AppContext.GetData(TypesKey) is Dictionary<Type, (int, string)> types &&
++                    types.TryGetValue(type, out var result)) return result;
++            }
++            throw new NotSupportedException("Static JSON type metadata is missing.");
++        }
++
++        internal static JsonPolymorphismOptions? GetPolymorphism(Type type)
++        {
++            lock (typeof(JsonSerializer))
++            {
++                if (AppContext.GetData(PolymorphismKey) is Dictionary<Type, Func<JsonPolymorphismOptions>?> types &&
++                    types.TryGetValue(type, out var factory)) return factory?.Invoke();
++            }
++            throw new NotSupportedException("Static JSON polymorphism metadata is missing.");
++        }
++    }
++}
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/WriteStack.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/WriteStack.cs
+index 8a09458..94c04c2 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/WriteStack.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/WriteStack.cs
+@@ -164,7 +164,7 @@ internal void Initialize(
+                 ReferenceResolver = options.ReferenceHandler.CreateResolver(writing: true);
+ 
+                 if (options.ReferenceHandlingStrategy == JsonKnownReferenceHandler.IgnoreCycles &&
+-                    rootValueBoxed is not null && jsonTypeInfo.Type.IsValueType)
++                    rootValueBoxed is not null && StaticTypeMetadata.HasFlag(jsonTypeInfo.Type, StaticTypeMetadata.ValueType))
+                 {
+                     // Root object is a boxed value type, we need to push it to the reference stack before starting the serializer.
+                     ReferenceResolver.PushReferenceForCycleDetection(rootValueBoxed);
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.Serialization.cs b/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.Serialization.cs
+index 3292e76..ab0afa3 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.Serialization.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.Serialization.cs
+@@ -614,7 +614,7 @@ public static void ThrowNotSupportedException(scoped ref ReadStack state, in Utf
+             // Obtain the type to show in the message.
+             Type propertyType = state.Current.JsonPropertyInfo?.PropertyType ?? state.Current.JsonTypeInfo.Type;
+ 
+-            if (!message.Contains(propertyType.ToString()))
++            if (!message.Contains(StaticTypeMetadata.GetName(propertyType)))
+             {
+                 if (message.Length > 0)
+                 {
+@@ -642,7 +642,7 @@ public static void ThrowNotSupportedException(ref WriteStack state, Exception in
+             // Obtain the type to show in the message.
+             Type propertyType = state.Current.JsonPropertyInfo?.PropertyType ?? state.Current.JsonTypeInfo.Type;
+ 
+-            if (!message.Contains(propertyType.ToString()))
++            if (!message.Contains(StaticTypeMetadata.GetName(propertyType)))
+             {
+                 if (message.Length > 0)
+                 {
+@@ -663,7 +663,7 @@ public static void ThrowNotSupportedException_DeserializeNoConstructor(JsonTypeI
+             Type type = typeInfo.Type;
+             string message;
+ 
+-            if (type.IsInterface || type.IsAbstract)
++            if (StaticTypeMetadata.HasFlag(type, StaticTypeMetadata.Interface) || StaticTypeMetadata.HasFlag(type, StaticTypeMetadata.Abstract))
+             {
+                 if (typeInfo.PolymorphicTypeResolver?.UsesTypeDiscriminators is true)
+                 {
+@@ -852,7 +852,7 @@ internal static void ThrowUnexpectedMetadataException(
+         [DoesNotReturn]
+         public static void ThrowNotSupportedException_NoMetadataForType(Type type, IJsonTypeInfoResolver? resolver)
+         {
+-            throw new NotSupportedException(SR.Format(SR.NoMetadataForType, type, resolver?.ToString() ?? "<null>"));
++            throw new NotSupportedException(SR.Format(SR.NoMetadataForType, type, StaticTypeMetadata.GetObjectString(resolver)));
+         }
+ 
+         public static NotSupportedException GetNotSupportedException_AmbiguousMetadataForType(Type type, Type match1, Type match2)
+@@ -869,12 +869,12 @@ public static void ThrowNotSupportedException_ConstructorContainsNullParameterNa
+         [DoesNotReturn]
+         public static void ThrowInvalidOperationException_NoMetadataForType(Type type, IJsonTypeInfoResolver? resolver)
+         {
+-            throw new InvalidOperationException(SR.Format(SR.NoMetadataForType, type, resolver?.ToString() ?? "<null>"));
++            throw new InvalidOperationException(SR.Format(SR.NoMetadataForType, type, StaticTypeMetadata.GetObjectString(resolver)));
+         }
+ 
+         public static Exception GetInvalidOperationException_NoMetadataForTypeProperties(IJsonTypeInfoResolver? resolver, Type type)
+         {
+-            return new InvalidOperationException(SR.Format(SR.NoMetadataForTypeProperties, resolver?.ToString() ?? "<null>", type));
++            return new InvalidOperationException(SR.Format(SR.NoMetadataForTypeProperties, StaticTypeMetadata.GetObjectString(resolver), type));
+         }
+ 
+         [DoesNotReturn]

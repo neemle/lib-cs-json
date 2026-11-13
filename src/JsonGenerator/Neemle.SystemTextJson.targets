@@ -11,13 +11,44 @@
     <IlcArg Include="--reflectiondata:none" />
     <LinkerArg Include="-Wl,--fatal-warnings" />
   </ItemGroup>
+  <PropertyGroup Condition="'$(PublishAot)' == 'true'">
+    <DefineConstants>$(DefineConstants);NEEMLE_STATIC_NATIVE_METADATA</DefineConstants>
+  </PropertyGroup>
   <Target Name="NeemleValidateWarnings" BeforeTargets="WriteIlcRspFileForCompilation"
           Condition="'$(PublishAot)' == 'true'">
-    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(NoWarn)', '^;?((1701|1702|8002)(;|$))*$'))"
+    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(NoWarn)', '^;?((1701|1702|8002|IL2121)(;|$))*$'))"
            Text="Warning suppression is not supported." />
     <PropertyGroup><NoWarn></NoWarn></PropertyGroup>
     <Error Condition="'$(IlcTreatWarningsAsErrors)' != 'true' Or '$(IlcResilient)' != 'false'"
            Text="NativeAOT warnings must be fatal." />
+  </Target>
+  <Target Name="NeemleSelectJsonRuntime" BeforeTargets="WriteIlcRspFileForCompilation"
+          Condition="'$(PublishAot)' == 'true'">
+    <ItemGroup>
+      <_NeemleFrameworkJson Include="@(IlcReference)"
+                            Condition="'%(IlcReference.Filename)' == 'System.Text.Json'" />
+    </ItemGroup>
+    <Error Condition="'@(_NeemleFrameworkJson->Count())' != '1'"
+           Text="Exactly one framework JSON assembly is required." />
+    <PropertyGroup>
+      <_NeemleJsonReference>@(_NeemleFrameworkJson)</_NeemleJsonReference>
+      <_NeemleRuntimeVersion>$([System.Text.RegularExpressions.Regex]::Replace('$(_NeemleJsonReference)', '^.*[/\\]([0-9]+\.[0-9]+\.[0-9]+)[/\\]runtimes[/\\].*$', '$1'))</_NeemleRuntimeVersion>
+      <_NeemleRuntimeDirectory>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NeemleJson/runtime/'))</_NeemleRuntimeDirectory>
+      <_NeemleRuntimeOutput>$(_NeemleRuntimeDirectory)System.Text.Json.dll</_NeemleRuntimeOutput>
+    </PropertyGroup>
+    <Error Condition="'$(NeemleJsonRuntimeAssembly)' == '' And !$([System.Text.RegularExpressions.Regex]::IsMatch('$(_NeemleRuntimeVersion)', '^[0-9]+\.[0-9]+\.[0-9]+$'))"
+           Text="The .NET runtime version could not be determined." />
+    <Exec Condition="'$(NeemleJsonRuntimeAssembly)' == ''"
+          Command="sh &quot;$(MSBuildThisFileDirectory)../tools/build-runtime.sh&quot; &quot;$(_NeemleRuntimeVersion)&quot; &quot;$(_NeemleRuntimeOutput)&quot; &quot;$(_NeemleRuntimeDirectory)&quot;" />
+    <PropertyGroup>
+      <NeemleJsonRuntimeAssembly Condition="'$(NeemleJsonRuntimeAssembly)' == ''">$(_NeemleRuntimeOutput)</NeemleJsonRuntimeAssembly>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(NeemleJsonRuntimeAssembly)')"
+           Text="The reflectionless JSON runtime assembly was not built." />
+    <ItemGroup>
+      <IlcReference Remove="@(_NeemleFrameworkJson)" />
+      <IlcReference Include="$(NeemleJsonRuntimeAssembly)" />
+    </ItemGroup>
   </Target>
   <Target Name="NeemleRewrite" BeforeTargets="CoreCompile" DependsOnTargets="ResolveReferences"
           Condition="'$(DesignTimeBuild)' != 'true'">
@@ -47,7 +78,8 @@
                       Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)defines.txt" Lines="$(DefineConstants)" Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)language.txt" Lines="$(LangVersion)" Overwrite="true" />
-    <Exec Command="dotnet tool/JsonGenerator.dll --manifest sources.txt references.txt . defines.txt language.txt"
+    <WriteLinesToFile File="$(_NeemleOutput)nullable.txt" Lines="$(Nullable)" Overwrite="true" />
+    <Exec Command="dotnet tool/JsonGenerator.dll --manifest sources.txt references.txt . defines.txt language.txt nullable.txt"
           WorkingDirectory="$(_NeemleOutput)" IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="_NeemleGeneratorExitCode" />
     </Exec>
