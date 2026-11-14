@@ -224,6 +224,12 @@ internal static class Program
         string classifiedJson = JsonSerializer.Serialize(classified, classifierOptions);
         Report("135", classified.Value is Cat { Name: "Misty", Lives: 9 } &&
             JsonSerializer.Deserialize<GlobalPet>(classifiedJson, classifierOptions).Value is Cat { Lives: 9 });
+        bool ambiguousRejected = false;
+        try { _ = JsonSerializer.Deserialize<GlobalPet>("{\"Name\":\"Misty\",\"Lives\":9}"); }
+        catch (InvalidOperationException) { ambiguousRejected = true; }
+        catch (NotSupportedException) { ambiguousRejected = true; }
+        catch (JsonException) { ambiguousRejected = true; }
+        Report("136", ambiguousRejected);
     }
 
     private static async IAsyncEnumerable<int> Numbers()

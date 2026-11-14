@@ -9,6 +9,11 @@ sealed partial class Rewriter
 {
     public override SyntaxNode? VisitInvocationExpression(InvocationExpressionSyntax node)
     {
+        if (node.Expression is MemberAccessExpressionSyntax { Name.Identifier.ValueText: "Add",
+                Expression: MemberAccessExpressionSyntax { Name.Identifier.ValueText: "TypeClassifiers" } classifiers } &&
+            semantic.GetSymbolInfo(classifiers).Symbol is IPropertySymbol { Name: "TypeClassifiers" } property &&
+            property.ContainingType.ToDisplayString() == OptionsTypeName)
+            asyncContexts.RegisterOptionsClassifier();
         if (staticNativeMetadata && node.ArgumentList.Arguments.Count == 0 &&
             node.Expression is MemberAccessExpressionSyntax { Name.Identifier.ValueText: "ToString" } enumCall &&
             semantic.GetTypeInfo(enumCall.Expression).Type?.TypeKind == TypeKind.Enum)

@@ -9,7 +9,10 @@ namespace Neemle.Json.Generator;
 internal sealed class AsyncContextEmitter
 {
     private readonly HashSet<ITypeSymbol> types = new(SymbolEqualityComparer.Default);
+    private bool hasOptionsClassifier;
     internal IEnumerable<ITypeSymbol> KnownTypes => types;
+
+    internal void RegisterOptionsClassifier() => hasOptionsClassifier = true;
 
     internal bool Register(ITypeSymbol type)
     {
@@ -45,6 +48,18 @@ internal sealed class AsyncContextEmitter
         var document = Cs.Document(CsLanguageVersion.CSharp14).Nullable(NullableMode.Enable);
         var context = document.Class("GeneratedAsyncJsonContext").Internal().Partial()
             .Base(Cs.Type("System.Text.Json.Serialization.JsonSerializerContext"));
+        if (hasOptionsClassifier)
+        {
+            var classifier = new CsExpression(ExpressionKind.TypeOf, "", [])
+            { Type = Cs.Type("System.Text.Json.Serialization.JsonUnionTypeStructuralClassifier") };
+            var classifiers = new CsExpression(ExpressionKind.Array, "", [])
+            {
+                Type = Cs.Type("System.Type"),
+                Initializer = new CsExpression(ExpressionKind.Initializer, "", new[] { classifier })
+            };
+            context.Attribute(Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSourceGenerationOptions"),
+                new AttributeArgument(classifiers, "TypeClassifiers", false)));
+        }
         var unionCases = types.OfType<INamedTypeSymbol>().Where(type =>
                 type.DeclaringSyntaxReferences.Any(reference => reference.GetSyntax().GetType().Name == "UnionDeclarationSyntax") ||
                 type.GetAttributes().Any(attribute =>
@@ -68,7 +83,9 @@ internal sealed class AsyncContextEmitter
         CsNode Prepared(CsNode value) => unionCases.Length == 0 ? value : NodeCall("PrepareUnionRoots", value);
         context.Method(Cs.Type("GeneratedAsyncJsonContext"), "ForOptions").Internal().Static()
             .Parameter(options.Nullable(), "options").Body(Cs.Tree(NodeIf(NullTest(Cs.Symbol("options")),
-                Return(Prepared(Cs.Symbol("Default")))), Return(Prepared(NodeCall("Contexts.GetValue", Cs.Symbol("options"), create))))).End();
+                Return(Prepared(hasOptionsClassifier ? NodeNew("GeneratedAsyncJsonContext",
+                    NodeNew("System.Text.Json.JsonSerializerOptions")) : Cs.Symbol("Default")))),
+                Return(Prepared(NodeCall("Contexts.GetValue", Cs.Symbol("options"), create))))).End();
         for (int i = 0; i < unionCases.Length; i++)
         {
             var typeOf = new CsExpression(ExpressionKind.TypeOf, "", [])
