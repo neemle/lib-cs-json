@@ -215,6 +215,15 @@ internal static class Program
         Report("132", JsonNode.Parse(objectExtraJson)?["flag"]?.GetValue<bool>() == true);
         var extensionJson = JsonSerializer.Serialize(extension);
         Report("133", JsonNode.Parse(extensionJson)?["age"]?.GetValue<int>() == 42);
+        var readOnlyRef = JsonSerializer.Deserialize<RefReadonlyConstructor>("{\"Value\":10}");
+        var privateReadOnlyRef = JsonSerializer.Deserialize<PrivateRefReadonlyConstructor>("{\"Value\":11}");
+        Report("134", readOnlyRef?.Value == 10 && privateReadOnlyRef?.Value == 11);
+        var classifierOptions = new JsonSerializerOptions();
+        classifierOptions.TypeClassifiers.Add(new JsonUnionTypeStructuralClassifier());
+        var classified = JsonSerializer.Deserialize<GlobalPet>("{\"Name\":\"Misty\",\"Lives\":9}", classifierOptions);
+        string classifiedJson = JsonSerializer.Serialize(classified, classifierOptions);
+        Report("135", classified.Value is Cat { Name: "Misty", Lives: 9 } &&
+            JsonSerializer.Deserialize<GlobalPet>(classifiedJson, classifierOptions).Value is Cat { Lives: 9 });
     }
 
     private static async IAsyncEnumerable<int> Numbers()
@@ -304,6 +313,7 @@ public union Reading(int, string);
 
 [JsonUnion(TypeClassifier = typeof(JsonUnionTypeStructuralClassifier))]
 public union Pet(Dog, Cat);
+public union GlobalPet(Dog, Cat);
 public sealed record Dog(string Name, string Breed);
 public sealed record Cat(string Name, int Lives);
 
@@ -375,4 +385,18 @@ public sealed class OutConstructor
     public int Value { get; set; }
     [JsonConstructor]
     public OutConstructor(out int value) { value = 0; }
+}
+
+public sealed class RefReadonlyConstructor
+{
+    public int Value { get; }
+    [JsonConstructor]
+    public RefReadonlyConstructor(ref readonly int value) => Value = value;
+}
+
+public sealed class PrivateRefReadonlyConstructor
+{
+    public int Value { get; }
+    [JsonConstructor]
+    private PrivateRefReadonlyConstructor(ref readonly int value) => Value = value;
 }
