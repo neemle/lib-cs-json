@@ -1,5 +1,7 @@
 <Project>
-  <UsingTask TaskName="Neemle.Json.Generator.GeneratorTask"
+  <UsingTask TaskName="Neemle.Json.Generator.GenerateTask"
+             AssemblyFile="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" />
+  <UsingTask TaskName="Neemle.Json.Generator.BuildRuntimeTask"
              AssemblyFile="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" />
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -35,15 +37,14 @@
     <PropertyGroup>
       <_NeemleJsonReference>@(_NeemleFrameworkJson)</_NeemleJsonReference>
       <_NeemleRuntimeVersion>$([System.Text.RegularExpressions.Regex]::Replace('$(_NeemleJsonReference)', '^.*[/\\]([0-9]+\.[0-9]+\.[0-9]+)[/\\]runtimes[/\\].*$', '$1'))</_NeemleRuntimeVersion>
-      <_NeemleRuntimeDirectory>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NeemleJson/runtime/'))</_NeemleRuntimeDirectory>
+      <_NeemleRuntimeDirectory>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NeemleJson/runtime/', '$(MSBuildProjectDirectory)'))</_NeemleRuntimeDirectory>
       <_NeemleRuntimeOutput>$(_NeemleRuntimeDirectory)System.Text.Json.dll</_NeemleRuntimeOutput>
     </PropertyGroup>
     <Error Condition="'$(NeemleJsonRuntimeAssembly)' == '' And !$([System.Text.RegularExpressions.Regex]::IsMatch('$(_NeemleRuntimeVersion)', '^[0-9]+\.[0-9]+\.[0-9]+$'))"
            Text="The .NET runtime version could not be determined." />
-    <Neemle.Json.Generator.GeneratorTask Condition="'$(NeemleJsonRuntimeAssembly)' == ''"
-      Tool="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" Mode="--build-runtime"
-      WorkingDirectory="$(MSBuildProjectDirectory)" Arg1="$(_NeemleRuntimeVersion)"
-      Arg2="$(_NeemleRuntimeOutput)" Arg3="$(_NeemleRuntimeDirectory)" />
+    <Neemle.Json.Generator.BuildRuntimeTask Condition="'$(NeemleJsonRuntimeAssembly)' == ''"
+      RuntimeVersion="$(_NeemleRuntimeVersion)" OutputFile="$(_NeemleRuntimeOutput)"
+      WorkingDirectory="$(_NeemleRuntimeDirectory)" />
     <PropertyGroup>
       <NeemleJsonRuntimeAssembly Condition="'$(NeemleJsonRuntimeAssembly)' == ''">$(_NeemleRuntimeOutput)</NeemleJsonRuntimeAssembly>
     </PropertyGroup>
@@ -57,35 +58,32 @@
   <Target Name="NeemleRewrite" BeforeTargets="CoreCompile" DependsOnTargets="ResolveReferences"
           Condition="'$(DesignTimeBuild)' != 'true'">
     <PropertyGroup>
-      <_NeemleTools>$(MSBuildThisFileDirectory)../tools</_NeemleTools>
-      <_NeemleOutput>$(IntermediateOutputPath)NeemleJson/</_NeemleOutput>
+      <_NeemleOutput>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NeemleJson/', '$(MSBuildProjectDirectory)'))</_NeemleOutput>
     </PropertyGroup>
     <ItemGroup>
       <_NeemleInput Include="@(Compile)" />
       <_NeemleReferences Include="@(ReferencePathWithRefAssemblies)" />
+      <_NeemleComposer Include="@(ReferenceCopyLocalPaths)"
+        Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Neemle.CSharpComposer' and
+                   '%(ReferenceCopyLocalPaths.Filename)' == 'Neemle.CSharpComposer'" />
     </ItemGroup>
     <Error Condition="'@(_NeemleInput->Count())' == '0' Or '@(_NeemleReferences->Count())' == '0'"
            Text="JSON generation requires source files and resolved references." />
+    <Error Condition="'@(_NeemleComposer->Count())' != '1'"
+           Text="JSON generation requires the Neemle.CSharpComposer dependency." />
     <RemoveDir Directories="$(_NeemleOutput)" />
     <MakeDir Directories="$(_NeemleOutput)" />
-    <ItemGroup>
-      <_NeemleToolFiles Include="$(_NeemleTools)/JsonGenerator.dll" />
-      <_NeemleToolFiles Include="$(_NeemleTools)/JsonGenerator.deps.json" />
-      <_NeemleToolFiles Include="$(_NeemleTools)/JsonGenerator.runtimeconfig.json" />
-      <_NeemleToolFiles Include="$(_NeemleTools)/Neemle.CSharpComposer.dll" />
-      <_NeemleToolFiles Include="$(_NeemleTools)/Microsoft.CodeAnalysis.dll" />
-      <_NeemleToolFiles Include="$(_NeemleTools)/Microsoft.CodeAnalysis.CSharp.dll" />
-    </ItemGroup>
-    <Copy SourceFiles="@(_NeemleToolFiles)" DestinationFolder="$(_NeemleOutput)tool/" />
     <WriteLinesToFile File="$(_NeemleOutput)sources.txt" Lines="@(_NeemleInput->'%(FullPath)')" Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)references.txt" Lines="@(_NeemleReferences->'%(FullPath)')"
                       Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)defines.txt" Lines="$(DefineConstants)" Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)language.txt" Lines="$(LangVersion)" Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)nullable.txt" Lines="$(Nullable)" Overwrite="true" />
-    <Neemle.Json.Generator.GeneratorTask Tool="tool/JsonGenerator.dll" Mode="--manifest" WorkingDirectory="$(_NeemleOutput)"
-      Arg1="sources.txt" Arg2="references.txt" Arg3="." Arg4="defines.txt" Arg5="language.txt" Arg6="nullable.txt" />
-    <RemoveDir Directories="$(_NeemleOutput)tool/" />
+    <Neemle.Json.Generator.GenerateTask SourcesFile="$(_NeemleOutput)sources.txt"
+      ReferencesFile="$(_NeemleOutput)references.txt" OutputDirectory="$(_NeemleOutput)"
+      DefinesFile="$(_NeemleOutput)defines.txt" LanguageFile="$(_NeemleOutput)language.txt"
+      NullableFile="$(_NeemleOutput)nullable.txt" RoslynDirectory="$(MSBuildToolsPath)/Roslyn/bincore"
+      ComposerReferences="@(_NeemleComposer)" />
     <ItemGroup>
       <Compile Remove="@(_NeemleInput)" />
       <_NeemleRewritten Include="$(_NeemleOutput)Source*.g.cs" />

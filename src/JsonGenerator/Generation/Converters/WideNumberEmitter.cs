@@ -8,12 +8,9 @@ namespace Neemle.Json.Generator;
 internal static class WideNumberEmitter
 {
     internal static bool IsWide(ITypeSymbol type) => type.ToDisplayString() is
-        "System.Half" or "System.Int128" or "System.UInt128" or "System.Numerics.BFloat16" or
-        "System.Numerics.Decimal32" or "System.Numerics.Decimal64" or "System.Numerics.Decimal128";
+        "System.Half" or "System.Int128" or "System.UInt128";
 
-    internal static bool IsFloating(ITypeSymbol type) => type.ToDisplayString() is "System.Half" or
-        "System.Numerics.BFloat16" or "System.Numerics.Decimal32" or "System.Numerics.Decimal64" or
-        "System.Numerics.Decimal128";
+    internal static bool IsFloating(ITypeSymbol type) => type.ToDisplayString() is "System.Half";
 
     internal static void Write(List<CsNode> body, ITypeSymbol type, int index)
     {

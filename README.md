@@ -1,5 +1,7 @@
 # Neemle.JSON
 
+The current source contains changes that are not yet in the published 0.1.10 package.
+
 Use ordinary `System.Text.Json` calls in a .NET NativeAOT application targeting
 static Linux musl on ARM64 or x64. The package generates JSON serialization code
 at build time for supported types, so those operations can run without runtime
@@ -36,8 +38,9 @@ public sealed class Message
 }
 ```
 
-The generator is included in the package and runs during the build; no explicit
-analyzer or context registration is needed. For NativeAOT builds, the package
+The generator runs as an MSBuild task; no explicit analyzer or context registration
+is needed. It uses Roslyn from the .NET SDK, and NuGet restores its
+`Neemle.CSharpComposer` dependency automatically. For NativeAOT builds, the package
 requires reflection metadata to be disabled and warnings to be treated as errors.
 It builds a patched JSON runtime from the matching official .NET runtime sources,
 so publishing requires network access to GitHub.
@@ -49,7 +52,7 @@ overloads in .NET 10 using a single model.
 
 ## Build and try locally
 
-To build the package locally, use a stable .NET SDK version 10 or later:
+To build the package locally, use a stable .NET 10 SDK:
 
 ```sh
 dotnet build Neemle.JSON.slnx -c Release

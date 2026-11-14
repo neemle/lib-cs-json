@@ -5,29 +5,20 @@ using Microsoft.CodeAnalysis.Operations;
 
 namespace Neemle.Json.Generator;
 
-internal static class Program
+internal static class SourceGenerator
 {
-    private static async Task Main(string[] args)
+    internal static void Generate(string sourcesFile, string referencesFile, string output,
+        string definesFile, string languageFile, string nullableFile)
     {
-        if (args.Length == 4 && args[0] == "--build-runtime")
-        {
-            await RuntimeBuilder.BuildAsync(args[1], args[2], args[3]);
-            return;
-        }
-
-        if (args.Length != 7 || args[0] != "--manifest")
-            throw new ArgumentException(("Usage: JsonGenerator --manifest <sources> <references> " +
-                    "<output> <defines> <language> <nullable>"));
-        var sources = File.ReadAllLines(args[1]).Where(File.Exists).ToArray();
-        var output = args[3];
-        var references = File.ReadAllLines(args[2]).Where(File.Exists);
+        var sources = File.ReadAllLines(sourcesFile).Where(File.Exists).ToArray();
+        var references = File.ReadAllLines(referencesFile).Where(File.Exists);
         var language = LanguageVersion.Default;
-        var languageValue = File.ReadAllText(args[5]).Trim();
+        var languageValue = File.ReadAllText(languageFile).Trim();
         if (languageValue.Length != 0 && !LanguageVersionFacts.TryParse(languageValue, out language))
             throw new InvalidOperationException("Unsupported C# language version: " + languageValue);
-        var symbols = File.ReadAllLines(args[4]).SelectMany(line =>
+        var symbols = File.ReadAllLines(definesFile).SelectMany(line =>
             line.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)).ToArray();
-        var nullable = File.ReadAllText(args[6]).Trim().ToLowerInvariant() switch
+        var nullable = File.ReadAllText(nullableFile).Trim().ToLowerInvariant() switch
         {
             "enable" => NullableContextOptions.Enable,
             "annotations" => NullableContextOptions.Annotations,

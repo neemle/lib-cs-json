@@ -16,16 +16,15 @@ internal static class RuntimeBuilder
 
     internal static async Task BuildAsync(string version, string output, string parent)
     {
-        if (!Version.TryParse(version, out var parsed) || parsed.Build < 0)
+        if (!Version.TryParse(version, out var parsed) || parsed.Major != 10 || parsed.Build < 0)
             throw new ArgumentException("Invalid runtime version.", nameof(version));
         string work = Path.Combine(parent, "runtime." + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(work);
         try
         {
             await ExtractAsync(version, work);
-            string tools = AppContext.BaseDirectory;
-            ApplyPatch(work, Path.Combine(tools, "JsonRuntime.patch"), parsed.Major >= 11);
-            if (parsed.Major >= 11) ApplyPatch(work, Path.Combine(tools, "JsonRuntime.Net11.patch"), false);
+            string tools = Path.GetDirectoryName(typeof(RuntimeBuilder).Assembly.Location)!;
+            ApplyPatch(work, Path.Combine(tools, "JsonRuntime.patch"));
             await BuildRuntimeAsync(work, output, parsed.Major);
         }
         finally { Directory.Delete(work, true); }
@@ -70,7 +69,7 @@ internal static class RuntimeBuilder
         if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(path, entry.Mode);
     }
 
-    private static void ApplyPatch(string root, string patchPath, bool net11)
+    private static void ApplyPatch(string root, string patchPath)
     {
         string[] lines = File.ReadAllLines(patchPath);
         int index = 0;
@@ -83,15 +82,10 @@ internal static class RuntimeBuilder
             string relative = header[(split + 3)..];
             int end = index;
             while (end < lines.Length && !lines[end].StartsWith("diff --git ", StringComparison.Ordinal)) end++;
-            if (!net11 || !ExcludedOnNet11(relative)) ApplyFile(root, relative, lines, index, end);
+            ApplyFile(root, relative, lines, index, end);
             index = end;
         }
     }
-
-    private static bool ExcludedOnNet11(string path) =>
-        path.EndsWith("/JsonSerializer.Read.HandleMetadata.cs", StringComparison.Ordinal) ||
-        path.EndsWith("/Metadata/JsonPropertyInfo.cs", StringComparison.Ordinal) ||
-        path.EndsWith("/Metadata/JsonTypeInfo.cs", StringComparison.Ordinal);
 
     private static void ApplyFile(string root, string relative, string[] patch, int start, int end)
     {
