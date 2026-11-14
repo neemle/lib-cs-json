@@ -10,7 +10,7 @@
     <StaticICULinking>false</StaticICULinking>
     <StaticExecutable>true</StaticExecutable>
     <OptimizationPreference>Size</OptimizationPreference>
-    <NeemlePackageVersion Condition="'$(NeemlePackageVersion)' == ''">0.1.10</NeemlePackageVersion>
+    <NeemlePackageVersion Condition="'$(NeemlePackageVersion)' == ''">1.10.0</NeemlePackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Neemle.JSON" Version="$(NeemlePackageVersion)" />

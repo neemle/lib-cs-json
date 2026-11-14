@@ -1,19 +1,20 @@
 # Neemle.JSON
 
-Neemle.JSON generates JSON serialization code at build time for .NET 10
-applications. It lets you use the usual `System.Text.Json` API in a statically
-linked NativeAOT application for Linux musl, without runtime reflection metadata
-or manually registering a `JsonSerializerContext`.
+Add Neemle.JSON to a .NET 10 application and keep using `System.Text.Json` as
+usual. During the build, the package generates the JSON code needed for
+NativeAOT: no manual generator setup or `JsonSerializerContext` is required.
 
-Use it when deploying to a musl environment such as Alpine Linux on ARM64 or x64
-and you want to keep normal `JsonSerializer.Serialize` and `Deserialize` calls.
+Use it to publish a statically linked Linux musl application, such as an Alpine
+Linux application on ARM64 or x64, without JSON runtime reflection metadata.
+The package targets `System.Text.Json`; other libraries need their own NativeAOT
+support.
 
 ## Use
 
-Add the package to your .NET 10 application:
+Add the dependency to your .NET 10 project:
 
 ```sh
-dotnet add package Neemle.JSON --version 0.1.10
+dotnet add package Neemle.JSON
 ```
 
 Then use `System.Text.Json` normally:
@@ -39,17 +40,16 @@ Publish for Linux musl with the .NET 10 NativeAOT toolchain installed:
 
 ```sh
 dotnet publish -c Release -r linux-musl-arm64 \
-  -p:PublishAot=true -p:StaticExecutable=true -p:InvariantGlobalization=true
+  -p:PublishAot=true -p:StaticExecutable=true -p:InvariantGlobalization=true \
+  -p:JsonSerializerIsReflectionEnabledByDefault=false
 ```
 
-Use `linux-musl-x64` for x64. The package configures reflection metadata and
-fatal build warnings automatically. Publishing downloads and builds the matching
+Use `linux-musl-x64` for x64. The package also passes `--reflectiondata:none` to
+NativeAOT and makes build warnings fatal. Publishing downloads and builds the matching
 official .NET JSON runtime, so it requires network access to GitHub.
 
-The published 0.1.10 package also requires Git and `sh` during NativeAOT
-publishing. The current source removes those package-specific requirements and
-uses an MSBuild DLL task, SDK Roslyn, and an automatically restored
-`Neemle.CSharpComposer` dependency. These changes are not yet published.
+The package uses an MSBuild DLL task and Roslyn from the SDK. NuGet restores
+the `Neemle.CSharpComposer` dependency automatically.
 
 ## Demo
 
