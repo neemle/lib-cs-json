@@ -97,7 +97,8 @@ internal static class FrameworkScalar
     {
         var parse = Cs.Symbol("TryParse", new()
         {
-            Target = TypeRef("System.Buffers.Text.Utf8Parser"), AsCall = true,
+            Target = TypeRef("System.Buffers.Text.Utf8Parser"),
+            AsCall = true,
             Arguments = Cs.Compound(Cs.Symbol("bytes"), Arg(ArgumentModifier.Out,
                 Cs.Symbol("value", new() { Operation = SymbolOperation.Declaration, Type = NodeType(TypeName(type)) })),
                 OutVar("consumed"))

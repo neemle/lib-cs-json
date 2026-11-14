@@ -29,10 +29,16 @@ static class CodecApiEmitter
         {
             CsNode jsonText = inputType == "byte[]" ? NodeCall("Encoding.UTF8.GetString", Cs.Symbol("json")) :
                 Cs.Symbol("json");
-            var read = new CsBody { Tree = Cs.Tree(Return(NodeCall($"Read_{i}",
-                Cs.Symbol("RootElement", new() { Target = Cs.Symbol("d") }), Cs.Symbol("options"), Cs.Value("$")))) };
-            var catchBody = new CsBody { Tree = Cs.Tree(NodeThrow(NodeCall("PositionedScalarError", Cs.Symbol("error"),
-                jsonText, Cs.Symbol("options")))) };
+            var read = new CsBody
+            {
+                Tree = Cs.Tree(Return(NodeCall($"Read_{i}",
+                Cs.Symbol("RootElement", new() { Target = Cs.Symbol("d") }), Cs.Symbol("options"), Cs.Value("$"))))
+            };
+            var catchBody = new CsBody
+            {
+                Tree = Cs.Tree(NodeThrow(NodeCall("PositionedScalarError", Cs.Symbol("error"),
+                jsonText, Cs.Symbol("options"))))
+            };
             Public(root, name, $"Decode_{i}")
                 .Parameter(inputType == "byte[]" ? Cs.Type("byte").Array() : Cs.Type("string"), "json")
                 .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null))

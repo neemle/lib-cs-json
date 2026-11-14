@@ -74,8 +74,12 @@ internal static class ConverterBridgeEmitter
     private static void EmitTypedFactory(TypeBuilder<FileBuilder> root, ITypeSymbol type, int index)
     {
         var converter = Cs.Generic("Converter", NodeType(TypeName(type)));
-        var pattern = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("value"),
-            Pattern = new CsPattern(PatternKind.Declaration) { Type = converter, Name = "typed" } });
+        var pattern = Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = Cs.Symbol("value"),
+            Pattern = new CsPattern(PatternKind.Declaration) { Type = converter, Name = "typed" }
+        });
         root.Method(Cs.Type("JsonConverter"), "AdaptTyped_" + index).Private().Static()
             .Parameter(Cs.Type("object"), "value").Body(Cs.Tree(
                 NodeIf(pattern, Return(NodeNew("ConverterAdapter<" + TypeName(type) + ">", Cs.Symbol("typed")))),

@@ -47,7 +47,8 @@ internal static class NumberHandlingEmitter
     {
         var text = Cs.Symbol("ToString", new()
         {
-            Target = Cs.Symbol("value"), AsCall = true,
+            Target = Cs.Symbol("value"),
+            AsCall = true,
             Arguments = Cs.Compound(Cs.Value(null), NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture"))
         });
         body.Add(NodeIf(NodeCall($"ShouldWriteNumber_{index}", Cs.Symbol("value"), Cs.Symbol("options"),
@@ -59,7 +60,7 @@ internal static class NumberHandlingEmitter
     internal static void EmitHelpers(TypeBuilder<FileBuilder> root, ITypeSymbol type, int index)
     {
         bool floating = type.SpecialType is SpecialType.System_Single or SpecialType.System_Double ||
-            WideNumberEmitter.IsHalf(type);
+            WideNumberEmitter.IsFloating(type);
         var read = Flag("AllowReadingFromString");
         var write = Flag("WriteAsString");
         if (floating)

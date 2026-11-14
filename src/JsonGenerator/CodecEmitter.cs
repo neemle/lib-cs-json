@@ -422,7 +422,13 @@ sealed class CodecEmitter
             DynamicEmitter.Emit(root, types);
             RuntimeTypeEmitter.Emit(root, types);
         }
+        bool objectMapKeys = mapKeys.Any(key => types[key].SpecialType == SpecialType.System_Object);
+        if (objectMapKeys)
+            for (int i = 0; i < types.Count; i++)
+                if (FrameworkCollection.SupportsKey(types[i]) ||
+                    ConverterAttributeEmitter.Converter(types[i], types[i]) is not null) mapKeys.Add(i);
         foreach (int key in mapKeys) MapKeyEmitter.Emit(root, this, types[key], key);
+        if (objectMapKeys) MapKeyEmitter.EmitObjectWriter(root, types, mapKeys);
         if (allEnumFactory) EnumFactoryEmitter.Emit(root, types);
         if (converterFactories) ConverterFactoryEmitter.EmitDispatch(root, types);
         if (frameworkFactoryAdapter) ConverterBridgeEmitter.Emit(root, types);

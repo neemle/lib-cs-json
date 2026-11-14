@@ -23,7 +23,8 @@ internal static class DynamicEmitter
                 string local = "typed_" + index;
                 var test = Cs.Symbol(new()
                 {
-                    AsIs = true, Value = Cs.Symbol("value"),
+                    AsIs = true,
+                    Value = Cs.Symbol("value"),
                     Pattern = new CsPattern(PatternKind.Declaration) { Type = NodeType(TypeName(type)), Name = local }
                 });
                 CsNode matches = test;

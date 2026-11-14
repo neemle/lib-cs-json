@@ -6,7 +6,7 @@ using static CodecApiEmitter;
 internal static class DuplicatePropertyEmitter
 {
     internal static CsNode Disabled() => NodeBinary(CsOperator.Equal, Cs.Symbol("AllowDuplicateProperties", new()
-        { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(false));
+    { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(false));
 
     internal static CsNode Check(CsNode present) => NodeCall("CheckDuplicate", present, Cs.Symbol("options"));
 

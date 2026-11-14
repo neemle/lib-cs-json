@@ -33,8 +33,11 @@ internal static class ContextAlias
 
     private static bool IsSerializerArgument(SemanticModel model, IdentifierNameSyntax identifier)
     {
-        if (identifier.Parent is not ArgumentSyntax { RefKindKeyword.RawKind: 0,
-            Parent.Parent: InvocationExpressionSyntax call } argument) return false;
+        if (identifier.Parent is not ArgumentSyntax
+            {
+                RefKindKeyword.RawKind: 0,
+                Parent.Parent: InvocationExpressionSyntax call
+            } argument) return false;
         if (model.GetSymbolInfo(call).Symbol is IMethodSymbol method)
             return method.ContainingType.ToDisplayString() == "System.Text.Json.JsonSerializer" &&
                 model.GetOperation(argument) is IArgumentOperation operation && operation.Parameter is { } parameter &&

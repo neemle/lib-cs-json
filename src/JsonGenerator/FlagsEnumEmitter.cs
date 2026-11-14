@@ -86,7 +86,8 @@ internal static class FlagsEnumEmitter
             Initializer = NodeVar("i", Cs.Value(0)),
             Condition = NodeBinary(CsOperator.LessThan, Cs.Symbol("i"),
                 NodeMember(Cs.Symbol($"EnumNames_{index}"), "Length")),
-            Iterators = Cs.Compound(Cs.PostIncrement(Cs.Id("i"))), Body = Cs.Tree(match)
+            Iterators = Cs.Compound(Cs.PostIncrement(Cs.Id("i"))),
+            Body = Cs.Tree(match)
         });
         var parts = NodeCall("name.Split", Cs.Literal(','));
         var each = NodeEach("item", parts, NodeVar("part", NodeCall("item.Trim")),

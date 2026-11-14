@@ -48,19 +48,35 @@ internal static class ExceptionEmitter
 
     private static void EmitConverterErrors(TypeBuilder<FileBuilder> root)
     {
-        var custom = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("error"),
-            Pattern = new CsPattern(PatternKind.Declaration) { Type = Cs.Type("UserNotSupportedException"), Name = "user" } });
-        var message = Cs.Symbol(new() { AsConditional = true, Parts = new CsNode[] { custom,
+        var custom = Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = Cs.Symbol("error"),
+            Pattern = new CsPattern(PatternKind.Declaration) { Type = Cs.Type("UserNotSupportedException"), Name = "user" }
+        });
+        var message = Cs.Symbol(new()
+        {
+            AsConditional = true,
+            Parts = new CsNode[] { custom,
             NodeBinary(CsOperator.Coalesce, NodeMember(Cs.Symbol("user"), "Text"), Cs.Value("Converter is not supported.")),
-            Cs.Value("Converter is not supported.") } });
+            Cs.Value("Converter is not supported.") }
+        });
         root.Method(Cs.Type("NotSupportedException"), "ConverterNotSupported").Private().Static()
             .Parameter(Cs.Type("NotSupportedException"), "error").Parameter(Cs.Type("string"), "path")
             .Body(Cs.Tree(Return(NodeNew("NotSupportedException", NodeBinary(CsOperator.Add,
                 NodeBinary(CsOperator.Add, message, Cs.Value(" Path: ")), Cs.Symbol("path")), Cs.Symbol("error"))))).End();
-        var jsonCustom = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("error"),
-            Pattern = new CsPattern(PatternKind.Declaration) { Type = Cs.Type("UserJsonException"), Name = "user" } });
-        var text = Cs.Symbol(new() { AsConditional = true, Parts = new CsNode[] { jsonCustom,
-            NodeMember(Cs.Symbol("user"), "Text"), Cs.Value("JSON converter failed.") } });
+        var jsonCustom = Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = Cs.Symbol("error"),
+            Pattern = new CsPattern(PatternKind.Declaration) { Type = Cs.Type("UserJsonException"), Name = "user" }
+        });
+        var text = Cs.Symbol(new()
+        {
+            AsConditional = true,
+            Parts = new CsNode[] { jsonCustom,
+            NodeMember(Cs.Symbol("user"), "Text"), Cs.Value("JSON converter failed.") }
+        });
         root.Method(Cs.Type("JsonException"), "ConverterJsonError").Private().Static()
             .Parameter(Cs.Type("JsonException"), "error").Parameter(Cs.Type("string"), "path")
             .Body(Cs.Tree(Return(NodeNew("JsonException", text, Cs.Symbol("path"), Cs.Value(null), Cs.Value(null),
@@ -102,11 +118,16 @@ internal static class ExceptionEmitter
         root.Field(table, "PropertyNames").Private().Static().ReadOnly()
             .Initialize(new CsExpression(ExpressionKind.New, "", [])).End();
         var factory = Cs.Lambda(new CsExpression(ExpressionKind.New, "", []) { Type = map },
-            Cs.LambdaParameter("_")) with { IsStatic = true };
-        var locked = Cs.Instruction(InstructionKind.Lock, new() { Value = Cs.Symbol("items"), Body = Cs.Tree(
+            Cs.LambdaParameter("_")) with
+        { IsStatic = true };
+        var locked = Cs.Instruction(InstructionKind.Lock, new()
+        {
+            Value = Cs.Symbol("items"),
+            Body = Cs.Tree(
             NodeIf(NodeCall("items.TryGetValue", Cs.Symbol("key"), OutVar("cached")), Return(Cs.Symbol("cached"))),
             NodeVar("converted", NodeCall("ApplyNamingPolicy", Cs.Symbol("policy"), Cs.Symbol("name"))),
-            NodeCall("items.Add", Cs.Symbol("key"), Cs.Symbol("converted")), Return(Cs.Symbol("converted"))) });
+            NodeCall("items.Add", Cs.Symbol("key"), Cs.Symbol("converted")), Return(Cs.Symbol("converted")))
+        });
         var policy = Cs.Symbol("PropertyNamingPolicy", new() { Target = Cs.Symbol("options"), ConditionalAccess = true });
         root.Method(Cs.Type("string"), "PropertyName").Private().Static()
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options").Parameter(Cs.Type("string"), "key")

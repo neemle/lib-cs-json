@@ -6,20 +6,31 @@ using static CodecApiEmitter;
 internal static class WideNumberEmitter
 {
     internal static bool IsWide(ITypeSymbol type) => type.ToDisplayString() is
-        "System.Half" or "System.Int128" or "System.UInt128";
+        "System.Half" or "System.Int128" or "System.UInt128" or "System.Numerics.BFloat16" or
+        "System.Numerics.Decimal32" or "System.Numerics.Decimal64" or "System.Numerics.Decimal128";
 
-    internal static bool IsHalf(ITypeSymbol type) => type.ToDisplayString() == "System.Half";
+    internal static bool IsFloating(ITypeSymbol type) => type.ToDisplayString() is "System.Half" or
+        "System.Numerics.BFloat16" or "System.Numerics.Decimal32" or "System.Numerics.Decimal64" or
+        "System.Numerics.Decimal128";
 
     internal static void Write(List<CsNode> body, ITypeSymbol type, int index)
     {
-        var text = Cs.Symbol("ToString", new() { Target = Cs.Symbol("value"), AsCall = true,
-            Arguments = Cs.Compound(Cs.Value(null), NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture")) });
+        var text = Cs.Symbol("ToString", new()
+        {
+            Target = Cs.Symbol("value"),
+            AsCall = true,
+            Arguments = Cs.Compound(Cs.Value(null), NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture"))
+        });
         body.Add(NodeVar("text", text));
         body.Add(NodeIf(NodeCall($"ShouldWriteNumber_{index}", Cs.Symbol("value"), Cs.Symbol("options"),
             Cs.Symbol("handlingOverride")), NodeCall("w.WriteStringValue", Cs.Symbol("text")),
             Cs.Instruction(InstructionKind.Return)));
-        if (IsHalf(type)) body.Add(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[]
-            { NodeCall("Half.IsFinite", Cs.Symbol("value")) } }), NodeThrow(NodeNew("ArgumentException"))));
+        if (IsFloating(type)) body.Add(NodeIf(Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[]
+            { IsFinite(type, Cs.Symbol("value")) }
+        }), NodeThrow(NodeNew("ArgumentException"))));
         body.Add(NodeCall("w.WriteRawValue", Cs.Symbol("text")));
     }
 
@@ -31,18 +42,26 @@ internal static class WideNumberEmitter
             Cs.Symbol("handlingOverride"));
         body.Add(NodeVar("text", NodeCall("e.GetRawText")));
         body.Add(NodeIf(allowed, NodeAssign(Cs.Symbol("text"), NonNull(NodeCall("e.GetString")))));
-        body.Add(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[]
-            { NodeBinary(CsOperator.OrElse, number, allowed) } }), Invalid()));
-        var parse = Cs.Symbol("TryParse", new() { Target = TypeRef(TypeName(type)), AsCall = true,
+        body.Add(NodeIf(Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[]
+            { NodeBinary(CsOperator.OrElse, number, allowed) }
+        }), Invalid()));
+        var parse = Cs.Symbol("TryParse", new()
+        {
+            Target = TypeRef(TypeName(type)),
+            AsCall = true,
             Arguments = Cs.Compound(Cs.Symbol("text"), NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture"),
-                OutVar("parsed")) });
+                OutVar("parsed"))
+        });
         var invalid = NodeBinary(CsOperator.OrElse,
             NodeBinary(CsOperator.NotEqual, Cs.Symbol("text"), NodeCall("text.Trim")),
             Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] { parse } }));
         body.Add(NodeIf(invalid, Invalid()));
-        if (IsHalf(type))
+        if (IsFloating(type))
         {
-            var finite = NodeCall("Half.IsFinite", Cs.Symbol("parsed"));
+            var finite = IsFinite(type, Cs.Symbol("parsed"));
             var known = new[] { "NaN", "Infinity", "-Infinity" }.Select(name => (CsNode)NodeBinary(
                 CsOperator.Equal, Cs.Symbol("text"), Cs.Value(name))).Aggregate((left, right) =>
                     NodeBinary(CsOperator.OrElse, left, right));
@@ -55,4 +74,11 @@ internal static class WideNumberEmitter
 
     private static CsNode Invalid() => NodeThrow(NodeCall("InvalidScalar", NodeNew("FormatException"),
         Cs.Symbol("path")));
+
+    private static CsNode IsFinite(ITypeSymbol type, CsNode value) => Cs.Symbol("IsFinite", new()
+    {
+        Target = TypeRef(TypeName(type)),
+        AsCall = true,
+        Arguments = Cs.Compound(value)
+    });
 }

@@ -52,8 +52,12 @@ internal static class JsonPositionEmitter
     private static void EmitNextPath(TypeBuilder<FileBuilder> root)
     {
         var value = NodeMember(Cs.Symbol("frame"), "Index");
-        var number = Cs.Symbol("ToString", new() { Target = value, AsCall = true,
-            Arguments = Cs.Compound(NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture")) });
+        var number = Cs.Symbol("ToString", new()
+        {
+            Target = value,
+            AsCall = true,
+            Arguments = Cs.Compound(NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture"))
+        });
         var arrayPath = NodeBinary(CsOperator.Add, NodeBinary(CsOperator.Add,
             NodeBinary(CsOperator.Add, NodeMember(Cs.Symbol("frame"), "Path"), Cs.Value("[")), number), Cs.Value("]"));
         root.Method(Cs.Type("string"), "NextJsonPath").Private().Static().Parameter(Cs.Type(Frame), "frame")
@@ -71,9 +75,13 @@ internal static class JsonPositionEmitter
         var property = NodeMember(NodeCall("frames.Peek"), "Name");
         var end = NodeBinary(CsOperator.OrElse, IsToken("EndObject"), IsToken("EndArray"));
         var start = NodeBinary(CsOperator.OrElse, IsToken("StartObject"), IsToken("StartArray"));
-        var current = Cs.Symbol(new() { AsConditional = true, Parts = new CsNode[] {
+        var current = Cs.Symbol(new()
+        {
+            AsConditional = true,
+            Parts = new CsNode[] {
             NodeBinary(CsOperator.Equal, NodeMember(Cs.Symbol("frames"), "Count"), Cs.Value(0)), Cs.Value("$"),
-            NodeCall("NextJsonPath", NodeCall("frames.Peek")) } });
+            NodeCall("NextJsonPath", NodeCall("frames.Peek")) }
+        });
         root.Method(Cs.Bool, "NextJsonTokenPath").Private().Static()
             .Parameter(Cs.Type("Utf8JsonReader"), "reader", "ref").Parameter(Frames, "frames")
             .Parameter(Cs.Type("string"), "path", "out")
@@ -106,20 +114,36 @@ internal static class JsonPositionEmitter
     {
         CsNode option(string name, CsNode fallback) => NodeBinary(CsOperator.Coalesce,
             Cs.Symbol(name, new() { Target = Cs.Symbol("options"), ConditionalAccess = true }), fallback);
-        var readerOptions = Cs.Symbol(new() { AsNew = true, Type = Cs.Type("JsonReaderOptions"),
-            Initializer = Cs.Symbol(new() { AsInitializer = true, Parts = new CsNode[] {
+        var readerOptions = Cs.Symbol(new()
+        {
+            AsNew = true,
+            Type = Cs.Type("JsonReaderOptions"),
+            Initializer = Cs.Symbol(new()
+            {
+                AsInitializer = true,
+                Parts = new CsNode[] {
                 NodeAssign(Cs.Symbol("AllowTrailingCommas"), option("AllowTrailingCommas", Cs.Value(false))),
                 NodeAssign(Cs.Symbol("CommentHandling"), option("ReadCommentHandling", NodeMember(Cs.Symbol("JsonCommentHandling"), "Disallow"))),
-                NodeAssign(Cs.Symbol("MaxDepth"), option("MaxDepth", Cs.Value(0))) } }) });
-        var skip = Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] {
+                NodeAssign(Cs.Symbol("MaxDepth"), option("MaxDepth", Cs.Value(0))) }
+            })
+        });
+        var skip = Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[] {
             NodeCall("NextJsonTokenPath", Arg(ArgumentModifier.Ref, Cs.Symbol("reader")), Cs.Symbol("frames"),
-                OutVar("current")) } });
-        var loop = Cs.Instruction(InstructionKind.While, new() { Condition = NodeCall("reader.Read"), Body = Cs.Tree(
+                OutVar("current")) }
+        });
+        var loop = Cs.Instruction(InstructionKind.While, new()
+        {
+            Condition = NodeCall("reader.Read"),
+            Body = Cs.Tree(
             NodeIf(skip, Cs.Instruction(InstructionKind.Continue)),
             NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("current"), Cs.Symbol("path")),
                 NodeCall("CountJsonPosition", Cs.Symbol("bytes"), NodeMember(Cs.Symbol("reader"), "BytesConsumed"),
                     Arg(ArgumentModifier.Out, Cs.Symbol("line")), Arg(ArgumentModifier.Out, Cs.Symbol("position"))),
-                Cs.Instruction(InstructionKind.Return))) });
+                Cs.Instruction(InstructionKind.Return)))
+        });
         root.Method(Cs.Void, "FindJsonPosition").Private().Static().Parameter(Cs.Type("string"), "json")
             .Parameter(Cs.Type("string"), "path").Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options")
             .Parameter(Cs.Type("long"), "line", "out").Parameter(Cs.Type("long"), "position", "out")

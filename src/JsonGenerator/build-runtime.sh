@@ -18,13 +18,20 @@ git clone --quiet --depth 1 --filter=blob:none --sparse --branch "v$runtime_vers
 git -C "$work/runtime" sparse-checkout set eng src/libraries/System.Text.Json src/libraries/Common \
     src/libraries/System.Private.CoreLib src/libraries/System.Runtime.InteropServices/gen \
     src/libraries/System.Text.RegularExpressions/gen src/libraries/Microsoft.NETCore.Platforms
-git -C "$work/runtime" apply "$script_dir/JsonRuntime.patch"
+major=${runtime_version%%.*}
+if [ "$major" -ge 11 ]; then
+    git -C "$work/runtime" apply --exclude='*/JsonSerializer.Read.HandleMetadata.cs' \
+        --exclude='*/Metadata/JsonPropertyInfo.cs' --exclude='*/Metadata/JsonTypeInfo.cs' \
+        "$script_dir/JsonRuntime.patch"
+    git -C "$work/runtime" apply "$script_dir/JsonRuntime.Net11.patch"
+else
+    git -C "$work/runtime" apply "$script_dir/JsonRuntime.patch"
+fi
 
 # Load the SDK's linker tasks in the standalone runtime build.
 sed -i 's/TaskFactory="TaskHostFactory"//g' "$work/runtime/eng/illink.targets"
 printf '%s\n' '<Project><ItemGroup><ProjectReference Remove="@(ProjectReference)" /></ItemGroup></Project>' \
     > "$work/framework-refs.targets"
-major=${runtime_version%%.*}
 framework="net$major.0"
 # Use the SDK linker instead of building the runtime repository's in-tree linker.
 dotnet build "$work/runtime/src/libraries/System.Text.Json/src/System.Text.Json.csproj" \

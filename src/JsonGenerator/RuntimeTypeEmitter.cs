@@ -35,9 +35,13 @@ internal static class RuntimeTypeEmitter
         root.Method(NodeType("object?"), "DecodeRuntimeBytes").Internal().Static()
             .Parameter(NodeType("ReadOnlySpan<byte>"), "utf8Json").Parameter(Cs.Type("Type"), "returnType")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null))
-            .Body(Cs.Tree(Cs.Symbol("document", new() { AsVar = true, Using = true,
-                    Value = NodeCall("JsonDocument.Parse", NodeCall("utf8Json.ToArray"),
-                        NodeCall("CreateDocumentOptions", Cs.Symbol("options"), Cs.Value(false))) }),
+            .Body(Cs.Tree(Cs.Symbol("document", new()
+            {
+                AsVar = true,
+                Using = true,
+                Value = NodeCall("JsonDocument.Parse", NodeCall("utf8Json.ToArray"),
+                        NodeCall("CreateDocumentOptions", Cs.Symbol("options"), Cs.Value(false)))
+            }),
                 Return(NodeCall("DecodeRuntime", NodeCall("document.RootElement.GetRawText"), Cs.Symbol("returnType"),
                     Cs.Symbol("options"))))).End();
         root.Method(NodeType("object?"), "DecodeRuntimeChars").Internal().Static()
@@ -56,15 +60,23 @@ internal static class RuntimeTypeEmitter
         root.Method(Cs.Void, "EncodeRuntimeWriter").Internal().Static().Parameter(Cs.Type("Utf8JsonWriter"), "writer")
             .Parameter(Cs.Type("object").Nullable(), "value").Parameter(Cs.Type("Type"), "inputType")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null))
-            .Body(Cs.Tree(Cs.Symbol("document", new() { AsVar = true, Using = true,
-                Value = NodeCall("JsonDocument.Parse", encoded) }),
+            .Body(Cs.Tree(Cs.Symbol("document", new()
+            {
+                AsVar = true,
+                Using = true,
+                Value = NodeCall("JsonDocument.Parse", encoded)
+            }),
                 NodeCall("document.RootElement.WriteTo", Cs.Symbol("writer")))).End();
         var reader = Arg(ArgumentModifier.Ref, Cs.Symbol("reader"));
         root.Method(NodeType("object?"), "DecodeRuntimeReader").Internal().Static()
             .Parameter(Cs.Type("Utf8JsonReader"), "reader", "ref").Parameter(Cs.Type("Type"), "returnType")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null))
-            .Body(Cs.Tree(Cs.Symbol("document", new() { AsVar = true, Using = true,
-                Value = NodeCall("JsonDocument.ParseValue", reader) }),
+            .Body(Cs.Tree(Cs.Symbol("document", new()
+            {
+                AsVar = true,
+                Using = true,
+                Value = NodeCall("JsonDocument.ParseValue", reader)
+            }),
                 Return(NodeCall("DecodeRuntime", NodeCall("document.RootElement.GetRawText"), Cs.Symbol("returnType"),
                     Cs.Symbol("options"))))).End();
     }
@@ -97,7 +109,7 @@ internal static class RuntimeTypeEmitter
                 "Element" => NodeCall(argument + ".GetRawText"),
                 "Document" => NodeCall(argument + ".RootElement.GetRawText"),
                 _ => NodeBinary(CsOperator.Coalesce, Cs.Symbol("ToJsonString", new()
-                    { Target = Cs.Symbol(argument), ConditionalAccess = true, AsCall = true }), Cs.Value("null"))
+                { Target = Cs.Symbol(argument), ConditionalAccess = true, AsCall = true }), Cs.Value("null"))
             };
             root.Method(NodeType("object?"), "DecodeRuntime" + kind).Internal().Static()
                 .Parameter(NodeType(type), argument).Parameter(Cs.Type("Type"), "returnType")
@@ -119,8 +131,13 @@ internal static class RuntimeTypeEmitter
             if (async) write.Async().Parameter(Cs.Type("CancellationToken"), "cancellationToken",
                 @default: new CsExpression(ExpressionKind.Default, "", []));
             var args = async ? new CsNode[] { Cs.Symbol("bytes"), Cs.Symbol("cancellationToken") } : [Cs.Symbol("bytes")];
-            var call = Cs.Symbol(async ? "WriteAsync" : "Write", new() { Target = Cs.Symbol("utf8Json"),
-                AsCall = true, Await = async, Arguments = Cs.Compound(args) });
+            var call = Cs.Symbol(async ? "WriteAsync" : "Write", new()
+            {
+                Target = Cs.Symbol("utf8Json"),
+                AsCall = true,
+                Await = async,
+                Arguments = Cs.Compound(args)
+            });
             write.Body(Cs.Tree(NodeVar("bytes", NodeCall("EncodeRuntimeBytes", Cs.Symbol("value"),
                 Cs.Symbol("inputType"), Cs.Symbol("options"))), call)).End();
             EmitStreamRead(root, async, suffix);
@@ -135,8 +152,13 @@ internal static class RuntimeTypeEmitter
         if (async) read.Async().Parameter(Cs.Type("CancellationToken"), "cancellationToken",
             @default: new CsExpression(ExpressionKind.Default, "", []));
         var args = async ? new CsNode[] { Cs.Symbol("stream"), Cs.Symbol("cancellationToken") } : [Cs.Symbol("stream")];
-        var copy = Cs.Symbol(async ? "CopyToAsync" : "CopyTo", new() { Target = Cs.Symbol("utf8Json"),
-            AsCall = true, Await = async, Arguments = Cs.Compound(args) });
+        var copy = Cs.Symbol(async ? "CopyToAsync" : "CopyTo", new()
+        {
+            Target = Cs.Symbol("utf8Json"),
+            AsCall = true,
+            Await = async,
+            Arguments = Cs.Compound(args)
+        });
         read.Body(Cs.Tree(Cs.Symbol("stream", new() { AsVar = true, Using = true, Value = NodeNew("MemoryStream") }),
             copy, Return(NodeCall("DecodeRuntimeBytes", NodeCall("stream.ToArray"), Cs.Symbol("returnType"),
                 Cs.Symbol("options"))))).End();

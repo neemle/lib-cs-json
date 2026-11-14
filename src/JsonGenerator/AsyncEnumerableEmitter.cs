@@ -81,13 +81,21 @@ internal static class AsyncEnumerableEmitter
     {
         CsNode Option(string name, CsNode fallback) => NodeBinary(CsOperator.Coalesce, Cs.Symbol(name, new()
         { Target = Cs.Symbol("options"), ConditionalAccess = true }), fallback);
-        var settings = Cs.Symbol(new() { AsNew = true, Type = Cs.Type("JsonReaderOptions"),
-            Initializer = Cs.Symbol(new() { AsInitializer = true, Parts = new CsNode[] {
+        var settings = Cs.Symbol(new()
+        {
+            AsNew = true,
+            Type = Cs.Type("JsonReaderOptions"),
+            Initializer = Cs.Symbol(new()
+            {
+                AsInitializer = true,
+                Parts = new CsNode[] {
                 NodeAssign(Cs.Symbol("AllowTrailingCommas"), Option("AllowTrailingCommas", Cs.Value(false))),
                 NodeAssign(Cs.Symbol("CommentHandling"), Option("ReadCommentHandling",
                     NodeMember(Cs.Symbol("JsonCommentHandling"), "Disallow"))),
                 NodeAssign(Cs.Symbol("MaxDepth"), Option("MaxDepth", Cs.Value(0))),
-                NodeAssign(Cs.Symbol("AllowMultipleValues"), Cs.Symbol("topLevelValues")) } }) });
+                NodeAssign(Cs.Symbol("AllowMultipleValues"), Cs.Symbol("topLevelValues")) }
+            })
+        });
         root.Method(Cs.Type("JsonReaderState"), "AsyncReaderState_" + index).Private().Static()
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options").Parameter(Cs.Bool, "topLevelValues")
             .Body(Cs.Tree(Return(NodeNew("JsonReaderState", settings)))).End();
@@ -135,8 +143,12 @@ internal static class AsyncEnumerableEmitter
             NodeAssign(Member("State"), Cs.Symbol("before")), NodeAssign(Member("Consumed"), Cs.Symbol("offset")),
             Return(Cs.Value(0))));
         body.Add(Cs.Symbol("owned", new() { AsVar = true, Using = true, Value = NonNull(Cs.Symbol("document")) }));
-        var path = Cs.Symbol(new() { AsConditional = true, Parts = new CsNode[] { Member("TopLevel"), Cs.Value("$"),
-            NodeBinary(CsOperator.Add, NodeBinary(CsOperator.Add, Cs.Value("$["), Member("Index")), Cs.Value("]")) } });
+        var path = Cs.Symbol(new()
+        {
+            AsConditional = true,
+            Parts = new CsNode[] { Member("TopLevel"), Cs.Value("$"),
+            NodeBinary(CsOperator.Add, NodeBinary(CsOperator.Add, Cs.Value("$["), Member("Index")), Cs.Value("]")) }
+        });
         body.Add(NodeAssign(Cs.Symbol("value"), NodeCall($"Read_{index}", NodeMember(Cs.Symbol("owned"), "RootElement"),
             Cs.Symbol("options"), path)));
         body.Add(NodeAssign(Member("Index"), NodeBinary(CsOperator.Add, Member("Index"), Cs.Value(1))));
@@ -164,8 +176,12 @@ internal static class AsyncEnumerableEmitter
 
     private static void EmitNext(TypeBuilder<FileBuilder> root, int index, string type)
     {
-        var span = Cs.Symbol("AsSpan", new() { Target = Member("Buffer"), AsCall = true,
-            Arguments = Cs.Compound(Cs.Value(0), Member("Count")) });
+        var span = Cs.Symbol("AsSpan", new()
+        {
+            Target = Member("Buffer"),
+            AsCall = true,
+            Arguments = Cs.Compound(Cs.Value(0), Member("Count"))
+        });
         root.Method(Cs.Int, "AsyncNext_" + index).Private().Static().Parameter(Cursor(index), "cursor")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options").Parameter(NodeType(type), "value", "out")
             .Body(Cs.Tree(NodeAssign(Cs.Symbol("value"), NonNull(DefaultValue())),
@@ -195,10 +211,19 @@ internal static class AsyncEnumerableEmitter
     {
         var resize = NodeCall("Array.Resize", Arg(ArgumentModifier.Ref, Member("Buffer")),
             NodeBinary(CsOperator.Multiply, NodeMember(Member("Buffer"), "Length"), Cs.Value(2)));
-        var memory = Cs.Symbol("AsMemory", new() { Target = Member("Buffer"), AsCall = true,
-            Arguments = Cs.Compound(Member("Count")) });
-        var read = Cs.Symbol("ReadAsync", new() { Target = Cs.Symbol("utf8Json"), AsCall = true, Await = true,
-            Arguments = Cs.Compound(memory, Cs.Symbol("cancellationToken")) });
+        var memory = Cs.Symbol("AsMemory", new()
+        {
+            Target = Member("Buffer"),
+            AsCall = true,
+            Arguments = Cs.Compound(Member("Count"))
+        });
+        var read = Cs.Symbol("ReadAsync", new()
+        {
+            Target = Cs.Symbol("utf8Json"),
+            AsCall = true,
+            Await = true,
+            Arguments = Cs.Compound(memory, Cs.Symbol("cancellationToken"))
+        });
         root.Method(NodeType("Task"), "AsyncFill_" + index).Private().Static().Async()
             .Parameter(Cs.Type("Stream"), "utf8Json").Parameter(Cursor(index), "cursor")
             .Parameter(Cs.Type("CancellationToken"), "cancellationToken")
@@ -211,11 +236,17 @@ internal static class AsyncEnumerableEmitter
 
     private static void EmitAdvance(TypeBuilder<FileBuilder> root, int index, string type)
     {
-        var work = new CsBody { Tree = Cs.Tree(NodeVar("status", NodeCall("AsyncNext_" + index,
+        var work = new CsBody
+        {
+            Tree = Cs.Tree(NodeVar("status", NodeCall("AsyncNext_" + index,
                 Cs.Symbol("cursor"), Cs.Symbol("options"), Arg(ArgumentModifier.Out, Cs.Symbol("value")))),
-            NodeCall("AsyncConsume_" + index, Cs.Symbol("cursor")), Return(Cs.Symbol("status"))) };
-        var cleanup = new CsBody { Tree = Cs.Tree(NodeCall("RestoreReferenceRead", Cs.Symbol("previous")),
-            NodeCall("SwapReferenceResolver", Cs.Symbol("previousResolver"))) };
+            NodeCall("AsyncConsume_" + index, Cs.Symbol("cursor")), Return(Cs.Symbol("status")))
+        };
+        var cleanup = new CsBody
+        {
+            Tree = Cs.Tree(NodeCall("RestoreReferenceRead", Cs.Symbol("previous")),
+            NodeCall("SwapReferenceResolver", Cs.Symbol("previousResolver")))
+        };
         root.Method(Cs.Int, "AsyncAdvance_" + index).Private().Static().Parameter(Cursor(index), "cursor")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options")
             .Parameter(Cs.Type("CancellationToken"), "cancellationToken").Parameter(NodeType(type), "value", "out")
@@ -239,7 +270,7 @@ internal static class AsyncEnumerableEmitter
                 NodeIf(ReferenceCycleEmitter.IsPreserve(), NodeAssign(Member("References"),
                     NodeNew("System.Collections.Generic.Dictionary<string, object>"))),
                 NodeIf(ReferenceCycleEmitter.IsCustom(), NodeAssign(Member("Resolver"), Cs.Symbol("CreateResolver", new()
-                    { Target = NonNull(NodeMember(NonNull(Cs.Symbol("options")), "ReferenceHandler")), AsCall = true }))),
+                { Target = NonNull(NodeMember(NonNull(Cs.Symbol("options")), "ReferenceHandler")), AsCall = true }))),
                 NodeAssign(Member("State"), NodeCall("AsyncReaderState_" + index, Cs.Symbol("options"),
                     Cs.Symbol("topLevelValues"))), Return(Cs.Symbol("cursor")))).End();
     }
@@ -254,12 +285,20 @@ internal static class AsyncEnumerableEmitter
     {
         var next = NodeCall("AsyncAdvance_" + index, Cs.Symbol("cursor"), Cs.Symbol("options"),
             Cs.Symbol("cancellationToken"), Arg(ArgumentModifier.Out, Member("Value")));
-        var fill = Cs.Symbol("AsyncFill_" + index, new() { AsCall = true, Await = true,
-            Arguments = Cs.Compound(Cs.Symbol("utf8Json"), Cs.Symbol("cursor"), Cs.Symbol("cancellationToken")) });
-        var loop = Cs.Instruction(InstructionKind.While, new() { Condition = Cs.Value(true), Body = Cs.Tree(
+        var fill = Cs.Symbol("AsyncFill_" + index, new()
+        {
+            AsCall = true,
+            Await = true,
+            Arguments = Cs.Compound(Cs.Symbol("utf8Json"), Cs.Symbol("cursor"), Cs.Symbol("cancellationToken"))
+        });
+        var loop = Cs.Instruction(InstructionKind.While, new()
+        {
+            Condition = Cs.Value(true),
+            Body = Cs.Tree(
             NodeVar("status", next), NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("status"), Cs.Value(1)),
                 Return(Cs.Value(true))), NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("status"), Cs.Value(3)),
-                Return(Cs.Value(false))), NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("status"), Cs.Value(0)), fill)) });
+                Return(Cs.Value(false))), NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("status"), Cs.Value(0)), fill))
+        });
         root.Method(NodeType("Task<bool>"), "AsyncMoveNext_" + index).Private().Static().Async()
             .Parameter(Cs.Type("Stream"), "utf8Json").Parameter(Cursor(index), "cursor")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options")
@@ -268,17 +307,26 @@ internal static class AsyncEnumerableEmitter
 
     private static void EmitIteratorBody(TypeBuilder<FileBuilder> root, int index, string type, CsType result)
     {
-        var next = Cs.Symbol("AsyncMoveNext_" + index, new() { AsCall = true, Await = true,
+        var next = Cs.Symbol("AsyncMoveNext_" + index, new()
+        {
+            AsCall = true,
+            Await = true,
             Arguments = Cs.Compound(Cs.Symbol("utf8Json"), Cs.Symbol("cursor"), Cs.Symbol("options"),
-                Cs.Symbol("cancellationToken")) });
-        var loop = Cs.Instruction(InstructionKind.While, new() { Condition = next,
-            Body = Cs.Tree(Cs.Instruction(InstructionKind.YieldReturn, new() { Value = Member("Value") })) });
+                Cs.Symbol("cancellationToken"))
+        });
+        var loop = Cs.Instruction(InstructionKind.While, new()
+        {
+            Condition = next,
+            Body = Cs.Tree(Cs.Instruction(InstructionKind.YieldReturn, new() { Value = Member("Value") }))
+        });
         root.Method(result, "AsyncIterator_" + index).Private().Static().Async()
             .Parameter(Cs.Type("Stream"), "utf8Json").Parameter(Cs.Bool, "topLevelValues")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null))
             .Parameter(new CsParameter(Cs.Type("CancellationToken"), "cancellationToken")
-            { Default = new CsExpression(ExpressionKind.Default, "", []),
-                Attributes = new[] { Cs.Attribute(Cs.Type("EnumeratorCancellation")) } })
+            {
+                Default = new CsExpression(ExpressionKind.Default, "", []),
+                Attributes = new[] { Cs.Attribute(Cs.Type("EnumeratorCancellation")) }
+            })
             .Body(Cs.Tree(NodeVar("cursor", NodeCall("CreateAsyncCursor_" + index, Cs.Symbol("utf8Json"),
                     Cs.Symbol("options"), Cs.Symbol("topLevelValues"))),
                 loop)).End();

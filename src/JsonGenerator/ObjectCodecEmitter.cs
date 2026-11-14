@@ -98,7 +98,9 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         }
         body.Add(Cs.Symbol(method, new()
         {
-            Target = Cast("global::" + name, Cs.Symbol(value)), AsCall = true, Arguments = Cs.Compound()
+            Target = Cast("global::" + name, Cs.Symbol(value)),
+            AsCall = true,
+            Arguments = Cs.Compound()
         }));
     }
 
@@ -243,9 +245,16 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         var body = new List<CsNode> { NodeCall("RequireObject", Cs.Symbol("e")),
             NodeCall($"ValidateNames_{index}", Cs.Symbol("options")) };
         EmitCallback(body, type, "IJsonOnDeserializing", "OnDeserializing", "result");
-        body.Add(Cs.Symbol("state", new() { Type = Cs.Type("object").Nullable().Array(), Value = Cs.Symbol(new()
-        { AsArray = true, Type = Cs.Type("object").Nullable(),
-            Arguments = Cs.Compound(Cs.Value(properties.Length * 2 + fieldCount)) }) }));
+        body.Add(Cs.Symbol("state", new()
+        {
+            Type = Cs.Type("object").Nullable().Array(),
+            Value = Cs.Symbol(new()
+            {
+                AsArray = true,
+                Type = Cs.Type("object").Nullable(),
+                Arguments = Cs.Compound(Cs.Value(properties.Length * 2 + fieldCount))
+            })
+        }));
         body.Add(ReadAll("ReadEntry_" + index));
         body.Add(NodeCall($"ValidateMembers_{index}", Cs.Symbol("state"), Cs.Symbol("options")));
         body.Add(NodeCall($"ValidateFields_{index}", Cs.Symbol("state"), Cs.Symbol("options")));
@@ -336,7 +345,7 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         else writeBody.Add(NodeIf(condition, statements.ToArray()));
         if (IgnoreReadonlyOptionApplies(property))
             body.Add(NodeIf(NodeBinary(CsOperator.NotEqual, Cs.Symbol("IgnoreReadOnlyProperties", new()
-                { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)), writeBody.ToArray()));
+            { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)), writeBody.ToArray()));
         else body.AddRange(writeBody);
     }
 
@@ -379,7 +388,7 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
     }
 
     private static CsSymbol Option(string name) => Cs.Symbol(name, new()
-        { Target = Cs.Symbol("options"), ConditionalAccess = true });
+    { Target = Cs.Symbol("options"), ConditionalAccess = true });
 
     private static CsNode OptionEnabled(string name) => NodeBinary(CsOperator.Equal, Option(name), Cs.Value(true));
 
@@ -693,8 +702,11 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
                 new CsNode[] { NodeCall($"IsKnown_{index}", NodeMember(Cs.Symbol("entry"), "Name"),
                     Cs.Symbol("options")) }
             }), NodeIf(ExtensionEnabled(extension), ExtensionWrite(extension)),
-                NodeIf(NodeBinary(CsOperator.AndAlso, Cs.Symbol(new() { Operator = CsOperator.Not,
-                    Parts = new CsNode[] { ExtensionEnabled(extension) } }), RejectUnmapped(type)),
+                NodeIf(NodeBinary(CsOperator.AndAlso, Cs.Symbol(new()
+                {
+                    Operator = CsOperator.Not,
+                    Parts = new CsNode[] { ExtensionEnabled(extension) }
+                }), RejectUnmapped(type)),
                     NodeThrow(NodeNew("JsonException")))));
         else
             body.Add(NodeIf(NodeBinary(CsOperator.AndAlso, RejectUnmapped(type), Cs.Symbol(new()

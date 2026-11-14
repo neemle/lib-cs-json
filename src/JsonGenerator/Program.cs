@@ -169,6 +169,16 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
 
     public override SyntaxNode? VisitLocalDeclarationStatement(LocalDeclarationStatementSyntax node)
     {
+        if (node.Declaration.Variables.Count == 1 && node.Declaration.Variables[0].Initializer?.Value is
+            ObjectCreationExpressionSyntax creation && semantic.GetTypeInfo(creation).Type is INamedTypeSymbol converter &&
+            (converter.ToDisplayString() == "System.Text.Json.Serialization.JsonStringEnumConverter" ||
+             converter.OriginalDefinition.ToDisplayString() == "System.Text.Json.Serialization.JsonStringEnumConverter<TEnum>") &&
+            SupportedConverterLocal(creation, semantic))
+        {
+            var rewritten = (LocalDeclarationStatementSyntax)base.VisitLocalDeclarationStatement(node)!;
+            return rewritten.WithDeclaration(rewritten.Declaration.WithType(
+                SyntaxFactory.IdentifierName("var").WithTriviaFrom(node.Declaration.Type)));
+        }
         if (node.Declaration.Variables.Count != 1 || semantic.GetDeclaredSymbol(node.Declaration.Variables[0]) is not
             ILocalSymbol local || ContextAlias.Find(semantic, local) is not { } alias ||
             ContextTarget(alias.Declaration.Initializer!.Value, alias.Invocation) is not { } info)
@@ -179,6 +189,20 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
             "global::System.Text.Json.JsonSerializerOptions").WithTriviaFrom(node.Declaration.Type)
                 .WithTrailingTrivia(SyntaxFactory.Space)).WithVariables(
                 SyntaxFactory.SingletonSeparatedList(variable)));
+    }
+
+    public override SyntaxNode? VisitFieldDeclaration(FieldDeclarationSyntax node)
+    {
+        if (node.Declaration.Variables.Count == 1 && node.Declaration.Variables[0].Initializer?.Value is
+            ObjectCreationExpressionSyntax creation && IsEnumConverter(creation, semantic) &&
+            SupportedConverterLocal(creation, semantic))
+        {
+            var rewritten = (FieldDeclarationSyntax)base.VisitFieldDeclaration(node)!;
+            var tuple = SyntaxFactory.ParseTypeName(
+                "(global::System.Text.Json.JsonNamingPolicy? NamingPolicy, bool AllowIntegerValues)");
+            return rewritten.WithDeclaration(rewritten.Declaration.WithType(tuple.WithTriviaFrom(node.Declaration.Type)));
+        }
+        return base.VisitFieldDeclaration(node);
     }
 
     public override SyntaxNode? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
@@ -357,24 +381,35 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
             return ContextCall("global::GeneratedJson.CopyOptions", source, visited).NormalizeWhitespace()
                 .WithTriviaFrom(node);
         }
-        if (semantic.GetTypeInfo(node).Type?.ToDisplayString() != "System.Text.Json.Serialization.JsonStringEnumConverter" ||
+        var enumConverterType = semantic.GetTypeInfo(node).Type as INamedTypeSymbol;
+        bool allEnums = enumConverterType?.ToDisplayString() == "System.Text.Json.Serialization.JsonStringEnumConverter";
+        bool genericEnum = enumConverterType?.OriginalDefinition.ToDisplayString() ==
+            "System.Text.Json.Serialization.JsonStringEnumConverter<TEnum>";
+        if (!(allEnums || genericEnum) ||
             !SupportedConverterLocal(node, semantic) || node.Parent is not EqualsValueClauseSyntax
-            { Parent: VariableDeclaratorSyntax { Parent: VariableDeclarationSyntax { Type: IdentifierNameSyntax { IsVar: true } } } })
+            { Parent: VariableDeclaratorSyntax { Parent: VariableDeclarationSyntax { Variables.Count: 1 } } })
             return base.VisitObjectCreationExpression(node);
         if (semantic.GetOperation(node) is not IObjectCreationOperation operation)
             return base.VisitObjectCreationExpression(node);
         var explicitArguments = operation.Arguments.Where(argument => !argument.IsImplicit).ToArray();
-        if (!explicitArguments.Select(argument => argument.Parameter!.Ordinal).SequenceEqual(
-            explicitArguments.Select(argument => argument.Parameter!.Ordinal).Order()))
-            throw new InvalidOperationException("Named enum converter arguments must preserve constructor order.");
-        ExpressionSyntax Argument(int ordinal, string fallback) => explicitArguments.FirstOrDefault(argument =>
-            argument.Parameter?.Ordinal == ordinal)?.Syntax is ArgumentSyntax argument ?
-            (ExpressionSyntax)Visit(argument.Expression)! : SyntaxFactory.ParseExpression(fallback);
-        var policy = SyntaxFactory.CastExpression(SyntaxFactory.ParseTypeName("global::System.Text.Json.JsonNamingPolicy?"),
-            SyntaxFactory.ParenthesizedExpression(Argument(0, "null")));
-        var fields = new[] { SyntaxFactory.Argument(policy).WithNameColon(SyntaxFactory.NameColon("NamingPolicy")),
-            SyntaxFactory.Argument(Argument(1, "true")).WithNameColon(SyntaxFactory.NameColon("AllowIntegerValues")) };
-        emitter.RegisterAllEnums();
+        var fields = new List<ArgumentSyntax>();
+        foreach (var argument in explicitArguments)
+        {
+            int ordinal = argument.Parameter!.Ordinal;
+            var value = (ExpressionSyntax)Visit(((ArgumentSyntax)argument.Syntax).Expression)!;
+            if (ordinal == 0) value = SyntaxFactory.CastExpression(
+                SyntaxFactory.ParseTypeName("global::System.Text.Json.JsonNamingPolicy?"),
+                SyntaxFactory.ParenthesizedExpression(value));
+            fields.Add(SyntaxFactory.Argument(value).WithNameColon(SyntaxFactory.NameColon(
+                ordinal == 0 ? "NamingPolicy" : "AllowIntegerValues")));
+        }
+        if (!explicitArguments.Any(argument => argument.Parameter!.Ordinal == 0))
+            fields.Add(SyntaxFactory.Argument(SyntaxFactory.ParseExpression("(global::System.Text.Json.JsonNamingPolicy?)null"))
+                .WithNameColon(SyntaxFactory.NameColon("NamingPolicy")));
+        if (!explicitArguments.Any(argument => argument.Parameter!.Ordinal == 1))
+            fields.Add(SyntaxFactory.Argument(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression))
+                .WithNameColon(SyntaxFactory.NameColon("AllowIntegerValues")));
+        if (allEnums) emitter.RegisterAllEnums();
         return SyntaxFactory.TupleExpression(SyntaxFactory.SeparatedList(fields)).NormalizeWhitespace().WithTriviaFrom(node);
     }
 
@@ -533,17 +568,8 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
             IEnumerable<ArgumentSyntax> settings;
             if (creation is not null) settings = creation.ArgumentList?.Arguments.Select(argument =>
                 (ArgumentSyntax)Visit(argument)!) ?? [];
-            else if (node.ArgumentList.Arguments[0].Expression is IdentifierNameSyntax identifier &&
-                semantic.GetSymbolInfo(identifier).Symbol is ILocalSymbol local && local.DeclaringSyntaxReferences
-                    .FirstOrDefault()?.GetSyntax() is VariableDeclaratorSyntax
-                {
-                    Initializer.Value: ObjectCreationExpressionSyntax init,
-                    Parent: VariableDeclarationSyntax { Type: IdentifierNameSyntax { IsVar: true } }
-                } &&
-                SupportedConverterLocal(init, semantic))
-                settings = new[] { "NamingPolicy", "AllowIntegerValues" }.Select(name => SyntaxFactory.Argument(
-                    SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier.WithoutTrivia(),
-                        SyntaxFactory.IdentifierName(name))));
+            else if (ConverterSettings(node.ArgumentList.Arguments[0].Expression) is { } configured)
+                settings = configured;
             else throw new InvalidOperationException("Unsupported enum converter registration.");
             var factoryArguments = SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(factoryOptions) }.Concat(settings));
             return SyntaxFactory.InvocationExpression(SyntaxFactory.ParseExpression("global::GeneratedJson.RegisterAllEnums"),
@@ -551,19 +577,39 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
         }
         bool isEnum = converterType.OriginalDefinition.ToDisplayString() ==
             "System.Text.Json.Serialization.JsonStringEnumConverter<TEnum>";
-        if (isEnum && creation is null)
-            throw new InvalidOperationException("Enum converter registration requires direct construction.");
+        IEnumerable<ArgumentSyntax> enumArguments = [];
+        if (isEnum && creation is not null)
+            enumArguments = creation.ArgumentList?.Arguments.Select(argument => (ArgumentSyntax)Visit(argument)!) ?? [];
+        else if (isEnum && ConverterSettings(node.ArgumentList.Arguments[0].Expression) is { } configured)
+            enumArguments = configured;
+        else if (isEnum)
+            throw new InvalidOperationException("Unsupported enum converter registration.");
         ITypeSymbol? converted = ConverterTarget(converterType, isEnum);
         if (converted is null || !emitter.TryRegister(converted, out int converterIndex))
             throw new InvalidOperationException("Unsupported converter type: " + converterType);
         var options = (ExpressionSyntax)Visit(converters.Expression)!;
         var arguments = isEnum ? SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(options) }.Concat(
-            creation!.ArgumentList?.Arguments.Select(argument => (ArgumentSyntax)Visit(argument)!) ?? [])) :
+            enumArguments)) :
             SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(options),
                 (ArgumentSyntax)Visit(node.ArgumentList.Arguments[0])! });
         return SyntaxFactory.InvocationExpression(SyntaxFactory.ParseExpression(CodecName(converterIndex) +
             "Register" + (isEnum ? "Enum_" : "_") + converterIndex), SyntaxFactory.ArgumentList(arguments))
             .WithTriviaFrom(node);
+    }
+
+    private IEnumerable<ArgumentSyntax>? ConverterSettings(ExpressionSyntax expression)
+    {
+        var symbol = semantic.GetSymbolInfo(expression).Symbol;
+        if (symbol is not ILocalSymbol && symbol is not IFieldSymbol) return null;
+        if (symbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() is not VariableDeclaratorSyntax
+            {
+                Initializer.Value: ObjectCreationExpressionSyntax initializer,
+                Parent: VariableDeclarationSyntax { Variables.Count: 1 }
+            } || !SupportedConverterLocal(initializer, semantic.Compilation.GetSemanticModel(initializer.SyntaxTree))) return null;
+        var target = (ExpressionSyntax)Visit(expression)!;
+        return new[] { "NamingPolicy", "AllowIntegerValues" }.Select(name => SyntaxFactory.Argument(
+            SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, target.WithoutTrivia(),
+                SyntaxFactory.IdentifierName(name))));
     }
 
     private static bool IsConverterFactory(INamedTypeSymbol type)
@@ -781,7 +827,8 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
         ITypeSymbol target, IArgumentOperation[] options)
     {
         var visited = (InvocationExpressionSyntax)base.VisitInvocationExpression(node)!;
-        ExpressionSyntax context = options.Length == 0 ? SyntaxFactory.ParseExpression("global::GeneratedAsyncJsonContext.Default") :
+        ExpressionSyntax context = options.Length == 0 ? ContextCall("global::GeneratedAsyncJsonContext.ForOptions",
+            SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)) :
             ContextCall("global::GeneratedAsyncJsonContext.ForOptions",
                 (ExpressionSyntax)Visit(((ArgumentSyntax)options[0].Syntax).Expression)!);
         var type = SyntaxFactory.ParseTypeName(target.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
@@ -1217,16 +1264,41 @@ sealed class Rewriter(SemanticModel semantic, CodecEmitter emitter, AsyncContext
     private static bool SupportedConverterLocal(ObjectCreationExpressionSyntax creation, SemanticModel model)
     {
         if (creation.Parent is not EqualsValueClauseSyntax { Parent: VariableDeclaratorSyntax declaration } ||
-            model.GetDeclaredSymbol(declaration) is not ILocalSymbol local) return false;
-        var scope = declaration.Ancestors().OfType<BaseMethodDeclarationSyntax>().FirstOrDefault() as SyntaxNode ??
-            declaration.SyntaxTree.GetRoot();
-        return scope.DescendantNodes().OfType<IdentifierNameSyntax>().Where(reference =>
-                SymbolEqualityComparer.Default.Equals(model.GetSymbolInfo(reference).Symbol, local)).All(reference =>
-            reference.Parent is ArgumentSyntax { Parent.Parent: InvocationExpressionSyntax invocation } &&
+            model.GetDeclaredSymbol(declaration) is not { } symbol) return false;
+        if (symbol is ILocalSymbol)
+        {
+            var scope = declaration.Ancestors().OfType<BaseMethodDeclarationSyntax>().FirstOrDefault() as SyntaxNode ??
+                declaration.SyntaxTree.GetRoot();
+            return scope.DescendantNodes().OfType<IdentifierNameSyntax>().Where(reference =>
+                SymbolEqualityComparer.Default.Equals(model.GetSymbolInfo(reference).Symbol, symbol))
+                .All(IsConverterRegistration);
+        }
+        if (symbol is not IFieldSymbol { DeclaredAccessibility: Accessibility.Private } field) return false;
+        foreach (var part in field.ContainingType.DeclaringSyntaxReferences)
+        {
+            var scope = part.GetSyntax();
+            var treeModel = model.Compilation.GetSemanticModel(scope.SyntaxTree);
+            if (scope.DescendantNodes().OfType<IdentifierNameSyntax>().Where(reference =>
+                SymbolEqualityComparer.Default.Equals(treeModel.GetSymbolInfo(reference).Symbol, symbol))
+                .Any(reference => !IsConverterRegistration(reference))) return false;
+        }
+        return true;
+    }
+
+    private static bool IsConverterRegistration(IdentifierNameSyntax reference)
+    {
+        SyntaxNode expression = reference.Parent is MemberAccessExpressionSyntax member && member.Name == reference ?
+            member : reference;
+        return expression.Parent is ArgumentSyntax { Parent.Parent: InvocationExpressionSyntax invocation } &&
             invocation.Expression is MemberAccessExpressionSyntax
             {
                 Name.Identifier.ValueText: "Add",
                 Expression: MemberAccessExpressionSyntax { Name.Identifier.ValueText: "Converters" }
-            });
+            };
     }
+
+    private static bool IsEnumConverter(ObjectCreationExpressionSyntax creation, SemanticModel model) =>
+        model.GetTypeInfo(creation).Type is INamedTypeSymbol converter &&
+        (converter.ToDisplayString() == "System.Text.Json.Serialization.JsonStringEnumConverter" ||
+         converter.OriginalDefinition.ToDisplayString() == "System.Text.Json.Serialization.JsonStringEnumConverter<TEnum>");
 }

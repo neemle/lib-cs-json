@@ -104,7 +104,7 @@ internal static class PolymorphismEmitter
             body.Add(NodeCall("CheckWriteDepth", Cs.Symbol("w"), Cs.Symbol("options"), Cs.Symbol("path")));
             if (CodecEmitter.OptionalFields(variant.Type).Any(field => !owner.SupportsOptionalField(field)))
                 body.Add(NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("IncludeFields", new()
-                    { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)),
+                { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)),
                     NodeThrow(NodeNew("NotSupportedException"))));
             body.Add(NodeCall($"ValidateNames_{context.Index}", Cs.Symbol("options")));
             ObjectCodecEmitter.EmitCallback(body, variant.Type, "IJsonOnSerializing", "OnSerializing", "value");
@@ -142,8 +142,12 @@ internal static class PolymorphismEmitter
         var body = new List<CsNode> { NodeAssign(Cs.Symbol("result"), NonNull(DefaultValue())) };
         body.Add(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] { matches } }),
             Return(Cs.Value(false))));
-        body.Add(Cs.Symbol("document", new() { AsVar = true, Using = true,
-            Value = NodeCall("WithoutMetadata", Cs.Symbol("e"), Cs.Value(context.Metadata), Cs.Symbol("options")) }));
+        body.Add(Cs.Symbol("document", new()
+        {
+            AsVar = true,
+            Using = true,
+            Value = NodeCall("WithoutMetadata", Cs.Symbol("e"), Cs.Value(context.Metadata), Cs.Symbol("options"))
+        }));
         body.Add(NodeAssign(Cs.Symbol("result"), NodeCall($"Read_{context.Index}", NodeMember(Cs.Symbol("document"),
             "RootElement"), Cs.Symbol("options"), Cs.Symbol("path"))));
         body.Add(Return(Cs.Value(true)));
@@ -166,9 +170,13 @@ internal static class PolymorphismEmitter
             for (int i = offset; i < Math.Min(offset + 3, variants.Length); i++)
             {
                 string local = "derived_" + i;
-                var test = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("value"),
+                var test = Cs.Symbol(new()
+                {
+                    AsIs = true,
+                    Value = Cs.Symbol("value"),
                     Pattern = new CsPattern(PatternKind.Declaration)
-                    { Type = NodeType(TypeName(variants[i].Type)), Name = local } });
+                    { Type = NodeType(TypeName(variants[i].Type)), Name = local }
+                });
                 var exact = NodeBinary(CsOperator.Equal, NodeCall(local + ".GetType"), TypeOf(TypeName(variants[i].Type)));
                 CsNode matches = (int?)Setting(type, "UnknownDerivedTypeHandling") == 2 ? test :
                     NodeBinary(CsOperator.AndAlso, test, exact);
@@ -255,8 +263,11 @@ internal static class PolymorphismEmitter
             CsNode present = NodeCall("e.TryGetProperty", Cs.Value(metadata), OutVar("tag"));
             var objectKind = NodeBinary(CsOperator.Equal, NodeMember(Cs.Symbol("e"), "ValueKind"),
                 NodeMember(Cs.Symbol("JsonValueKind"), "Object"));
-            var absent = Cs.Symbol(new() { Operator = CsOperator.Not,
-                Parts = new CsNode[] { NodeBinary(CsOperator.AndAlso, objectKind, present) } });
+            var absent = Cs.Symbol(new()
+            {
+                Operator = CsOperator.Not,
+                Parts = new CsNode[] { NodeBinary(CsOperator.AndAlso, objectKind, present) }
+            });
             body.Add(NodeIf(absent, Return(Cs.Value(false))));
             body.Add(NodeCall("RejectDuplicateMetadata", Cs.Symbol("e"), Cs.Value(metadata)));
             body.Add(NodeCall("RequireFirstMetadata", Cs.Symbol("e"), Cs.Value(metadata), Cs.Symbol("options")));
@@ -265,8 +276,12 @@ internal static class PolymorphismEmitter
                 Return(Cs.Value(true))));
             if ((bool?)Setting(type, "IgnoreUnrecognizedTypeDiscriminators") == true)
             {
-                body.Add(Cs.Symbol("document", new() { AsVar = true, Using = true,
-                    Value = NodeCall("WithoutMetadata", Cs.Symbol("e"), Cs.Value(metadata), Cs.Symbol("options")) }));
+                body.Add(Cs.Symbol("document", new()
+                {
+                    AsVar = true,
+                    Using = true,
+                    Value = NodeCall("WithoutMetadata", Cs.Symbol("e"), Cs.Value(metadata), Cs.Symbol("options"))
+                }));
                 body.Add(NodeAssign(Cs.Symbol("result"), NodeCall($"Read_{index}",
                     NodeMember(Cs.Symbol("document"), "RootElement"), Cs.Symbol("options"), Cs.Symbol("path"))));
                 body.Add(Return(Cs.Value(true)));
@@ -321,23 +336,30 @@ internal static class PolymorphismEmitter
             .Parameter(Cs.Type("JsonElement"), "e").Parameter(Cs.Type("string"), "name")
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options")
             .Body(Cs.Tree(Cs.Symbol("stream", new() { AsVar = true, Using = true, Value = NodeNew("MemoryStream") }),
-                Cs.Symbol("writer", new() { AsVar = true, Using = true,
-                    Value = NodeNew("Utf8JsonWriter", Cs.Symbol("stream")) }), NodeCall("writer.WriteStartObject"),
+                Cs.Symbol("writer", new()
+                {
+                    AsVar = true,
+                    Using = true,
+                    Value = NodeNew("Utf8JsonWriter", Cs.Symbol("stream"))
+                }), NodeCall("writer.WriteStartObject"),
                 write, NodeCall("writer.WriteEndObject"), NodeCall("writer.Flush"),
                 Return(NodeCall("JsonDocument.Parse", NodeCall("stream.ToArray"),
                     NodeCall("CreateDocumentOptions", Cs.Symbol("options"), Cs.Value(false)))))).End();
         root.Method(Cs.Void, "RequireFirstMetadata").Private().Static().Parameter(Cs.Type("JsonElement"), "e")
             .Parameter(Cs.Type("string"), "name").Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options")
             .Body(Cs.Tree(NodeIf(NodeBinary(CsOperator.Equal, Cs.Symbol("AllowOutOfOrderMetadataProperties", new()
-                { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)),
+            { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)),
                     Cs.Instruction(InstructionKind.Return)), NodeVar("items", NodeCall("e.EnumerateObject")),
                 NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] { NodeCall("items.MoveNext") } }),
                     NodeThrow(NodeNew("JsonException"))), NodeIf(NodeBinary(CsOperator.AndAlso,
                         NodeBinary(CsOperator.NotEqual, Cs.Symbol("name"), Cs.Value("$id")),
                         NodeBinary(CsOperator.AndAlso, ReferenceCycleEmitter.IsPreserve(),
                             NodeBinary(CsOperator.Equal, NodeMember(NodeMember(Cs.Symbol("items"), "Current"), "Name"),
-                                Cs.Value("$id")))), NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not,
-                        Parts = new CsNode[] { NodeCall("items.MoveNext") } }), NodeThrow(NodeNew("JsonException")))),
+                                Cs.Value("$id")))), NodeIf(Cs.Symbol(new()
+                                {
+                                    Operator = CsOperator.Not,
+                                    Parts = new CsNode[] { NodeCall("items.MoveNext") }
+                                }), NodeThrow(NodeNew("JsonException")))),
                 NodeIf(NodeBinary(CsOperator.NotEqual,
                     NodeMember(NodeMember(Cs.Symbol("items"), "Current"), "Name"), Cs.Symbol("name")),
                     NodeThrow(NodeNew("JsonException"))))).End();

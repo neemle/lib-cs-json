@@ -9,9 +9,9 @@ using TypeKind = Microsoft.CodeAnalysis.TypeKind;
 
 internal static class NativeTypeMetadataEmitter
 {
-    private const string RegistryKey = "Neemle.SystemTextJson.NativeTypeMetadata";
+    private const string RegistryKey = "Neemle.JSON.NativeTypeMetadata";
     private const string RegistryType = "System.Collections.Generic.Dictionary<System.Type, System.ValueTuple<int, string>>";
-    private const string PolymorphismKey = "Neemle.SystemTextJson.NativePolymorphism";
+    private const string PolymorphismKey = "Neemle.JSON.NativePolymorphism";
     private const string PolymorphismType = "System.Collections.Generic.Dictionary<System.Type, System.Func<System.Text.Json.Serialization.Metadata.JsonPolymorphismOptions>?>";
     private const int ValueType = 1;
     private const int Class = 2;

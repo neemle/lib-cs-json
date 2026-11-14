@@ -63,7 +63,8 @@ internal static class ConverterFactoryEmitter
         root.Field(table, "ConverterCollections").Private().Static().ReadOnly()
             .Initialize(new CsExpression(ExpressionKind.New, "", [])).End();
         var create = Cs.Lambda(new CsExpression(ExpressionKind.New, "", []) { Type = Cs.Type("ConverterCollection") },
-            Cs.LambdaParameter("_")) with { IsStatic = true };
+            Cs.LambdaParameter("_")) with
+        { IsStatic = true };
         root.Method(Cs.Type("ConverterCollection"), "Converters").Internal().Static()
             .Parameter(Cs.Type("JsonSerializerOptions"), "options")
             .Body(Cs.Tree(Return(NodeCall("ConverterCollections.GetValue", Cs.Symbol("options"), create)))).End();
@@ -71,8 +72,12 @@ internal static class ConverterFactoryEmitter
             .Parameter(Cs.Type("JsonSerializerOptions"), "options")
             .Parameter(Cs.Type("object").Array(), "items", "params")
             .Body(Cs.Tree(NodeEach("item", Cs.Symbol("items"),
-                    Cs.Symbol("Add", new() { Target = NodeCall("Converters", Cs.Symbol("options")),
-                        AsCall = true, Arguments = Cs.Compound(Cs.Symbol("item")) })),
+                    Cs.Symbol("Add", new()
+                    {
+                        Target = NodeCall("Converters", Cs.Symbol("options")),
+                        AsCall = true,
+                        Arguments = Cs.Compound(Cs.Symbol("item"))
+                    })),
                 Return(Cs.Symbol("options")))).End();
         root.Method(Cs.Bool, "OptionsAreReadOnly").Internal().Static()
             .Parameter(Cs.Type("JsonSerializerOptions"), "options")
@@ -81,17 +86,29 @@ internal static class ConverterFactoryEmitter
         root.Method(Cs.Type("JsonSerializerOptions"), "CopyOptions").Internal().Static()
             .Parameter(Cs.Type("JsonSerializerOptions"), "source").Parameter(Cs.Type("JsonSerializerOptions"), "copy")
             .Body(Cs.Tree(NodeEach("item", NodeCall("Converters", Cs.Symbol("source")),
-                Cs.Symbol("Add", new() { Target = NodeCall("Converters", Cs.Symbol("copy")), AsCall = true,
-                    Arguments = Cs.Compound(Cs.Symbol("item")) })), Return(Cs.Symbol("copy")))).End();
+                Cs.Symbol("Add", new()
+                {
+                    Target = NodeCall("Converters", Cs.Symbol("copy")),
+                    AsCall = true,
+                    Arguments = Cs.Compound(Cs.Symbol("item"))
+                })), Return(Cs.Symbol("copy")))).End();
     }
 
     internal static void EmitLookup(TypeBuilder<FileBuilder> root, int index, string name, CsType converterType,
         bool supportsEnum)
     {
-        var typed = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("item"),
-            Pattern = new CsPattern(PatternKind.Declaration) { Type = converterType, Name = "typed" } });
-        var factory = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("item"),
-            Pattern = new CsPattern(PatternKind.Declaration) { Type = Cs.Type("ConverterFactory"), Name = "factory" } });
+        var typed = Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = Cs.Symbol("item"),
+            Pattern = new CsPattern(PatternKind.Declaration) { Type = converterType, Name = "typed" }
+        });
+        var factory = Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = Cs.Symbol("item"),
+            Pattern = new CsPattern(PatternKind.Declaration) { Type = Cs.Type("ConverterFactory"), Name = "factory" }
+        });
         var compatible = NodeBinary(CsOperator.AndAlso, typed, NodeCall("typed.CanConvert", TypeOf(name)));
         var factoryCompatible = NodeBinary(CsOperator.AndAlso, factory, NodeCall("factory.CanConvert", TypeOf(name)));
         var registered = NodeBinary(CsOperator.AndAlso,
@@ -135,11 +152,18 @@ internal static class ConverterFactoryEmitter
     internal static void EmitRegistration(TypeBuilder<FileBuilder> root, int index, string name, CsType converterType)
     {
         var createHolder = Cs.Lambda(new CsExpression(ExpressionKind.New, "", [])
-            { Type = Cs.Type($"Holder_{index}") }, Cs.LambdaParameter("_")) with { IsStatic = true };
-        var notConvertible = Cs.Symbol(new() { Operator = CsOperator.Not,
-            Parts = new CsNode[] { NodeCall("factory.CanConvert", TypeOf(name)) } });
-        var notRegistered = Cs.Symbol(new() { Operator = CsOperator.Not,
-            Parts = new CsNode[] { NodeMember(Cs.Symbol("holder"), "Registered") } });
+        { Type = Cs.Type($"Holder_{index}") }, Cs.LambdaParameter("_")) with
+        { IsStatic = true };
+        var notConvertible = Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[] { NodeCall("factory.CanConvert", TypeOf(name)) }
+        });
+        var notRegistered = Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[] { NodeMember(Cs.Symbol("holder"), "Registered") }
+        });
         root.Method(Cs.Void, $"RegisterFactory_{index}").Internal().Static()
             .Parameter(Cs.Type("JsonSerializerOptions"), "options").Parameter(Cs.Type("ConverterFactory"), "factory")
             .Body(Cs.Tree(NodeIf(notConvertible, Cs.Instruction(InstructionKind.Return)),
@@ -154,8 +178,12 @@ internal static class ConverterFactoryEmitter
         var factory = NodeMember(Cs.Symbol("holder"), "Factory");
         var current = NodeMember(Cs.Symbol("holder"), "Converter");
         var condition = NodeBinary(CsOperator.AndAlso, NullTest(factory, true), NullTest(current));
-        var isConverter = Cs.Symbol(new() { AsIs = true, Value = Cs.Symbol("created"),
-            Pattern = new CsPattern(PatternKind.Declaration) { Type = converterType, Name = "converter" } });
+        var isConverter = Cs.Symbol(new()
+        {
+            AsIs = true,
+            Value = Cs.Symbol("created"),
+            Pattern = new CsPattern(PatternKind.Declaration) { Type = converterType, Name = "converter" }
+        });
         root.Method(Cs.Bool, $"ResolveFactory_{index}").Private().Static()
             .Parameter(Cs.Type($"Holder_{index}"), "holder").Parameter(Cs.Type("JsonSerializerOptions"), "options")
             .Body(Cs.Tree(NodeIf(condition,
@@ -177,8 +205,26 @@ internal static class ConverterFactoryEmitter
                 .Parameter(Cs.Type("JsonSerializerOptions"), "options")
                 .Parameter(Cs.Type("ConverterFactory"), "factory").Body(Cs.Tree(calls)).End();
         }
-        var dispatch = Enumerable.Range(0, batches).Select(batch => (CsNode)NodeCall($"RegisterFactoryBatch_{batch}",
-            Cs.Symbol("options"), Cs.Symbol("factory"))).ToArray();
+        var methods = Enumerable.Range(0, batches).Select(batch => $"RegisterFactoryBatch_{batch}").ToList();
+        int level = 0;
+        while (methods.Count > batchSize)
+        {
+            var next = new List<string>();
+            foreach (string[] group in methods.Chunk(batchSize))
+            {
+                string name = $"RegisterFactoryLevel_{level}_{next.Count}";
+                next.Add(name);
+                var calls = group.Select(method => (CsNode)NodeCall(method, Cs.Symbol("options"),
+                    Cs.Symbol("factory"))).ToArray();
+                root.Method(Cs.Void, name).Private().Static()
+                    .Parameter(Cs.Type("JsonSerializerOptions"), "options")
+                    .Parameter(Cs.Type("ConverterFactory"), "factory").Body(Cs.Tree(calls)).End();
+            }
+            methods = next;
+            level++;
+        }
+        var dispatch = methods.Select(method => (CsNode)NodeCall(method, Cs.Symbol("options"),
+            Cs.Symbol("factory"))).ToArray();
         root.Method(Cs.Void, "RegisterFactory").Internal().Static()
             .Parameter(Cs.Type("JsonSerializerOptions"), "options").Parameter(Cs.Type("ConverterFactory"), "factory")
             .Body(Cs.Tree(dispatch)).End();

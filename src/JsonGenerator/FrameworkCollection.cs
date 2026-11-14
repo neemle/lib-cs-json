@@ -28,6 +28,7 @@ internal static class FrameworkCollection
         "System.Collections.Generic.IList<T>" => "Add",
         "System.Collections.Generic.IReadOnlyCollection<T>" => "Add",
         "System.Collections.Generic.IReadOnlyList<T>" => "Add",
+        "System.Collections.Generic.IReadOnlySet<T>" => "Add",
         "System.Collections.Generic.ISet<T>" => "Add",
         "System.Collections.Concurrent.ConcurrentQueue<T>" => "Enqueue",
         "System.Collections.Concurrent.ConcurrentStack<T>" => "Push",
@@ -146,7 +147,7 @@ internal static class FrameworkCollection
         string element = CodecApiEmitter.TypeName(type.TypeArguments[0]);
         if (IsMap(type)) return $"System.Collections.Generic.Dictionary<{element}, " +
             CodecApiEmitter.TypeName(type.TypeArguments[1]) + ">";
-        return definition == "System.Collections.Generic.ISet<T>" ?
+        return definition is "System.Collections.Generic.ISet<T>" or "System.Collections.Generic.IReadOnlySet<T>" ?
             $"System.Collections.Generic.HashSet<{element}>" : $"System.Collections.Generic.List<{element}>";
     }
 
@@ -168,13 +169,21 @@ internal static class FrameworkCollection
             keyType.TypeKind == Microsoft.CodeAnalysis.TypeKind.Enum ?
             NodeCall($"EnumKey_{owner.Register(keyType)}", key, Cs.Symbol("options")) : KeyName(keyType, key, converted);
         var fallback = new List<CsNode>();
-        if (dateKey) fallback.Add(Cs.Symbol("keyDocument", new() { AsVar = true, Using = true,
-            Value = NodeCall("JsonDocument.Parse", NodeCall($"Encode_{owner.Register(keyType)}", key)) }));
-        if (standardKey) fallback.Add(NodeAssign(Cs.Symbol("name"), name));
-        if (keyType.SpecialType is SpecialType.System_Single or SpecialType.System_Double || WideNumberEmitter.IsHalf(keyType))
+        if (dateKey) fallback.Add(Cs.Symbol("keyDocument", new()
         {
-            var finite = Cs.Symbol("IsFinite", new() { Target = TypeRef(TypeName(keyType)), AsCall = true,
-                Arguments = Cs.Compound(key) });
+            AsVar = true,
+            Using = true,
+            Value = NodeCall("JsonDocument.Parse", NodeCall($"Encode_{owner.Register(keyType)}", key))
+        }));
+        if (standardKey) fallback.Add(NodeAssign(Cs.Symbol("name"), name));
+        if (keyType.SpecialType is SpecialType.System_Single or SpecialType.System_Double || WideNumberEmitter.IsFloating(keyType))
+        {
+            var finite = Cs.Symbol("IsFinite", new()
+            {
+                Target = TypeRef(TypeName(keyType)),
+                AsCall = true,
+                Arguments = Cs.Compound(key)
+            });
             fallback.Add(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] { finite } }),
                 NodeThrow(NodeNew("ArgumentException"))));
         }
@@ -182,7 +191,13 @@ internal static class FrameworkCollection
             TypeRef("global::System.Text.Encodings.Web.JavaScriptEncoder"), "UnsafeRelaxedJsonEscaping")) :
             Cs.Symbol("name");
         var customWritten = NodeCall($"TryWriteMapKey_{keyIndex}", Cs.Symbol("w"), key, Cs.Symbol("options"));
-        fallback.Add(standardKey ? NodeCall("w.WritePropertyName", propertyName) : NodeThrow(NodeNew("NotSupportedException")));
+        if (keyType.SpecialType == SpecialType.System_Object)
+            fallback.Add(NodeIf(Cs.Symbol(new()
+            {
+                Operator = CsOperator.Not,
+                Parts = new CsNode[] { NodeCall("TryWriteObjectMapKey", Cs.Symbol("w"), key, Cs.Symbol("options")) }
+            }), NodeThrow(NodeNew("NotSupportedException"))));
+        else fallback.Add(standardKey ? NodeCall("w.WritePropertyName", propertyName) : NodeThrow(NodeNew("NotSupportedException")));
         var itemBody = new List<CsNode> { NodeVar("name", Cs.Value("?")), NodeIf(Cs.Symbol(new()
             { Operator = CsOperator.Not, Parts = new CsNode[] { customWritten } }), fallback.ToArray()) };
         itemBody.Add(NodeCall($"Write_{owner.Register(valueType)}", NumberHandlingEmitter.Forward(
@@ -217,8 +232,11 @@ internal static class FrameworkCollection
                 NodeThrow(NodeNew("JsonException"))), NodeVar("key", Index(name, Cs.Value(0)))];
         if (IsDateKey(type))
         {
-            var escaped = Cs.Symbol("ToString", new() { Target = NodeCall("JsonEncodedText.Encode", name),
-                AsCall = true });
+            var escaped = Cs.Symbol("ToString", new()
+            {
+                Target = NodeCall("JsonEncodedText.Encode", name),
+                AsCall = true
+            });
             var json = NodeBinary(CsOperator.Add, NodeBinary(CsOperator.Add, Cs.Value("\""), escaped), Cs.Value("\""));
             return [NodeVar("key", NodeCall($"Decode_{owner.Register(type)}", json))];
         }
@@ -230,9 +248,10 @@ internal static class FrameworkCollection
             return ReadNonIntegerKey(type, name);
         var parse = Cs.Symbol("TryParse", new()
         {
-            Target = TypeRef(TypeName(type)), AsCall = true,
+            Target = TypeRef(TypeName(type)),
+            AsCall = true,
             Arguments = Cs.Compound(name, NodeMember(TypeRef("global::System.Globalization.NumberStyles"),
-                    WideNumberEmitter.IsWide(type) && !WideNumberEmitter.IsHalf(type) ? "AllowLeadingSign" :
+                    WideNumberEmitter.IsWide(type) && !WideNumberEmitter.IsFloating(type) ? "AllowLeadingSign" :
                     CodecEmitter.IntegralGetter(type.SpecialType) is null ? "Float" : "AllowLeadingSign"),
                 NodeMember(TypeRef("global::System.Globalization.CultureInfo"), "InvariantCulture"), OutVar("key"))
         });

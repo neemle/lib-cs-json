@@ -28,9 +28,13 @@ internal static class PropertyValidationEmitter
         EmitBatches(root, dispatch, methods);
         var insensitive = NodeBinary(CsOperator.Equal, Cs.Symbol("PropertyNameCaseInsensitive", new()
         { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true));
-        var comparer = Cs.Symbol(new() { AsConditional = true, Parts = new CsNode[] { insensitive,
+        var comparer = Cs.Symbol(new()
+        {
+            AsConditional = true,
+            Parts = new CsNode[] { insensitive,
             NodeMember(Cs.Symbol("StringComparer"), "OrdinalIgnoreCase"),
-            NodeMember(Cs.Symbol("StringComparer"), "Ordinal") } });
+            NodeMember(Cs.Symbol("StringComparer"), "Ordinal") }
+        });
         root.Method(Cs.Void, "ValidateNames_" + index).Private().Static()
             .Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options")
             .Body(Cs.Tree(NodeVar("names", NodeNew("System.Collections.Generic.HashSet<string>", comparer)),

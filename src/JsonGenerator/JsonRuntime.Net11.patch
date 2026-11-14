@@ -1,0 +1,137 @@
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Document/JsonDocument.PropertyNameSet.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Document/JsonDocument.PropertyNameSet.cs
+index 4aa736e..ebfb422 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Document/JsonDocument.PropertyNameSet.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Document/JsonDocument.PropertyNameSet.cs
+@@ -150,10 +150,9 @@ public bool Equals(ReadOnlyMemory<byte> left, ReadOnlyMemory<byte> right) =>
+ 
+                 public int GetHashCode(ReadOnlyMemory<byte> name)
+                 {
+-                    // Marvin is the currently used hash algorithm for string comparisons.
+-                    // The seed is unique to this process so an item's hash code can't easily be
+-                    // discovered by an adversary trying to perform a denial of service attack.
+-                    return Marvin.ComputeHash32(name.Span, Marvin.DefaultSeed);
++                    var hash = new HashCode();
++                    hash.AddBytes(name.Span);
++                    return hash.ToHashCode();
+                 }
+             }
+         }
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/JsonHelpers.cs b/src/libraries/System.Text.Json/src/System/Text/Json/JsonHelpers.cs
+index f5f9f4f..5656fba 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/JsonHelpers.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/JsonHelpers.cs
+@@ -269,8 +269,12 @@ int IAlternateEqualityComparer<ReadOnlySpan<byte>, byte[]>.GetHashCode(ReadOnlyS
+                 ComputeHashCode(span);
+ #endif
+ 
+-            private static int ComputeHashCode(ReadOnlySpan<byte> value) =>
+-                Marvin.ComputeHash32(value, Marvin.DefaultSeed);
++            private static int ComputeHashCode(ReadOnlySpan<byte> value)
++            {
++                var hash = new HashCode();
++                hash.AddBytes(value);
++                return hash.ToHashCode();
++            }
+         }
+ 
+         /// <summary>
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs
+index 1eb4237..d1f8b4e 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializer.Read.HandleMetadata.cs
+@@ -561,7 +561,7 @@ internal static void ValidateMetadataForArrayConverter(JsonConverter converter,
+ 
+         internal static T ResolveReferenceId<T>(ref ReadStack state)
+         {
+-            Debug.Assert(!typeof(T).IsValueType);
++            Debug.Assert((Array.Empty<T>() is object[]));
+             Debug.Assert(state.ReferenceId is not null);
+ 
+             string referenceId = state.ReferenceId;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonMetadataServices.Helpers.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonMetadataServices.Helpers.cs
+index d103aaa..1ab3956 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonMetadataServices.Helpers.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonMetadataServices.Helpers.cs
+@@ -125,7 +125,7 @@ private static void PopulatePolymorphismMetadata(
+             {
+                 // Older versions of the source generator do not populate polymorphism options,
+                 // so attempt to populate it from attributes at runtime.
+-                polymorphismOptions = JsonPolymorphismOptions.CreateFromAttributeDeclarations(typeInfo.Type, out _);
++                polymorphismOptions = StaticTypeMetadata.GetPolymorphism(typeInfo.Type);
+                 typeClassifierFactory = null;
+             }
+             else if (polymorphismOptions.IsEmpty)
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
+index 7d8752f..9e4136b 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
+@@ -472,7 +472,7 @@ private void ValidateAndCachePropertyName()
+             Debug.Assert(Name is not null);
+ 
+             if (Options.ReferenceHandlingStrategy is JsonKnownReferenceHandler.Preserve &&
+-                this is { DeclaringType.IsValueType: false, IsIgnored: false, IsExtensionData: false } &&
++                !StaticTypeMetadata.HasFlag(DeclaringType, StaticTypeMetadata.ValueType) && this is { IsIgnored: false, IsExtensionData: false } &&
+                 Name is JsonSerializer.IdPropertyName or JsonSerializer.RefPropertyName)
+             {
+                 // Validate potential conflicts with reference preservation metadata property names.
+@@ -631,7 +631,7 @@ private void DetermineEffectiveObjectCreationHandlingForProperty()
+                     preferredCreationHandling == JsonObjectCreationHandling.Populate &&
+                     EffectiveConverter.CanPopulate &&
+                     Get is not null &&
+-                    (!PropertyType.IsValueType || Set is not null) &&
++                    (!StaticTypeMetadata.HasFlag(PropertyType, StaticTypeMetadata.ValueType) || Set is not null) &&
+                     !DeclaringTypeInfo.SupportsPolymorphicDeserialization &&
+                     !(Set is null && IgnoreReadOnlyMember);
+ 
+@@ -649,7 +649,7 @@ Get is not null &&
+                     ThrowHelper.ThrowInvalidOperationException_ObjectCreationHandlingPropertyMustHaveAGetter(this);
+                 }
+ 
+-                if (PropertyType.IsValueType && Set is null)
++                if (StaticTypeMetadata.HasFlag(PropertyType, StaticTypeMetadata.ValueType) && Set is null)
+                 {
+                     ThrowHelper.ThrowInvalidOperationException_ObjectCreationHandlingPropertyValueTypeMustHaveASetter(this);
+                 }
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.cs b/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.cs
+index 190eec5..0e09b4e 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/ThrowHelper.cs
+@@ -654,10 +654,28 @@ public static void ThrowFormatException()
+             throw new FormatException { Source = ExceptionSourceValueToRethrowAsJsonException };
+         }
+ 
++        private static string NumericTypeName(NumericType value) => value switch
++        {
++            NumericType.Byte => "Byte", NumericType.SByte => "SByte",
++            NumericType.Int16 => "Int16", NumericType.Int32 => "Int32", NumericType.Int64 => "Int64",
++            NumericType.Int128 => "Int128", NumericType.UInt16 => "UInt16", NumericType.UInt32 => "UInt32",
++            NumericType.UInt64 => "UInt64", NumericType.UInt128 => "UInt128", NumericType.Half => "Half",
++            NumericType.Single => "Single", NumericType.Double => "Double", NumericType.Decimal => "Decimal",
++            NumericType.BFloat16 => "BFloat16", NumericType.Decimal32 => "Decimal32",
++            NumericType.Decimal64 => "Decimal64", NumericType.Decimal128 => "Decimal128", _ => ""
++        };
++
++        private static string DataTypeName(DataType value) => value switch
++        {
++            DataType.Boolean => "Boolean", DataType.DateOnly => "DateOnly", DataType.DateTime => "DateTime",
++            DataType.DateTimeOffset => "DateTimeOffset", DataType.TimeOnly => "TimeOnly", DataType.TimeSpan => "TimeSpan",
++            DataType.Base64String => "Base64String", DataType.Guid => "Guid", DataType.Version => "Version", _ => ""
++        };
++
+         [DoesNotReturn]
+         public static void ThrowFormatException(NumericType numericType)
+         {
+-            throw new FormatException(SR.Format(SR.FormatNumericType, numericType)) { Source = ExceptionSourceValueToRethrowAsJsonException };
++            throw new FormatException(SR.Format(SR.FormatNumericType, NumericTypeName(numericType))) { Source = ExceptionSourceValueToRethrowAsJsonException };
+         }
+ 
+         [DoesNotReturn]
+@@ -675,7 +693,7 @@ public static void ThrowFormatException(DataType dataType)
+                 case DataType.TimeSpan:
+                 case DataType.Guid:
+                 case DataType.Version:
+-                    message = SR.Format(SR.UnsupportedFormat, dataType);
++                    message = SR.Format(SR.UnsupportedFormat, DataTypeName(dataType));
+                     break;
+                 case DataType.Base64String:
+                     message = SR.CannotDecodeInvalidBase64;

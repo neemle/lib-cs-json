@@ -1,4 +1,4 @@
-# Neemle.SystemTextJson
+# Neemle.JSON
 
 Use ordinary `System.Text.Json` calls in a .NET NativeAOT application targeting
 static Linux musl on ARM64 or x64. The package generates JSON serialization code
@@ -14,7 +14,7 @@ system, such as an Alpine Linux container, and you want to keep using the usual
 Add the package to your application project:
 
 ```xml
-<PackageReference Include="Neemle.SystemTextJson" Version="0.9.184" />
+<PackageReference Include="Neemle.JSON" Version="0.1.10" />
 ```
 
 Then use `System.Text.Json` normally:
@@ -42,25 +42,17 @@ requires reflection metadata to be disabled and warnings to be treated as errors
 It builds a patched JSON runtime from the matching official .NET runtime sources,
 so publishing also requires Git and network access to GitHub.
 
-## Current scope
+## Demo
 
-Supported cases include strings, numbers, booleans, nullable values, arrays,
-`List<T>`, dictionaries with string or integer keys, enums and compatible public classes and
-structs. The demo shows attributes such as `JsonPropertyName`, `JsonRequired`
-and `JsonIgnore`, property ordering, field options, as well as streams and selected converter scenarios.
-
-**This is not yet a complete drop-in replacement for System.Text.Json.** Some
-types, options and converter usages are unsupported and cause a build error.
-Use it when your application's JSON operations fit the supported subset; run
-the demo and test your own models before relying on it.
+The demo exercises all 103 `JsonSerializer` serialization and deserialization
+overloads in .NET 10 using a single model.
 
 ## Build and try locally
 
-The package is not published to nuget.org yet. Build it with a stable .NET SDK
-version 10 or later:
+To build the package locally, use a stable .NET SDK version 10 or later:
 
 ```sh
-dotnet build Neemle.SystemTextJson.slnx -c Release
+dotnet build Neemle.JSON.slnx -c Release
 dotnet pack src/JsonGenerator/JsonGenerator.csproj -c Release -o .dev-temp/packages
 ```
 

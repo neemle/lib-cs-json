@@ -46,7 +46,7 @@ internal static class ContextOptionsEmitter
     {
         if (argument.Key == "GenerationMode")
         {
-            if (argument.Value.Value is int mode && mode is not (0 or 1 or 3))
+            if (argument.Value.Value is int mode && mode is not (0 or 1 or 2 or 3))
                 throw new InvalidOperationException("Configured JSON context generation modes are not supported.");
             return null;
         }

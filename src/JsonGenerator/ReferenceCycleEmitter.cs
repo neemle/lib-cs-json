@@ -39,24 +39,38 @@ internal static class ReferenceCycleEmitter
 
     private static void EmitReferenceId(TypeBuilder<FileBuilder> root)
     {
-        var number = Cs.Symbol(new() { AsParenthesized = true,
-            Value = NodeBinary(CsOperator.Add, Cs.Symbol("index"), Cs.Value(1)) });
+        var number = Cs.Symbol(new()
+        {
+            AsParenthesized = true,
+            Value = NodeBinary(CsOperator.Add, Cs.Symbol("index"), Cs.Value(1))
+        });
         root.Method(Cs.Type("string"), "ReferenceId").Private().Static().Parameter(Cs.Int, "index")
-            .Body(Cs.Tree(Return(Cs.Symbol("ToString", new() { Target = number, AsCall = true,
-                Arguments = Cs.Compound(NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture")) })))).End();
+            .Body(Cs.Tree(Return(Cs.Symbol("ToString", new()
+            {
+                Target = number,
+                AsCall = true,
+                Arguments = Cs.Compound(NodeMember(Cs.Symbol("CultureInfo"), "InvariantCulture"))
+            })))).End();
     }
 
     private static void EmitEnter(TypeBuilder<FileBuilder> root, CsType list)
     {
         var factory = Cs.Lambda(new CsExpression(ExpressionKind.New, "", []) { Type = list },
-            Cs.LambdaParameter("_")) with { IsStatic = true };
+            Cs.LambdaParameter("_")) with
+        { IsStatic = true };
         var preserve = NodeBinary(CsOperator.AndAlso, Cs.Symbol("allowPreserve"), IsPreserve());
         var ignore = NodeBinary(CsOperator.Equal, Handler(), IgnoreCycles());
-        var inactive = Cs.Symbol(new() { Operator = CsOperator.Not,
-            Parts = new CsNode[] { NodeBinary(CsOperator.OrElse, IsPreserve(), ignore) } });
+        var inactive = Cs.Symbol(new()
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[] { NodeBinary(CsOperator.OrElse, IsPreserve(), ignore) }
+        });
         var remember = NodeIf(NodeBinary(CsOperator.AndAlso, Cs.Symbol("preserve"), Cs.Symbol(new()
-        { Operator = CsOperator.Not, Parts = new CsNode[] { NodeCall("EnterReference", Cs.Symbol("writer"),
-            Cs.Symbol("value"), Cs.Symbol("options")) } })), Return(Cs.Value(false)));
+        {
+            Operator = CsOperator.Not,
+            Parts = new CsNode[] { NodeCall("EnterReference", Cs.Symbol("writer"),
+            Cs.Symbol("value"), Cs.Symbol("options")) }
+        })), Return(Cs.Value(false)));
         var cycle = NodeBinary(CsOperator.AndAlso, ignore, NodeBinary(CsOperator.GreaterThanOrEqual,
             NodeCall("ReferenceIndex", Cs.Symbol("items"), Cs.Symbol("value")), Cs.Value(0)));
         root.Method(Cs.Bool, "EnterCycle").Private().Static().Parameter(Cs.Type("Utf8JsonWriter"), "writer")
@@ -70,10 +84,14 @@ internal static class ReferenceCycleEmitter
 
     private static void EmitCustomEntry(TypeBuilder<FileBuilder> root)
     {
-        var factory = Cs.Lambda(new CsBody { Tree = Cs.Tree(Return(NodeNew(
+        var factory = Cs.Lambda(new CsBody
+        {
+            Tree = Cs.Tree(Return(NodeNew(
             "System.Collections.Generic.Dictionary<object, string>", NodeMember(
-                TypeRef("global::System.Collections.Generic.ReferenceEqualityComparer"), "Instance")))) },
-            Cs.LambdaParameter("_")) with { IsStatic = true };
+                TypeRef("global::System.Collections.Generic.ReferenceEqualityComparer"), "Instance"))))
+        },
+            Cs.LambdaParameter("_")) with
+        { IsStatic = true };
         var getResolver = NodeCall("CustomResolvers.TryGetValue", Cs.Symbol("writer"), OutVar("resolver"));
         var missing = Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] { getResolver } });
         root.Method(Cs.Bool, "EnterReference").Private().Static().Parameter(Cs.Type("Utf8JsonWriter"), "writer")
@@ -81,7 +99,7 @@ internal static class ReferenceCycleEmitter
             .Body(Cs.Tree(NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] { IsCustom() } }),
                     Return(NodeCall("EnterPreserved", Cs.Symbol("writer"), Cs.Symbol("value")))),
                 NodeIf(missing, NodeAssign(Cs.Symbol("resolver"), Cs.Symbol("CreateResolver", new()
-                    { Target = NonNull(NodeMember(NonNull(Cs.Symbol("options")), "ReferenceHandler")), AsCall = true })),
+                { Target = NonNull(NodeMember(NonNull(Cs.Symbol("options")), "ReferenceHandler")), AsCall = true })),
                     NodeCall("CustomResolvers.Add", Cs.Symbol("writer"), Cs.Symbol("resolver"))),
                 NodeVar("id", NodeCall("resolver.GetReference", Cs.Symbol("value"), OutVar("exists"))),
                 NodeIf(Cs.Symbol("exists"), NodeCall("writer.WriteStartObject"),
@@ -100,7 +118,8 @@ internal static class ReferenceCycleEmitter
     private static void EmitPreservedEntry(TypeBuilder<FileBuilder> root, CsType list)
     {
         var factory = Cs.Lambda(new CsExpression(ExpressionKind.New, "", []) { Type = list },
-            Cs.LambdaParameter("_")) with { IsStatic = true };
+            Cs.LambdaParameter("_")) with
+        { IsStatic = true };
         var existing = NodeBinary(CsOperator.GreaterThanOrEqual, Cs.Symbol("index"), Cs.Value(0));
         root.Method(Cs.Bool, "EnterPreserved").Private().Static().Parameter(Cs.Type("Utf8JsonWriter"), "writer")
             .Parameter(Cs.Type("object"), "value").Body(Cs.Tree(
@@ -141,8 +160,12 @@ internal static class ReferenceCycleEmitter
                     NodeCall("ReferenceIndex", Cs.Symbol("ids"), Cs.Symbol("value")))))).End();
         root.Method(Cs.Void, "WriteCustomReferenceId").Private().Static().Parameter(Cs.Type("Utf8JsonWriter"), "writer")
             .Parameter(Cs.Type("object"), "value").Body(Cs.Tree(
-                NodeIf(Cs.Symbol(new() { Operator = CsOperator.Not, Parts = new CsNode[] {
-                    NodeCall("CustomReferenceIds.TryGetValue", Cs.Symbol("writer"), OutVar("customIds")) } }),
+                NodeIf(Cs.Symbol(new()
+                {
+                    Operator = CsOperator.Not,
+                    Parts = new CsNode[] {
+                    NodeCall("CustomReferenceIds.TryGetValue", Cs.Symbol("writer"), OutVar("customIds")) }
+                }),
                     NodeThrow(NodeNew("JsonException"))),
                 NodeCall("writer.WriteString", Cs.Value("$id"), Index(Cs.Symbol("customIds"), Cs.Symbol("value"))))).End();
     }
@@ -168,8 +191,11 @@ internal static class ReferenceCycleEmitter
         var arguments = new List<CsNode> { Cs.Symbol("w"), Cs.Symbol("value"), Cs.Symbol("options"), Cs.Symbol("path") };
         if (numeric) arguments.Add(Cs.Symbol("handlingOverride"));
         var work = new CsBody { Tree = Cs.Tree(NodeCall($"WriteCore_{index}", arguments.ToArray())) };
-        var cleanup = new CsBody { Tree = Cs.Tree(NodeCall("ExitCycle", Cs.Symbol("w"), Cs.Symbol("options"),
-            Cs.Value(allowPreserve))) };
+        var cleanup = new CsBody
+        {
+            Tree = Cs.Tree(NodeCall("ExitCycle", Cs.Symbol("w"), Cs.Symbol("options"),
+            Cs.Value(allowPreserve)))
+        };
         statements.Add(Cs.Try(work, finallyBody: cleanup));
         return statements.ToArray();
     }

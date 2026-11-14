@@ -53,69 +53,69 @@ internal static class JsonDomApiEmitter
     private static void EmitDomWriters(int index, string type, bool reference, TypeBuilder<FileBuilder> root)
     {
         foreach (string kind in new[] { "Element", "Document", "Node" })
-        foreach (bool declared in new[] { false, true })
-        {
-            string result = kind switch
+            foreach (bool declared in new[] { false, true })
             {
-                "Element" => "JsonElement",
-                "Document" => "JsonDocument",
-                _ => "System.Text.Json.Nodes.JsonNode?"
-            };
-            var method = root.Method(NodeType(result), $"Encode{kind}_{index}").Internal().Static()
-                .Parameter(declared ? NodeType("object?") : InputType(type, reference), "value");
-            if (declared) method.Parameter(Cs.Type("Type"), "inputType");
-            method.Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
-            var encoded = declared ? NodeCall($"Encode_{index}", Cs.Symbol("value"), Cs.Symbol("inputType"),
-                Cs.Symbol("options")) : NodeCall($"Encode_{index}", Cs.Symbol("value"), Cs.Symbol("options"));
-            if (kind == "Element")
-                method.Body(Cs.Tree(Cs.Symbol("document", new()
-                { AsVar = true, Using = true, Value = NodeCall("JsonDocument.Parse", encoded) }),
-                    Return(NodeCall("document.RootElement.Clone")))).End();
-            else method.Body(Cs.Tree(Return(NodeCall(kind == "Document" ? "JsonDocument.Parse" : "JsonNode.Parse",
-                encoded)))).End();
-        }
+                string result = kind switch
+                {
+                    "Element" => "JsonElement",
+                    "Document" => "JsonDocument",
+                    _ => "System.Text.Json.Nodes.JsonNode?"
+                };
+                var method = root.Method(NodeType(result), $"Encode{kind}_{index}").Internal().Static()
+                    .Parameter(declared ? NodeType("object?") : InputType(type, reference), "value");
+                if (declared) method.Parameter(Cs.Type("Type"), "inputType");
+                method.Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
+                var encoded = declared ? NodeCall($"Encode_{index}", Cs.Symbol("value"), Cs.Symbol("inputType"),
+                    Cs.Symbol("options")) : NodeCall($"Encode_{index}", Cs.Symbol("value"), Cs.Symbol("options"));
+                if (kind == "Element")
+                    method.Body(Cs.Tree(Cs.Symbol("document", new()
+                    { AsVar = true, Using = true, Value = NodeCall("JsonDocument.Parse", encoded) }),
+                        Return(NodeCall("document.RootElement.Clone")))).End();
+                else method.Body(Cs.Tree(Return(NodeCall(kind == "Document" ? "JsonDocument.Parse" : "JsonNode.Parse",
+                    encoded)))).End();
+            }
     }
 
     private static void EmitDomReaders(int index, string type, TypeBuilder<FileBuilder> root)
     {
         foreach (string kind in new[] { "JsonElement", "JsonDocument", "System.Text.Json.Nodes.JsonNode?" })
-        foreach (bool declared in new[] { false, true })
-        {
-            var method = Reader(root, declared ? "object?" : type, index).Parameter(NodeType(kind), "element");
-            if (declared) method.Parameter(Cs.Type("Type"), "inputType");
-            method.Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
-            CsNode value = kind switch
+            foreach (bool declared in new[] { false, true })
             {
-                "JsonElement" => Cs.Symbol("element"),
-                "JsonDocument" => NodeMember(Cs.Symbol("element"), "RootElement"),
-                _ => NodeBinary(CsOperator.Coalesce, Cs.Symbol("ToJsonString", new()
-                { Target = Cs.Symbol("element"), ConditionalAccess = true, AsCall = true }), Cs.Value("null"))
-            };
-            string target = kind.StartsWith("System.", StringComparison.Ordinal) ? "Decode" : "Read";
-            CsNode call = target == "Read" ? NodeCall($"Read_{index}", value, Cs.Symbol("options"), Cs.Value("$")) :
-                NodeCall($"Decode_{index}", value, Cs.Symbol("options"));
-            var body = new List<CsNode>();
-            if (kind == "JsonDocument") body.Add(NodeCall("ArgumentNullException.ThrowIfNull", Cs.Symbol("element")));
-            body.Add(NodeCall("ValidateRuntimeOptions", Cs.Symbol("options")));
-            if (declared) body.Add(CheckType(type));
-            body.Add(Return(call));
-            method.Body(Cs.Tree(body.ToArray())).End();
-        }
+                var method = Reader(root, declared ? "object?" : type, index).Parameter(NodeType(kind), "element");
+                if (declared) method.Parameter(Cs.Type("Type"), "inputType");
+                method.Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
+                CsNode value = kind switch
+                {
+                    "JsonElement" => Cs.Symbol("element"),
+                    "JsonDocument" => NodeMember(Cs.Symbol("element"), "RootElement"),
+                    _ => NodeBinary(CsOperator.Coalesce, Cs.Symbol("ToJsonString", new()
+                    { Target = Cs.Symbol("element"), ConditionalAccess = true, AsCall = true }), Cs.Value("null"))
+                };
+                string target = kind.StartsWith("System.", StringComparison.Ordinal) ? "Decode" : "Read";
+                CsNode call = target == "Read" ? NodeCall($"Read_{index}", value, Cs.Symbol("options"), Cs.Value("$")) :
+                    NodeCall($"Decode_{index}", value, Cs.Symbol("options"));
+                var body = new List<CsNode>();
+                if (kind == "JsonDocument") body.Add(NodeCall("ArgumentNullException.ThrowIfNull", Cs.Symbol("element")));
+                body.Add(NodeCall("ValidateRuntimeOptions", Cs.Symbol("options")));
+                if (declared) body.Add(CheckType(type));
+                body.Add(Return(call));
+                method.Body(Cs.Tree(body.ToArray())).End();
+            }
     }
 
     private static void EmitSpanReaders(int index, string type, TypeBuilder<FileBuilder> root)
     {
         foreach (string item in new[] { "byte", "char" })
-        foreach (bool declared in new[] { false, true })
-        {
-            var method = Reader(root, declared ? "object?" : type, index)
-                .Parameter(NodeType($"ReadOnlySpan<{item}>"), "json");
-            if (declared) method.Parameter(Cs.Type("Type"), "inputType");
-            method.Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
-            var read = Return(NodeCall($"Decode_{index}", NodeCall(item == "byte" ? "json.ToArray" :
-                "json.ToString"), Cs.Symbol("options")));
-            method.Body(declared ? Cs.Tree(CheckType(type), read) : Cs.Tree(read)).End();
-        }
+            foreach (bool declared in new[] { false, true })
+            {
+                var method = Reader(root, declared ? "object?" : type, index)
+                    .Parameter(NodeType($"ReadOnlySpan<{item}>"), "json");
+                if (declared) method.Parameter(Cs.Type("Type"), "inputType");
+                method.Parameter(Cs.Type("JsonSerializerOptions").Nullable(), "options", @default: Cs.Literal(null));
+                var read = Return(NodeCall($"Decode_{index}", NodeCall(item == "byte" ? "json.ToArray" :
+                    "json.ToString"), Cs.Symbol("options")));
+                method.Body(declared ? Cs.Tree(CheckType(type), read) : Cs.Tree(read)).End();
+            }
     }
 
     private static void EmitReader(int index, string type, TypeBuilder<FileBuilder> root)
@@ -130,8 +130,12 @@ internal static class JsonDomApiEmitter
             body.Add(NodeCall("ValidateRuntimeOptions", Cs.Symbol("options")));
             if (declared) body.Add(CheckType(type));
             body.Add(Cs.Symbol("document", new()
-            { AsVar = true, Using = true, Value = NodeCall("JsonDocument.ParseValue",
-                Arg(ArgumentModifier.Ref, Cs.Symbol("reader"))) }));
+            {
+                AsVar = true,
+                Using = true,
+                Value = NodeCall("JsonDocument.ParseValue",
+                Arg(ArgumentModifier.Ref, Cs.Symbol("reader")))
+            }));
             body.Add(Return(NodeCall($"Read_{index}", NodeMember(Cs.Symbol("document"), "RootElement"),
                 Cs.Symbol("options"), Cs.Value("$"))));
             method.Body(Cs.Tree(body.ToArray())).End();

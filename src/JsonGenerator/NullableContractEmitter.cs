@@ -24,6 +24,6 @@ internal static class NullableContractEmitter
 
     private static CsNode Check(CsNode isNull, CsNode path) => NodeIf(NodeBinary(CsOperator.AndAlso,
         NodeBinary(CsOperator.Equal, Cs.Symbol("RespectNullableAnnotations", new()
-            { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)), isNull),
+        { Target = Cs.Symbol("options"), ConditionalAccess = true }), Cs.Value(true)), isNull),
         NodeThrow(NodeNew("JsonException", Cs.Value(null), path, Cs.Value(null), Cs.Value(null))));
 }
