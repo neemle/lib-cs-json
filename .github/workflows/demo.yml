@@ -2,22 +2,21 @@ name: JSON demo
 
 on:
   push:
+    branches: [main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
-  release:
-    types: [published]
 
 permissions:
   contents: read
 
 jobs:
   demo:
-    name: .NET ${{ matrix.dotnet }} / ${{ matrix.arch }} / ${{ matrix.mode }}
+    name: .NET 10 / ${{ matrix.arch }} / ${{ matrix.mode }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
-        dotnet: ['10']
         arch: [arm64, x64]
         mode: [jit, aot]
         include:
@@ -29,43 +28,59 @@ jobs:
             rid: linux-musl-x64
     steps:
       - uses: actions/checkout@v4
-      - name: Build and run demo
+      - name: Build and run demo without packaging
         env:
           RID: ${{ matrix.rid }}
           MODE: ${{ matrix.mode }}
-          DOTNET_VERSION: ${{ matrix.dotnet }}
         run: |
-          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e RID -e MODE -e DOTNET_VERSION \
-            mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}.0-alpine-aot sh -c '
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e RID -e MODE \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot sh -c '
               set -eu
-              mkdir -p .dev-temp/ci
-              dotnet pack src/JsonGenerator/JsonGenerator.csproj -c Release -o /work/.dev-temp/packages
+              mkdir -p .dev-temp/ci/consumer .dev-temp/ci/tools .dev-temp/ci/buildTransitive
+              dotnet build src/JsonGenerator/JsonGenerator.csproj -c Release --nologo -v:q
+              cp .dev-temp/bin/src/JsonGenerator/JsonGenerator/Release/net10.0/JsonGenerator.dll .dev-temp/ci/tools/
+              cp src/JsonGenerator/JsonRuntime.patch .dev-temp/ci/tools/
+              cp src/JsonGenerator/Neemle.JSON.targets .dev-temp/ci/buildTransitive/
+              printf "%s\n" \
+                "<Project Sdk=\"Microsoft.NET.Sdk\">" \
+                "  <PropertyGroup>" \
+                "    <OutputType>Exe</OutputType>" \
+                "    <TargetFramework>net10.0</TargetFramework>" \
+                "    <Nullable>enable</Nullable>" \
+                "    <ImplicitUsings>enable</ImplicitUsings>" \
+                "    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>" \
+                "    <InvariantGlobalization>true</InvariantGlobalization>" \
+                "    <StaticExecutable>true</StaticExecutable>" \
+                "    <OptimizationPreference>Size</OptimizationPreference>" \
+                "  </PropertyGroup>" \
+                "  <ItemGroup>" \
+                "    <PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" />" \
+                "    <Compile Include=\"/work/samples/JsonAotDemo/Program.cs\" />" \
+                "  </ItemGroup>" \
+                "  <Import Project=\"/work/.dev-temp/ci/buildTransitive/Neemle.JSON.targets\" />" \
+                "</Project>" > .dev-temp/ci/consumer/Consumer.csproj
               if [ "$MODE" = jit ]; then
-                dotnet restore samples/JsonAotDemo/JsonAotDemo.csproj -r "$RID" \
-                  -p:TargetFramework="net$DOTNET_VERSION.0" -p:PublishAot=false \
-                  --source /work/.dev-temp/packages --source https://api.nuget.org/v3/index.json
-                dotnet build samples/JsonAotDemo/JsonAotDemo.csproj --no-restore -c Release -r "$RID" \
-                  -p:TargetFramework="net$DOTNET_VERSION.0" -p:PublishAot=false -o /work/.dev-temp/ci/bin
-                if ! dotnet /work/.dev-temp/ci/bin/JsonAotDemo.dll > /work/.dev-temp/ci/output.txt; then
+                dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=false
+                dotnet build .dev-temp/ci/consumer/Consumer.csproj --no-restore -c Release -r "$RID" \
+                  -p:PublishAot=false -o /work/.dev-temp/ci/bin
+                if ! dotnet /work/.dev-temp/ci/bin/Consumer.dll > /work/.dev-temp/ci/output.txt; then
                   cat /work/.dev-temp/ci/output.txt
                   exit 1
                 fi
               else
-                dotnet restore samples/JsonAotDemo/JsonAotDemo.csproj -r "$RID" \
-                  -p:TargetFramework="net$DOTNET_VERSION.0" \
-                  --source /work/.dev-temp/packages --source https://api.nuget.org/v3/index.json
-                dotnet publish samples/JsonAotDemo/JsonAotDemo.csproj --no-restore -c Release -r "$RID" \
-                  -p:TargetFramework="net$DOTNET_VERSION.0" -o /work/.dev-temp/ci/bin
-                response="/work/.dev-temp/obj/samples/JsonAotDemo/JsonAotDemo/Release/net$DOTNET_VERSION.0/$RID/native/JsonAotDemo.ilc.rsp"
+                dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=true
+                dotnet publish .dev-temp/ci/consumer/Consumer.csproj --no-restore -c Release -r "$RID" \
+                  -p:PublishAot=true -o /work/.dev-temp/ci/bin
+                response="/work/.dev-temp/obj/.dev-temp/ci/consumer/Consumer/Release/net10.0/$RID/native/Consumer.ilc.rsp"
                 grep -Fxq -- --reflectiondata:none "$response"
                 grep -Fxq -- --warnaserror "$response"
-                readelf -h /work/.dev-temp/ci/bin/JsonAotDemo > /dev/null
-                if readelf -l /work/.dev-temp/ci/bin/JsonAotDemo | grep -q INTERP || \
-                   readelf -d /work/.dev-temp/ci/bin/JsonAotDemo | grep -q NEEDED; then
+                readelf -h /work/.dev-temp/ci/bin/Consumer > /dev/null
+                if readelf -l /work/.dev-temp/ci/bin/Consumer | grep -q INTERP || \
+                   readelf -d /work/.dev-temp/ci/bin/Consumer | grep -q NEEDED; then
                   echo "The AOT executable is not statically linked." >&2
                   exit 1
                 fi
-                if ! /work/.dev-temp/ci/bin/JsonAotDemo > /work/.dev-temp/ci/output.txt; then
+                if ! /work/.dev-temp/ci/bin/Consumer > /work/.dev-temp/ci/output.txt; then
                   cat /work/.dev-temp/ci/output.txt
                   exit 1
                 fi
@@ -74,72 +89,73 @@ jobs:
             '
       - uses: actions/upload-artifact@v4
         with:
-          name: demo-${{ matrix.dotnet }}-${{ matrix.arch }}-${{ matrix.mode }}
+          name: demo-${{ matrix.arch }}-${{ matrix.mode }}
           path: .dev-temp/ci/output.txt
-          if-no-files-found: error
-          include-hidden-files: true
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        if: matrix.dotnet == '10' && matrix.arch == 'arm64' && matrix.mode == 'jit'
-        with:
-          name: neemle-json-package
-          path: .dev-temp/packages/Neemle.JSON.*.nupkg
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 1
 
   compare:
-    name: Compare JIT and AOT / .NET ${{ matrix.dotnet }} / ${{ matrix.arch }}
+    name: Compare JIT and AOT / .NET 10 / ${{ matrix.arch }}
     needs: demo
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: ['10']
         arch: [arm64, x64]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: demo-${{ matrix.dotnet }}-${{ matrix.arch }}-jit
+          name: demo-${{ matrix.arch }}-jit
           path: jit
       - uses: actions/download-artifact@v4
         with:
-          name: demo-${{ matrix.dotnet }}-${{ matrix.arch }}-aot
+          name: demo-${{ matrix.arch }}-aot
           path: aot
       - name: Compare complete output
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work \
-            mcr.microsoft.com/dotnet/sdk:${{ matrix.dotnet }}.0-alpine-aot \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot \
             dotnet run --file .github/CompareDemo.cs -- jit/output.txt aot/output.txt
 
   publish:
-    name: Publish to NuGet.org
-    if: github.event_name == 'release'
+    name: Release tagged version
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     needs: compare
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: neemle-json-package
-          path: package
+      - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+      - name: Validate tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version=$(dotnet msbuild src/JsonGenerator/JsonGenerator.csproj -nologo -getProperty:Version)
+          test "$RELEASE_TAG" = "v$version"
+      - name: Pack tagged version
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot \
+            dotnet pack src/JsonGenerator/JsonGenerator.csproj -c Release -o /work/.dev-temp/release
       - name: Authenticate to NuGet
         id: nuget-login
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
         with:
           user: neemle
-      - name: Publish verified package
+      - name: Publish verified package and create release
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          case "$RELEASE_TAG" in v*) version=${RELEASE_TAG#v} ;; *) exit 1 ;; esac
-          package="package/Neemle.JSON.$version.nupkg"
+          package=".dev-temp/release/Neemle.JSON.${RELEASE_TAG#v}.nupkg"
           test -f "$package"
           dotnet nuget push "$package" --api-key "$NUGET_API_KEY" \
             --source https://api.nuget.org/v3/index.json
+          gh release create "$RELEASE_TAG" "$package" --title "Neemle.JSON ${RELEASE_TAG#v}" \
+            --notes "Release ${RELEASE_TAG#v}, verified by .NET 10 JIT and NativeAOT CI."
