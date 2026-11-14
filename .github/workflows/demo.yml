@@ -61,7 +61,7 @@ jobs:
                 "    <PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" />" \
                 "    <Compile Include=\"/work/samples/JsonAotDemo${DOTNET_VERSION#10}/Program.cs\" />" \
                 "  </ItemGroup>" \
-                "  <Import Project=\"/work/.dev-temp/ci/buildTransitive/Neemle.JSON.targets\" Condition=\"&quot;\$(MODE)&quot; == &quot;aot&quot;\" />" \
+                "  <Import Project=\"/work/.dev-temp/ci/buildTransitive/Neemle.JSON.targets\" Condition=\"&apos;\$(MODE)&apos; == &apos;aot&apos;\" />" \
                 "</Project>" > .dev-temp/ci/consumer/Consumer.csproj
               if [ "$MODE" = jit ]; then
                 dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=false
