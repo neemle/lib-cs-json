@@ -207,6 +207,14 @@ internal static class Program
         var decimal32Nan = JsonSerializer.Deserialize<Decimal32>(JsonSerializer.Serialize(Decimal32.NaN, numberOptions), numberOptions);
         var decimal128Nan = JsonSerializer.Deserialize<Decimal128>(JsonSerializer.Serialize(Decimal128.NaN, numberOptions), numberOptions);
         Report("130", BFloat16.IsNaN(bfloatNan) && Decimal32.IsNaN(decimal32Nan) && Decimal128.IsNaN(decimal128Nan));
+        var inValue = JsonSerializer.Deserialize<InConstructor>("{\"Value\":7}");
+        var refValue = JsonSerializer.Deserialize<RefConstructor>("{\"Value\":8}");
+        var outValue = JsonSerializer.Deserialize<OutConstructor>("{\"Value\":9}");
+        Report("131", inValue?.Value == 7 && refValue?.Value == 8 && outValue?.Value == 9);
+        var objectExtraJson = JsonSerializer.Serialize(objectExtra);
+        Report("132", JsonNode.Parse(objectExtraJson)?["flag"]?.GetValue<bool>() == true);
+        var extensionJson = JsonSerializer.Serialize(extension);
+        Report("133", JsonNode.Parse(extensionJson)?["age"]?.GetValue<int>() == 42);
     }
 
     private static async IAsyncEnumerable<int> Numbers()
@@ -347,3 +355,24 @@ public sealed class HiddenData
 
 public sealed class Defaults { public string Name { get; init; } = "default"; }
 public sealed class ObjectExtra { [JsonExtensionData] public JsonObject? Extra { get; set; } }
+
+public sealed class InConstructor
+{
+    public int Value { get; }
+    [JsonConstructor]
+    public InConstructor(in int value) => Value = value;
+}
+
+public sealed class RefConstructor
+{
+    public int Value { get; }
+    [JsonConstructor]
+    public RefConstructor(ref int value) => Value = value;
+}
+
+public sealed class OutConstructor
+{
+    public int Value { get; set; }
+    [JsonConstructor]
+    public OutConstructor(out int value) { value = 0; }
+}

@@ -338,13 +338,13 @@ sealed class CodecEmitter
         if (constructors.Length != 1) return null;
         var constructor = constructors[0];
         if (!AccessibleConstructor(constructor) || constructor.Parameters.Length == 0) return null;
-        return constructor.Parameters.All(parameter => props.Any(property => Matches(parameter, property))) &&
+        return constructor.Parameters.All(parameter => parameter.RefKind == RefKind.Out || props.Any(property => Matches(parameter, property))) &&
             props.All(property => CanSet(property) || constructor.Parameters.Any(parameter => Matches(parameter, property))) ?
             constructor : null;
     }
 
     private static bool Matches(IParameterSymbol parameter, IPropertySymbol property) =>
-        string.Equals(parameter.Name, property.Name, StringComparison.OrdinalIgnoreCase) &&
+        parameter.RefKind != RefKind.Out && string.Equals(parameter.Name, property.Name, StringComparison.OrdinalIgnoreCase) &&
         SymbolEqualityComparer.Default.Equals(parameter.Type, property.Type);
 
     public string Generate()

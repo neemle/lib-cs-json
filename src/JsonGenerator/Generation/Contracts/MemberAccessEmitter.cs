@@ -42,7 +42,12 @@ internal sealed class MemberAccessEmitter
         var method = root.Method(NodeType(TypeName(constructor.ContainingType)), "Access_constructor_" + index)
             .Private().Static().Extern().Attribute(attribute);
         for (int i = 0; i < constructor.Parameters.Length; i++)
-            method.Parameter(NodeType(TypeName(constructor.Parameters[i].Type)), "arg" + i);
+            method.Parameter(NodeType(TypeName(constructor.Parameters[i].Type)), "arg" + i,
+                constructor.Parameters[i].RefKind switch
+                {
+                    RefKind.Ref => "ref", RefKind.Out => "out", RefKind.In => "in",
+                    var kind when kind.ToString() == "RefReadOnlyParameter" => "ref readonly", _ => null
+                });
         method.End();
     }
 

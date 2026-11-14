@@ -91,13 +91,14 @@ sealed partial class Rewriter
             member.WhenNotNull is ConditionalAccessExpressionSyntax element &&
             element.Expression is ElementBindingExpressionSyntax && element.WhenNotNull is InvocationExpressionSyntax nestedCall &&
             NodeValueIndex(nestedCall) is int valueIndex)
-            return RewriteNodeValue(SyntaxFactory.ConditionalAccessExpression(node.Expression,
-                SyntaxFactory.ConditionalAccessExpression(member.Expression, element.Expression)), valueIndex, true, node);
+            return RewriteNodeValue(SyntaxFactory.ConditionalAccessExpression((ExpressionSyntax)Visit(node.Expression)!,
+                SyntaxFactory.ConditionalAccessExpression((ExpressionSyntax)Visit(member.Expression)!,
+                    (ExpressionSyntax)Visit(element.Expression)!)), valueIndex, true, node, false);
         if (node.WhenNotNull is ConditionalAccessExpressionSyntax nested &&
             nested.Expression is ElementBindingExpressionSyntax && nested.WhenNotNull is InvocationExpressionSyntax call &&
             NodeValueIndex(call) is int nestedIndex)
-            return RewriteNodeValue(SyntaxFactory.ConditionalAccessExpression(node.Expression, nested.Expression),
-                nestedIndex, true, node);
+            return RewriteNodeValue(SyntaxFactory.ConditionalAccessExpression((ExpressionSyntax)Visit(node.Expression)!,
+                (ExpressionSyntax)Visit(nested.Expression)!), nestedIndex, true, node, false);
         if (node.WhenNotNull is InvocationExpressionSyntax invocation && NodeValueIndex(invocation) is int index)
             return RewriteNodeValue(node.Expression, index, true, node);
         return base.VisitConditionalAccessExpression(node);
@@ -114,9 +115,10 @@ sealed partial class Rewriter
         return index;
     }
 
-    private SyntaxNode RewriteNodeValue(ExpressionSyntax value, int index, bool conditional, SyntaxNode original)
+    private SyntaxNode RewriteNodeValue(ExpressionSyntax value, int index, bool conditional, SyntaxNode original,
+        bool visitValue = true)
     {
-        var argument = SyntaxFactory.Argument((ExpressionSyntax)Visit(value)!);
+        var argument = SyntaxFactory.Argument(visitValue ? (ExpressionSyntax)Visit(value)! : value);
         return SyntaxFactory.InvocationExpression(SyntaxFactory.ParseExpression(CodecName(index) +
             (conditional ? "NullableNodeGetValue_" : "NodeGetValue_") + index),
             SyntaxFactory.ArgumentList(SyntaxFactory.SingletonSeparatedList(argument))).WithTriviaFrom(original);

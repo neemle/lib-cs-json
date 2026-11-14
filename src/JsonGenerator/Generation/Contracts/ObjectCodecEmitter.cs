@@ -67,7 +67,7 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         body.Add(NodeCall($"ValidateMembers_{index}", Cs.Symbol("state"), Cs.Symbol("options")));
         if (!parameterless)
         {
-            body.Add(Cs.Symbol("result", new() { AsAssignment = true, Value = Construction(type, properties, index) }));
+            body.Add(Cs.Symbol("result", new() { AsAssignment = true, Value = Construction(type, properties, index, body) }));
             if (type.IsReferenceType) body.Add(NodeCall("RegisterReference", Cs.Symbol("e"), Cs.Symbol("result"),
                 Cs.Symbol("options")));
             EmitCallback(body, type, "IJsonOnDeserializing", "OnDeserializing", "result");
@@ -134,12 +134,24 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
         type.InstanceConstructors.Any(c => AccessibleConstructor(c) && c.Parameters.Length == 0) &&
         properties.All(p => CanSet(p) || PopulateEmitter.CanHandleReadonly(p));
 
-    private static CsNode Construction(INamedTypeSymbol type, IPropertySymbol[] properties, int index)
+    private static CsNode Construction(INamedTypeSymbol type, IPropertySymbol[] properties, int index, List<CsNode> body)
     {
         var constructor = Constructor(type, properties) ?? throw new InvalidOperationException(
             "No supported JSON constructor for " + TypeName(type));
-        return Construct(constructor, index, constructor.Parameters.Select(parameter =>
-            ConstructorArgument(parameter, properties)).ToArray());
+        var arguments = new List<CsNode>();
+        foreach (var parameter in constructor.Parameters)
+        {
+            if (parameter.RefKind is RefKind.Ref or RefKind.Out || parameter.RefKind.ToString() == "RefReadOnlyParameter")
+            {
+                string name = "constructorArgument" + arguments.Count;
+                body.Add(Cs.Symbol(name, new() { Type = NodeType(TypeName(parameter.Type)),
+                    Value = parameter.RefKind == RefKind.Out ? DefaultValue() : ConstructorArgument(parameter, properties) }));
+                arguments.Add(Arg(parameter.RefKind == RefKind.Out ? ArgumentModifier.Out :
+                    parameter.RefKind == RefKind.Ref ? ArgumentModifier.Ref : ArgumentModifier.In, Cs.Symbol(name)));
+            }
+            else arguments.Add(ConstructorArgument(parameter, properties));
+        }
+        return Construct(constructor, index, arguments.ToArray());
     }
 
     private static CsNode Construct(IMethodSymbol constructor, int index, CsNode[] arguments) =>
@@ -174,7 +186,7 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
     }
 
     private static int PropertyIndex(IPropertySymbol[] properties, IParameterSymbol parameter) =>
-        Array.FindIndex(properties, property => string.Equals(property.Name, parameter.Name,
+        parameter.RefKind == RefKind.Out ? -1 : Array.FindIndex(properties, property => string.Equals(property.Name, parameter.Name,
             StringComparison.OrdinalIgnoreCase) && SymbolEqualityComparer.Default.Equals(property.Type, parameter.Type));
 
     internal void EmitObjectHelpers(TypeBuilder<FileBuilder> root, INamedTypeSymbol type, int index)
