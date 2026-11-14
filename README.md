@@ -40,7 +40,7 @@ The generator is included in the package and runs during the build; no explicit
 analyzer or context registration is needed. For NativeAOT builds, the package
 requires reflection metadata to be disabled and warnings to be treated as errors.
 It builds a patched JSON runtime from the matching official .NET runtime sources,
-so publishing also requires Git and network access to GitHub.
+so publishing requires network access to GitHub.
 
 ## Demo
 

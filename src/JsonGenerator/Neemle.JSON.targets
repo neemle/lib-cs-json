@@ -1,4 +1,6 @@
 <Project>
+  <UsingTask TaskName="Neemle.Json.Generator.GeneratorTask"
+             AssemblyFile="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" />
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
@@ -38,8 +40,10 @@
     </PropertyGroup>
     <Error Condition="'$(NeemleJsonRuntimeAssembly)' == '' And !$([System.Text.RegularExpressions.Regex]::IsMatch('$(_NeemleRuntimeVersion)', '^[0-9]+\.[0-9]+\.[0-9]+$'))"
            Text="The .NET runtime version could not be determined." />
-    <Exec Condition="'$(NeemleJsonRuntimeAssembly)' == ''"
-          Command="sh &quot;$(MSBuildThisFileDirectory)../tools/build-runtime.sh&quot; &quot;$(_NeemleRuntimeVersion)&quot; &quot;$(_NeemleRuntimeOutput)&quot; &quot;$(_NeemleRuntimeDirectory)&quot;" />
+    <Neemle.Json.Generator.GeneratorTask Condition="'$(NeemleJsonRuntimeAssembly)' == ''"
+      Tool="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" Mode="--build-runtime"
+      WorkingDirectory="$(MSBuildProjectDirectory)" Arg1="$(_NeemleRuntimeVersion)"
+      Arg2="$(_NeemleRuntimeOutput)" Arg3="$(_NeemleRuntimeDirectory)" />
     <PropertyGroup>
       <NeemleJsonRuntimeAssembly Condition="'$(NeemleJsonRuntimeAssembly)' == ''">$(_NeemleRuntimeOutput)</NeemleJsonRuntimeAssembly>
     </PropertyGroup>
@@ -79,13 +83,9 @@
     <WriteLinesToFile File="$(_NeemleOutput)defines.txt" Lines="$(DefineConstants)" Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)language.txt" Lines="$(LangVersion)" Overwrite="true" />
     <WriteLinesToFile File="$(_NeemleOutput)nullable.txt" Lines="$(Nullable)" Overwrite="true" />
-    <Exec Command="dotnet tool/JsonGenerator.dll --manifest sources.txt references.txt . defines.txt language.txt nullable.txt"
-          WorkingDirectory="$(_NeemleOutput)" IgnoreExitCode="true">
-      <Output TaskParameter="ExitCode" PropertyName="_NeemleGeneratorExitCode" />
-    </Exec>
+    <Neemle.Json.Generator.GeneratorTask Tool="tool/JsonGenerator.dll" Mode="--manifest" WorkingDirectory="$(_NeemleOutput)"
+      Arg1="sources.txt" Arg2="references.txt" Arg3="." Arg4="defines.txt" Arg5="language.txt" Arg6="nullable.txt" />
     <RemoveDir Directories="$(_NeemleOutput)tool/" />
-    <Error Condition="'$(_NeemleGeneratorExitCode)' != '0'"
-           Text="JSON generation failed; check the error above." />
     <ItemGroup>
       <Compile Remove="@(_NeemleInput)" />
       <_NeemleRewritten Include="$(_NeemleOutput)Source*.g.cs" />
