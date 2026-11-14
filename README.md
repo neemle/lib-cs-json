@@ -1,22 +1,19 @@
 # Neemle.JSON
 
-The current source contains changes that are not yet in the published 0.1.10 package.
+Neemle.JSON generates JSON serialization code at build time for .NET 10
+applications. It lets you use the usual `System.Text.Json` API in a statically
+linked NativeAOT application for Linux musl, without runtime reflection metadata
+or manually registering a `JsonSerializerContext`.
 
-Use ordinary `System.Text.Json` calls in a .NET NativeAOT application targeting
-static Linux musl on ARM64 or x64. The package generates JSON serialization code
-at build time for supported types, so those operations can run without runtime
-reflection metadata or a manually written `JsonSerializerContext`.
+Use it when deploying to a musl environment such as Alpine Linux on ARM64 or x64
+and you want to keep normal `JsonSerializer.Serialize` and `Deserialize` calls.
 
-This is useful when deploying a small, statically linked application to a musl
-system, such as an Alpine Linux container, and you want to keep using the usual
-`JsonSerializer.Serialize` and `Deserialize` calls.
+## Use
 
-## Example
+Add the package to your .NET 10 application:
 
-Add the package to your application project:
-
-```xml
-<PackageReference Include="Neemle.JSON" Version="0.1.10" />
+```sh
+dotnet add package Neemle.JSON --version 0.1.10
 ```
 
 Then use `System.Text.Json` normally:
@@ -38,12 +35,21 @@ public sealed class Message
 }
 ```
 
-The generator runs as an MSBuild task; no explicit analyzer or context registration
-is needed. It uses Roslyn from the .NET SDK, and NuGet restores its
-`Neemle.CSharpComposer` dependency automatically. For NativeAOT builds, the package
-requires reflection metadata to be disabled and warnings to be treated as errors.
-It builds a patched JSON runtime from the matching official .NET runtime sources,
-so publishing requires network access to GitHub.
+Publish for Linux musl with the .NET 10 NativeAOT toolchain installed:
+
+```sh
+dotnet publish -c Release -r linux-musl-arm64 \
+  -p:PublishAot=true -p:StaticExecutable=true -p:InvariantGlobalization=true
+```
+
+Use `linux-musl-x64` for x64. The package configures reflection metadata and
+fatal build warnings automatically. Publishing downloads and builds the matching
+official .NET JSON runtime, so it requires network access to GitHub.
+
+The published 0.1.10 package also requires Git and `sh` during NativeAOT
+publishing. The current source removes those package-specific requirements and
+uses an MSBuild DLL task, SDK Roslyn, and an automatically restored
+`Neemle.CSharpComposer` dependency. These changes are not yet published.
 
 ## Demo
 
