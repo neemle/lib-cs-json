@@ -724,6 +724,8 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
     private CsNode[] ExtensionWrite(ISymbol extension)
     {
         var name = NodeMember(Cs.Symbol("entry"), "Name");
+        bool readOnly = MemberType(extension) is INamedTypeSymbol map && map.OriginalDefinition.ToDisplayString() ==
+            "System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>";
         CsNode read;
         if (IsNodeExtension(extension)) read = NodeCall("JsonNode.Parse", NodeCall("entry.Value.GetRawText"));
         else
@@ -732,6 +734,18 @@ sealed class ObjectCodecEmitter(CodecEmitter owner)
             read = valueType.SpecialType == SpecialType.System_Object ?
                 NodeCall($"Read_{owner.Register(valueType)}", NodeMember(Cs.Symbol("entry"), "Value"),
                     Cs.Symbol("options"), Path(name)) : NodeCall("entry.Value.Clone");
+        }
+        if (readOnly)
+        {
+            string valueType = TypeName(((INamedTypeSymbol)MemberType(extension)).TypeArguments[1]);
+            return [NodeVar("previousData", access.Read(extension, "result")),
+                NodeVar("extensionData", NodeNew("System.Collections.Generic.Dictionary<string, " + valueType + ">")),
+                NodeIf(NullTest(Cs.Symbol("previousData"), true), NodeEach("item", Cs.Symbol("previousData"),
+                    NodeAssign(Index(Cs.Symbol("extensionData"), NodeMember(Cs.Symbol("item"), "Key")),
+                        NodeMember(Cs.Symbol("item"), "Value")))),
+                DuplicatePropertyEmitter.Check(NodeCall("extensionData.ContainsKey", name)),
+                NodeAssign(Index(Cs.Symbol("extensionData"), name), read),
+                access.Write(extension, "result", Cs.Symbol("extensionData"))];
         }
         return [NodeVar("extensionData", access.Read(extension, "result")),
             NodeIf(NullTest(Cs.Symbol("extensionData")),

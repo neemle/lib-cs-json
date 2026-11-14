@@ -15,7 +15,7 @@ sealed partial class Rewriter
             return base.VisitInvocationExpression(node);
         var method = operation.TargetMethod;
         if (method.Name is not ("Serialize" or "Deserialize" or "SerializeToUtf8Bytes" or "SerializeAsync"
-            or "DeserializeAsync" or "DeserializeAsyncEnumerable" or "SerializeToElement" or
+            or "DeserializeAsync" or "DeserializeAsyncEnumerable" or "SerializeAsyncEnumerable" or "SerializeToElement" or
                 "SerializeToDocument" or "SerializeToNode"))
             return base.VisitInvocationExpression(node);
         if (method.Parameters.Any(p => p.Type.ToDisplayString()
@@ -26,6 +26,25 @@ sealed partial class Rewriter
         ITypeSymbol? target = method.TypeArguments.Length == 1 ? method.TypeArguments[0] :
             node.ArgumentList.Arguments.Select(a => a.Expression).OfType<TypeOfExpressionSyntax>()
                 .Select(a => semantic.GetTypeInfo(a.Type).Type).FirstOrDefault();
+        if (method.Name == "SerializeAsyncEnumerable" && target is not null && asyncContexts.RegisterUnsupported(target))
+            return RewriteAsyncContextInvocation(node, operation, target, optionArguments);
+        if (target is ITypeParameterSymbol && method.Parameters[0].Type.ToDisplayString() is
+            "System.Text.Json.Utf8JsonReader" or "System.Text.Json.Utf8JsonWriter")
+        {
+            bool decode = method.Name == "Deserialize";
+            if (!decode && method.Name != "Serialize")
+                throw new InvalidOperationException("Unsupported generic JSON operation: " + node);
+            emitter.TryRegister(semantic.Compilation.GetSpecialType(SpecialType.System_Object), out _);
+            var visited = (InvocationExpressionSyntax)base.VisitInvocationExpression(node)!;
+            var type = SyntaxFactory.Argument(SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(target.Name)));
+            var arguments = visited.ArgumentList.Arguments.Insert(decode ? 1 : 2, type);
+            var call = visited.WithArgumentList(visited.ArgumentList.WithArguments(arguments)).WithExpression(
+                SyntaxFactory.ParseExpression(decode ? "global::GeneratedJson.DecodeRuntimeReader" :
+                    "global::GeneratedJson.EncodeRuntimeWriter"));
+            return decode ? SyntaxFactory.ParenthesizedExpression(SyntaxFactory.CastExpression(
+                SyntaxFactory.ParseTypeName(target.Name), SyntaxFactory.PostfixUnaryExpression(
+                    SyntaxKind.SuppressNullableWarningExpression, call))) : call;
+        }
         if (method.Name == "Serialize" && node.ArgumentList.Arguments.Count == 1 &&
             method.ReturnType.SpecialType == SpecialType.System_String && target is INamedTypeSymbol invalidTarget &&
             HasInvalidIgnore(invalidTarget))

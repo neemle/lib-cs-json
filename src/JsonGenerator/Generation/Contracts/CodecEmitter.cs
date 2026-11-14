@@ -249,7 +249,7 @@ sealed class CodecEmitter
         if (extension is not null && MemberType(extension).WithNullableAnnotation(NullableAnnotation.None).ToDisplayString() ==
             "System.Text.Json.Nodes.JsonObject") return true;
         if (extension is not null && (MemberType(extension) is not INamedTypeSymbol extType || extType.OriginalDefinition.ToDisplayString()
-                != "System.Collections.Generic.Dictionary<TKey, TValue>" ||
+                is not ("System.Collections.Generic.Dictionary<TKey, TValue>" or "System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>") ||
             extType.TypeArguments[0].SpecialType != SpecialType.System_String ||
             (extType.TypeArguments[1].ToDisplayString() != "System.Text.Json.JsonElement" &&
                 extType.TypeArguments[1].SpecialType != SpecialType.System_Object))) return false;

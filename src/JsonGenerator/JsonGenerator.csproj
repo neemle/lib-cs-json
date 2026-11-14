@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Neemle.JSON</PackageId>
-    <Version>1.10.0</Version>
+    <Version>1.11.0</Version>
     <Authors>Neemle</Authors>
     <Description>Compile-time JSON generation for .NET NativeAOT.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Include="Neemle.JSON.targets" Pack="true" PackagePath="buildTransitive/" />
     <None Include="JsonRuntime.patch" Pack="true" PackagePath="tools/" />
+    <None Include="JsonRuntime.Net11.patch" Pack="true" PackagePath="tools/" />
     <None Include="$(OutputPath)JsonGenerator.dll" Pack="true" PackagePath="tools/" />
     <None Include="../../README.md" Pack="true" PackagePath="/" />
     <None Include="../../LICENSE.TXT" Pack="true" PackagePath="/" />

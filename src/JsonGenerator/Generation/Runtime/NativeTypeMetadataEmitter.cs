@@ -25,7 +25,8 @@ internal static class NativeTypeMetadataEmitter
     internal static void Write(string directory, IEnumerable<ITypeSymbol> candidates)
     {
         var types = candidates.Select(type => type.WithNullableAnnotation(NullableAnnotation.None))
-            .Where(type => type is INamedTypeSymbol or IArrayTypeSymbol)
+            .Where(type => (type is IArrayTypeSymbol or INamedTypeSymbol { IsUnboundGenericType: false }) &&
+                !ContainsTypeParameter(type))
             .Distinct(SymbolEqualityComparer.Default).OfType<ITypeSymbol>().ToArray();
         var document = Cs.Document(CsLanguageVersion.CSharp14).Nullable(NullableMode.Enable);
         var root = document.Class("GeneratedNativeTypeMetadata").Internal().Static().Partial();
@@ -38,7 +39,7 @@ internal static class NativeTypeMetadataEmitter
             if (attributes.Length == 0) continue;
             string factory = "CreatePolymorphism_" + factories.Count;
             factories.Add(type, factory);
-            EmitPolymorphism(root, factory, attributes);
+            EmitPolymorphism(root, factory, type, attributes, types);
         }
         foreach (var chunk in types.Chunk(12))
         {
@@ -127,13 +128,14 @@ internal static class NativeTypeMetadataEmitter
     }
 
     private static void EmitPolymorphism(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> root,
-        string name, IReadOnlyList<AttributeData> attributes)
+        string name, INamedTypeSymbol owner, IReadOnlyList<AttributeData> attributes, IReadOnlyList<ITypeSymbol> types)
     {
         var body = new List<CsNode> { NodeVar("options", NodeNew("System.Text.Json.Serialization.Metadata.JsonPolymorphismOptions")) };
         foreach (var attribute in attributes)
         {
             foreach (var argument in attribute.NamedArguments)
             {
+                if (argument.Key == "InferClosedTypePolymorphism") continue;
                 CsNode value = Cs.Value(argument.Value.Value);
                 if (argument.Key == "UnknownDerivedTypeHandling")
                     value = Cast("System.Text.Json.Serialization.JsonUnknownDerivedTypeHandling", value);
@@ -142,16 +144,33 @@ internal static class NativeTypeMetadataEmitter
             if (!CodecEmitter.IsJsonAttribute(attribute, "JsonDerivedTypeAttribute")) continue;
             if (attribute.ConstructorArguments[0].Value is not ITypeSymbol derived)
                 throw new InvalidOperationException("A polymorphic type must be known at build time.");
+            if (derived is INamedTypeSymbol { IsUnboundGenericType: true } generic &&
+                generic.Arity == owner.TypeArguments.Length)
+                derived = generic.ConstructedFrom.Construct(owner.TypeArguments.ToArray());
             var args = new List<CsNode> { TypeOf(RuntimeSyntaxType(derived)) };
             if (attribute.ConstructorArguments.Length > 1 && attribute.ConstructorArguments[1].Value is { } discriminator)
                 args.Add(Cs.Value(discriminator));
             body.Add(NodeCall("options.DerivedTypes.Add", NodeNew("System.Text.Json.Serialization.Metadata.JsonDerivedType",
                 args.ToArray())));
         }
+        if (attributes.Any(attribute => attribute.NamedArguments.Any(argument =>
+                argument.Key == "InferClosedTypePolymorphism" && argument.Value.Value is true)))
+            foreach (var derived in types.OfType<INamedTypeSymbol>().Where(type =>
+                SymbolEqualityComparer.Default.Equals(type.BaseType, owner)))
+                body.Add(NodeCall("options.DerivedTypes.Add", NodeNew("System.Text.Json.Serialization.Metadata.JsonDerivedType",
+                    TypeOf(RuntimeSyntaxType(derived)), Cs.Value(derived.Name))));
         body.Add(Return(Cs.Symbol("options")));
         root.Method(NodeType("System.Text.Json.Serialization.Metadata.JsonPolymorphismOptions"), name).Private().Static()
             .Body(Cs.Tree(body.ToArray())).End();
     }
+
+    private static bool ContainsTypeParameter(ITypeSymbol type) => type switch
+    {
+        ITypeParameterSymbol => true,
+        IArrayTypeSymbol array => ContainsTypeParameter(array.ElementType),
+        INamedTypeSymbol named => named.TypeArguments.Any(ContainsTypeParameter),
+        _ => false
+    };
 
     private static string RuntimeSyntaxType(ITypeSymbol type) => type.ToDisplayString(
         SymbolDisplayFormat.FullyQualifiedFormat.WithMiscellaneousOptions(

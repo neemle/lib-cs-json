@@ -45,6 +45,14 @@ internal sealed class AsyncContextEmitter
         var document = Cs.Document(CsLanguageVersion.CSharp14).Nullable(NullableMode.Enable);
         var context = document.Class("GeneratedAsyncJsonContext").Internal().Partial()
             .Base(Cs.Type("System.Text.Json.Serialization.JsonSerializerContext"));
+        var unionCases = types.OfType<INamedTypeSymbol>().Where(type =>
+                type.DeclaringSyntaxReferences.Any(reference => reference.GetSyntax().GetType().Name == "UnionDeclarationSyntax") ||
+                type.GetAttributes().Any(attribute =>
+                    attribute.AttributeClass?.ToDisplayString() == "System.Runtime.CompilerServices.UnionAttribute"))
+            .SelectMany(type => type.InstanceConstructors.Where(constructor => constructor.Parameters.Length == 1)
+                .Select(constructor => constructor.Parameters[0].Type.WithNullableAnnotation(NullableAnnotation.None)))
+            .Distinct<ITypeSymbol>(SymbolEqualityComparer.Default).ToArray();
+        var unionNames = unionCases.Select((type, index) => FrameworkCaseName(type) ?? "NeemleUnionCase" + index).ToArray();
         var options = Cs.Type("System.Text.Json.JsonSerializerOptions");
         context.Field(Cs.Generic("System.Runtime.CompilerServices.ConditionalWeakTable", options,
             Cs.Type("GeneratedAsyncJsonContext")), "Contexts").Private().Static().ReadOnly()
@@ -56,10 +64,22 @@ internal sealed class AsyncContextEmitter
         }, Cs.LambdaParameter("value"))
             with
         { IsStatic = true };
+        if (unionCases.Length != 0) EmitUnionRoots(context, unionCases, unionNames);
+        CsNode Prepared(CsNode value) => unionCases.Length == 0 ? value : NodeCall("PrepareUnionRoots", value);
         context.Method(Cs.Type("GeneratedAsyncJsonContext"), "ForOptions").Internal().Static()
             .Parameter(options.Nullable(), "options").Body(Cs.Tree(NodeIf(NullTest(Cs.Symbol("options")),
-                Return(Cs.Symbol("Default"))), Return(NodeCall("Contexts.GetValue", Cs.Symbol("options"), create)))).End();
-        foreach (var type in types)
+                Return(Prepared(Cs.Symbol("Default")))), Return(Prepared(NodeCall("Contexts.GetValue", Cs.Symbol("options"), create))))).End();
+        for (int i = 0; i < unionCases.Length; i++)
+        {
+            var typeOf = new CsExpression(ExpressionKind.TypeOf, "", [])
+            { Type = CodecApiEmitter.NodeType(unionCases[i].ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)) };
+            var attribute = FrameworkCaseName(unionCases[i]) is null ?
+                Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf),
+                    new AttributeArgument(Cs.Literal(unionNames[i]), "TypeInfoPropertyName", false)) :
+                Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf));
+            context.Attribute(attribute);
+        }
+        foreach (var type in types.Where(type => !unionCases.Any(item => SymbolEqualityComparer.Default.Equals(item, type))))
         {
             var typeOf = new CsExpression(ExpressionKind.TypeOf, "", [])
             { Type = CodecApiEmitter.NodeType(type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)) };
@@ -75,4 +95,64 @@ internal sealed class AsyncContextEmitter
         }
     }
 
+    private static void EmitUnionRoots(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> context,
+        IReadOnlyList<ITypeSymbol> cases, IReadOnlyList<string> names)
+    {
+        var contextType = Cs.Type("GeneratedAsyncJsonContext");
+        context.Field(Cs.Generic("System.Runtime.CompilerServices.ConditionalWeakTable", contextType, Cs.Type("object")),
+            "UnionRoots").Private().Static().ReadOnly().Initialize(new CsExpression(ExpressionKind.New, "", [])).End();
+        var calls = cases.Select((type, index) => (CsNode)NodeCall("GC.KeepAlive", NodeNew(
+            "System.Func<System.Text.Json.JsonSerializerOptions, System.Text.Json.Serialization.Metadata.JsonTypeInfo<" +
+            TypeName(type) + ">>", NodeMember(Cs.Symbol("context"), "Create_" + names[index])))).ToList();
+        var methods = new List<string>();
+        foreach (CsNode[] group in calls.Chunk(3))
+        {
+            string name = "PreserveUnionCases_0_" + methods.Count;
+            methods.Add(name);
+            context.Method(Cs.Void, name).Private().Static().Parameter(contextType, "context")
+                .Body(Cs.Tree(group)).End();
+        }
+        int level = 1;
+        while (methods.Count > 3)
+        {
+            var next = new List<string>();
+            foreach (string[] group in methods.Chunk(3))
+            {
+                string name = $"PreserveUnionCases_{level}_{next.Count}";
+                next.Add(name);
+                context.Method(Cs.Void, name).Private().Static().Parameter(contextType, "context")
+                    .Body(Cs.Tree(group.Select(method => (CsNode)NodeCall(method, Cs.Symbol("context"))).ToArray())).End();
+            }
+            methods = next;
+            level++;
+        }
+        calls = methods.Select(method => (CsNode)NodeCall(method, Cs.Symbol("context"))).ToList();
+        calls.Add(Return(NodeNew("object")));
+        context.Method(Cs.Type("object"), "CreateUnionRoots").Private().Static().Parameter(contextType, "context")
+            .Body(Cs.Tree(calls.ToArray())).End();
+        context.Method(contextType, "PrepareUnionRoots").Private().Static().Parameter(contextType, "context")
+            .Body(Cs.Tree(NodeCall("UnionRoots.GetValue", Cs.Symbol("context"), Cs.Symbol("CreateUnionRoots")),
+                Return(Cs.Symbol("context")))).End();
+    }
+
+    private static string? FrameworkCaseName(ITypeSymbol type)
+    {
+        if (type.SpecialType != SpecialType.None) return type.Name;
+        if (type is IArrayTypeSymbol { ElementType.SpecialType: SpecialType.System_Byte }) return "ByteArray";
+        if (type is INamedTypeSymbol { TypeArguments.Length: 1 } memory &&
+            memory.TypeArguments[0].SpecialType == SpecialType.System_Byte)
+        {
+            return memory.OriginalDefinition.ToDisplayString() switch
+            {
+                "System.Memory<T>" => "MemoryByte",
+                "System.ReadOnlyMemory<T>" => "ReadOnlyMemoryByte",
+                _ => null
+            };
+        }
+        return type.ToDisplayString() is "System.DateTimeOffset" or "System.DateOnly" or "System.TimeOnly" or
+            "System.TimeSpan" or "System.Guid" or "System.Half" or "System.Int128" or "System.UInt128" or
+            "System.Uri" or "System.Version" or "System.Text.Json.JsonElement" or "System.Text.Json.JsonDocument" or
+            "System.Numerics.BFloat16" or "System.Numerics.Decimal32" or "System.Numerics.Decimal64" or
+            "System.Numerics.Decimal128" ? type.Name : null;
+    }
 }

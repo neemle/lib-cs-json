@@ -33,6 +33,9 @@ sealed partial class Rewriter
             return visited.WithArgumentList(visited.ArgumentList.WithArguments(visited.ArgumentList.Arguments.Replace(
                 visited.ArgumentList.Arguments[position], metadata))).NormalizeWhitespace().WithTriviaFrom(node);
         }
+        if (operation.TargetMethod.Name == "SerializeAsyncEnumerable")
+            return visited.WithArgumentList(visited.ArgumentList.AddArguments(
+                metadata.WithNameColon(SyntaxFactory.NameColon("jsonTypeInfo")))).NormalizeWhitespace().WithTriviaFrom(node);
         int insertion = operation.TargetMethod.Name.StartsWith("Serialize", StringComparison.Ordinal) &&
             operation.TargetMethod.Parameters[0].Type.ToDisplayString() == "System.IO.Stream" ? 2 : 1;
         return visited.WithArgumentList(visited.ArgumentList.WithArguments(
@@ -84,6 +87,7 @@ sealed partial class Rewriter
         if (node.Expression is not MemberAccessExpressionSyntax call ||
             semantic.GetSymbolInfo(call.Expression).Symbol is not INamedTypeSymbol serializer ||
             serializer.ToDisplayString() != "System.Text.Json.JsonSerializer") return null;
+        if (call.Name.Identifier.ValueText == "SerializeAsyncEnumerable") return null;
         for (int position = 0; position < node.ArgumentList.Arguments.Count; position++)
         {
             var expression = node.ArgumentList.Arguments[position].Expression;

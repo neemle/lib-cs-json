@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net11.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishAot>true</PublishAot>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <StaticICULinking>false</StaticICULinking>
+    <StaticExecutable>true</StaticExecutable>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <NeemlePackageVersion Condition="'$(NeemlePackageVersion)' == ''">1.11.0</NeemlePackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Neemle.JSON" Version="$(NeemlePackageVersion)" />
+  </ItemGroup>
+</Project>

@@ -86,6 +86,13 @@ sealed partial class Rewriter
 
     public override SyntaxNode? VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
     {
+        if (node.WhenNotNull is ConditionalAccessExpressionSyntax member &&
+            member.Expression is MemberBindingExpressionSyntax &&
+            member.WhenNotNull is ConditionalAccessExpressionSyntax element &&
+            element.Expression is ElementBindingExpressionSyntax && element.WhenNotNull is InvocationExpressionSyntax nestedCall &&
+            NodeValueIndex(nestedCall) is int valueIndex)
+            return RewriteNodeValue(SyntaxFactory.ConditionalAccessExpression(node.Expression,
+                SyntaxFactory.ConditionalAccessExpression(member.Expression, element.Expression)), valueIndex, true, node);
         if (node.WhenNotNull is ConditionalAccessExpressionSyntax nested &&
             nested.Expression is ElementBindingExpressionSyntax && nested.WhenNotNull is InvocationExpressionSyntax call &&
             NodeValueIndex(call) is int nestedIndex)

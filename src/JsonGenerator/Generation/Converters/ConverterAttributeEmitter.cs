@@ -18,8 +18,10 @@ internal static class ConverterAttributeEmitter
                 IsCustomAttribute(candidate));
         if (attribute?.AttributeClass is { } custom && IsCustomAttribute(custom) &&
             custom.DeclaringSyntaxReferences.Length != 0) return custom;
-        if (attribute?.ConstructorArguments.FirstOrDefault().Value is not INamedTypeSymbol converter ||
-            converter.DeclaredAccessibility is not (Accessibility.Internal or Accessibility.Public) ||
+        if (attribute?.ConstructorArguments.FirstOrDefault().Value is not INamedTypeSymbol converter) return null;
+        if (converter.IsUnboundGenericType && type is INamedTypeSymbol target && converter.Arity == target.TypeArguments.Length)
+            converter = converter.ConstructedFrom.Construct(target.TypeArguments.ToArray());
+        if (converter.DeclaredAccessibility is not (Accessibility.Internal or Accessibility.Public) ||
             converter.DeclaringSyntaxReferences.Length == 0 || converter.BaseType is not { } parent ||
             !IsFactory(converter) && (parent.OriginalDefinition.ToDisplayString() !=
                 "System.Text.Json.Serialization.JsonConverter<T>" ||

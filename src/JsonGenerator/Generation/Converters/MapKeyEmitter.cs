@@ -24,6 +24,9 @@ internal static class MapKeyEmitter
             ("System.DateOnly", "DateOnly"), ("System.TimeOnly", "TimeOnly"),
             ("System.TimeSpan", "TimeSpan"), ("System.Uri", "Uri"), ("System.Version", "Version")
         ];
+        foreach (string name in new[] { "BFloat16", "Decimal32", "Decimal64", "Decimal128" })
+            if (types.Any(type => type.ToDisplayString() == "System.Numerics." + name))
+                primitives.Add(("System.Numerics." + name, name));
         var handlers = new List<CsNode>();
         foreach (var (type, converter) in primitives)
         {

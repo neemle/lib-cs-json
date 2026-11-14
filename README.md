@@ -1,6 +1,6 @@
 # Neemle.JSON
 
-Add Neemle.JSON to a .NET 10 application and keep using `System.Text.Json` as
+Add Neemle.JSON to a .NET 10 or .NET 11 application and keep using `System.Text.Json` as
 usual. During the build, the package generates the JSON code needed for
 NativeAOT: no manual generator setup or `JsonSerializerContext` is required.
 
@@ -11,7 +11,7 @@ support.
 
 ## Use
 
-Add the dependency to your .NET 10 project:
+Add the dependency to your project:
 
 ```sh
 dotnet add package Neemle.JSON
@@ -36,7 +36,7 @@ public sealed class Message
 }
 ```
 
-Publish for Linux musl with the .NET 10 NativeAOT toolchain installed:
+Publish for Linux musl with the appropriate .NET NativeAOT toolchain installed:
 
 ```sh
 dotnet publish -c Release -r linux-musl-arm64 \
@@ -53,8 +53,8 @@ the `Neemle.CSharpComposer` dependency automatically.
 
 ## Demo
 
-The demo exercises all 103 `JsonSerializer` serialization and deserialization
-overloads in .NET 10 using a single model.
+The .NET 10 demo exercises the 103 `JsonSerializer` serialization and deserialization
+overloads. The separate .NET 11 demo also exercises newer JSON features.
 
 ## Build and try locally
 
@@ -87,7 +87,7 @@ dotnet publish samples/JsonAotDemo/JsonAotDemo.csproj -c Release -r linux-musl-a
 Use `linux-musl-x64` for x64. The demo uses invariant globalization and prints
 `JSON_DEMO_PASS` after its checks pass.
 
-CI runs the JIT and NativeAOT demos in parallel on ARM64 and x64, then compares
+CI runs the JIT and NativeAOT demos for .NET 10 and .NET 11 in parallel on ARM64 and x64, then compares
 their output as JSON values where applicable, ignoring object property order.
 
 MIT. See [LICENSE.TXT](LICENSE.TXT).
