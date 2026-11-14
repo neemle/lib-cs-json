@@ -1,8 +1,9 @@
 # Neemle.JSON
 
-Add Neemle.JSON to a .NET 10 or .NET 11 application and keep using `System.Text.Json` as
-usual. During the build, the package generates the JSON code needed for
-NativeAOT: no manual generator setup or `JsonSerializerContext` is required.
+Neemle.JSON 1.11.0 supports both .NET 10 and .NET 11. Add it to your application
+and keep using `System.Text.Json` as usual. During the build, the package generates
+the JSON code needed for NativeAOT: no manual generator setup or
+`JsonSerializerContext` is required.
 
 Use it to publish a statically linked Linux musl application, such as an Alpine
 Linux application on ARM64 or x64, without JSON runtime reflection metadata.
@@ -14,7 +15,7 @@ support.
 Add the dependency to your project:
 
 ```sh
-dotnet add package Neemle.JSON
+dotnet add package Neemle.JSON --version 1.11.0
 ```
 
 Then use `System.Text.Json` normally:
@@ -53,8 +54,9 @@ the `Neemle.CSharpComposer` dependency automatically.
 
 ## Demo
 
-The .NET 10 demo exercises the 103 `JsonSerializer` serialization and deserialization
-overloads. The separate .NET 11 demo also exercises newer JSON features.
+The [.NET 10 demo](samples/JsonAotDemo) exercises the 103 `JsonSerializer`
+serialization and deserialization overloads. The separate
+[.NET 11 demo](samples/JsonAotDemo11) also exercises features introduced in .NET 11.
 
 ## Build and try locally
 
@@ -86,6 +88,16 @@ dotnet publish samples/JsonAotDemo/JsonAotDemo.csproj -c Release -r linux-musl-a
 
 Use `linux-musl-x64` for x64. The demo uses invariant globalization and prints
 `JSON_DEMO_PASS` after its checks pass.
+
+For .NET 11, use the `mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot` image and
+the separate demo:
+
+```sh
+dotnet restore samples/JsonAotDemo11/JsonAotDemo11.csproj -r linux-musl-arm64 \
+  --source .dev-temp/packages --source https://api.nuget.org/v3/index.json
+dotnet publish samples/JsonAotDemo11/JsonAotDemo11.csproj -c Release -r linux-musl-arm64 --no-restore
+.dev-temp/bin/samples/JsonAotDemo11/JsonAotDemo11/Release/net11.0/linux-musl-arm64/publish/JsonAotDemo11
+```
 
 CI runs the JIT and NativeAOT demos for .NET 10 and .NET 11 in parallel on ARM64 and x64, then compares
 their output as JSON values where applicable, ignoring object property order.
