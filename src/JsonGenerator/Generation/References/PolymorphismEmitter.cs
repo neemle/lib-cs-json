@@ -20,15 +20,18 @@ internal static class PolymorphismEmitter
         var settings = attributes.FirstOrDefault(attribute =>
             CodecEmitter.IsJsonAttribute(attribute, "JsonPolymorphicAttribute"));
         if (settings is not null && settings.NamedArguments.Any(argument => argument.Key is not
-            ("TypeDiscriminatorPropertyName" or "IgnoreUnrecognizedTypeDiscriminators" or "UnknownDerivedTypeHandling")))
+            ("TypeDiscriminatorPropertyName" or "IgnoreUnrecognizedTypeDiscriminators" or "UnknownDerivedTypeHandling" or
+                "InferClosedTypePolymorphism")))
             return null;
         var result = new List<Variant>();
         foreach (var attribute in attributes.Where(attribute =>
             CodecEmitter.IsJsonAttribute(attribute, "JsonDerivedTypeAttribute")))
         {
             if (attribute.ConstructorArguments.Length == 0 || attribute.ConstructorArguments[0].Value is not
-                INamedTypeSymbol derived || derived.IsAbstract || derived.TypeKind != Microsoft.CodeAnalysis.TypeKind.Class ||
-                !Inherits(derived, type)) return null;
+                INamedTypeSymbol derived) return null;
+            if (derived.IsUnboundGenericType && derived.Arity == type.TypeArguments.Length)
+                derived = derived.ConstructedFrom.Construct(type.TypeArguments.ToArray());
+            if (derived.IsAbstract || derived.TypeKind != Microsoft.CodeAnalysis.TypeKind.Class || !Inherits(derived, type)) return null;
             object? discriminator = attribute.ConstructorArguments.Length > 1 ?
                 attribute.ConstructorArguments[1].Value : null;
             if (discriminator is not (null or string or int)) return null;
@@ -36,7 +39,27 @@ internal static class PolymorphismEmitter
                 discriminator is not null && Equals(item.Discriminator, discriminator))) return null;
             result.Add(new Variant(derived, discriminator));
         }
+        if (result.Count == 0 && settings?.NamedArguments.Any(argument =>
+                argument.Key == "InferClosedTypePolymorphism" && argument.Value.Value is true) == true)
+            result.AddRange(DeclaredTypes(type.ContainingAssembly.GlobalNamespace).Where(candidate =>
+                !candidate.IsAbstract && candidate.TypeParameters.Length == 0 && Inherits(candidate, type))
+                .Select(candidate => new Variant(candidate, candidate.Name)));
         return result.Count == 0 ? null : result.OrderByDescending(item => Depth(item.Type)).ToArray();
+    }
+
+    private static IEnumerable<INamedTypeSymbol> DeclaredTypes(INamespaceSymbol scope)
+    {
+        foreach (var type in scope.GetTypeMembers())
+            foreach (var nested in DeclaredTypes(type)) yield return nested;
+        foreach (var child in scope.GetNamespaceMembers())
+            foreach (var nested in DeclaredTypes(child)) yield return nested;
+    }
+
+    private static IEnumerable<INamedTypeSymbol> DeclaredTypes(INamedTypeSymbol type)
+    {
+        yield return type;
+        foreach (var child in type.GetTypeMembers())
+            foreach (var nested in DeclaredTypes(child)) yield return nested;
     }
 
     private static int Depth(INamedTypeSymbol type)

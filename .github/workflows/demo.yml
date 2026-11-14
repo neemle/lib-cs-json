@@ -67,7 +67,7 @@ jobs:
                 dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=false
                 dotnet build .dev-temp/ci/consumer/Consumer.csproj --no-restore -c Release -r "$RID" \
                   -p:PublishAot=false -o /work/.dev-temp/ci/bin
-                if ! timeout 180 dotnet /work/.dev-temp/ci/bin/Consumer.dll > /work/.dev-temp/ci/output.txt; then
+                if ! timeout -s KILL 180 dotnet /work/.dev-temp/ci/bin/Consumer.dll > /work/.dev-temp/ci/output.txt; then
                   cat /work/.dev-temp/ci/output.txt
                   exit 1
                 fi
@@ -84,7 +84,7 @@ jobs:
                   echo "The AOT executable is not statically linked." >&2
                   exit 1
                 fi
-                if ! timeout 180 /work/.dev-temp/ci/bin/Consumer > /work/.dev-temp/ci/output.txt; then
+                if ! timeout -s KILL 180 /work/.dev-temp/ci/bin/Consumer > /work/.dev-temp/ci/output.txt; then
                   cat /work/.dev-temp/ci/output.txt
                   exit 1
                 fi
