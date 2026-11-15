@@ -52,6 +52,10 @@ official .NET JSON runtime, so it requires network access to GitHub.
 The package uses an MSBuild DLL task and Roslyn from the SDK. NuGet restores
 the `Neemle.CSharpComposer` dependency automatically.
 
+For a solution with multiple projects, add Neemle.JSON to every project whose
+JSON calls need generation. Adding it only to the application does not rewrite
+the source code of referenced projects or precompiled dependencies.
+
 ## Demo
 
 The demos explicitly build with `--reflectiondata:none`. This strict setting applies
