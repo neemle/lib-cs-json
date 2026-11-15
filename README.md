@@ -1,8 +1,8 @@
 # Neemle.JSON
 
-Neemle.JSON 1.11.1 supports both .NET 10 and .NET 11. Add it to your application
-and keep using `System.Text.Json` as usual. During the build, the package generates
-the JSON code needed for NativeAOT: no manual generator setup or
+Neemle.JSON supports both .NET 10 and .NET 11. Add it to your application
+and keep using `System.Text.Json` as usual. During C# compilation, the package generates
+the JSON code needed for NativeAOT without rewriting your source files: no manual generator setup or
 `JsonSerializerContext` is required.
 
 Use it to publish a statically linked Linux musl application, such as an Alpine
@@ -15,7 +15,7 @@ support.
 Add the dependency to your project:
 
 ```sh
-dotnet add package Neemle.JSON --version 1.11.1
+dotnet add package Neemle.JSON
 ```
 
 Then use `System.Text.Json` normally:
@@ -49,12 +49,13 @@ Use `linux-musl-x64` for x64. The package disables reflection-based JSON seriali
 and makes build warnings fatal. Publishing downloads and builds the matching
 official .NET JSON runtime, so it requires network access to GitHub.
 
-The package uses an MSBuild DLL task and Roslyn from the SDK. NuGet restores
-the `Neemle.CSharpComposer` dependency automatically.
+The package registers a Roslyn source generator automatically. NuGet restores the
+`Neemle.CSharpComposer` dependency automatically. The matching JSON runtime is
+prepared by an MSBuild task when publishing for NativeAOT.
 
 For a solution with multiple projects, add Neemle.JSON to every project whose
-JSON calls need generation. Adding it only to the application does not rewrite
-the source code of referenced projects or precompiled dependencies.
+JSON calls need generation. Adding it only to the application does not generate
+code for referenced projects or precompiled dependencies.
 
 ## Demo
 

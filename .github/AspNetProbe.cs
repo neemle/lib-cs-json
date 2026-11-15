@@ -8,6 +8,9 @@ app.Urls.Add("http://127.0.0.1:0");
 app.MapGet("/json", () => TypedResults.Json(new Message("Ada"), WebProbeContext.Default.Message));
 if (JsonSerializer.IsReflectionEnabledByDefault)
     throw new InvalidOperationException("Reflection-based JSON serialization must be disabled.");
+var action = ProbeAction.Created;
+if ($"Action: {action}" != "Action: Created" || $"{action,10}" != "   Created")
+    throw new InvalidOperationException("Enum interpolation failed.");
 
 string json = JsonSerializer.Serialize(new Message("Ada"));
 if (JsonSerializer.Deserialize<Message>(json)?.Name != "Ada")
@@ -23,6 +26,7 @@ if (JsonSerializer.Deserialize<Message>(response)?.Name != "Ada")
 Console.WriteLine("ASPNET_STARTUP_PASS");
 
 public sealed record Message(string Name);
+public enum ProbeAction { Created }
 
 [JsonSerializable(typeof(Message))]
 internal partial class WebProbeContext : JsonSerializerContext;

@@ -13,13 +13,11 @@ internal static class GeneratedCodeLayout
     private const int MaxComplexity = 10;
     private const int MaxLineLength = 120;
 
-    internal static void Write(string directory, string source)
+    internal static IReadOnlyList<string> Split(string source)
     {
         var root = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(source).GetRoot();
         var type = root.Members.OfType<ClassDeclarationSyntax>().Single();
-        var output = GroupMembers(root, type);
-        for (int i = 0; i < output.Count; i++)
-            File.WriteAllText(Path.Combine(directory, $"JsonCodecs{i}.g.cs"), output[i]);
+        return GroupMembers(root, type);
     }
 
     private static List<string> GroupMembers(CompilationUnitSyntax root, ClassDeclarationSyntax type)

@@ -133,7 +133,12 @@ internal static class Program
         CheckJson("103", JsonSerializer.Serialize<Payload>(payload, typedInfo));
 
         var entry = new DemoEntry(DemoAction.Created);
-        Report("104", $"Action: {entry.Action}" == "Action: Created" && $"{entry.Action,10}" == "   Created");
+        Report("104", JsonSerializer.Deserialize<DemoEntry>(JsonSerializer.Serialize(entry))?.Action == DemoAction.Created);
+        object boxed = payload;
+        Type runtimeType = typeof(Payload);
+        string dynamicJson = JsonSerializer.Serialize(boxed, runtimeType);
+        Report("105", JsonSerializer.Deserialize(dynamicJson, runtimeType) is Payload { Name: "Ada" } &&
+            JsonSerializer.Serialize(boxed) == dynamicJson);
         Console.WriteLine(failures == 0 ? "JSON_DEMO_PASS" : $"JSON_DEMO_FAIL {failures}");
         if (failures != 0) Environment.ExitCode = 1;
     }

@@ -42,9 +42,9 @@ internal sealed class AsyncContextEmitter
             property.DeclaredAccessibility == Accessibility.Public).Any(property => ContainsAsync(property.Type, visited));
     }
 
-    internal void Write(string directory)
+    internal string? Generate()
     {
-        if (types.Count == 0) return;
+        if (types.Count == 0) return null;
         var document = Cs.Document(CsLanguageVersion.CSharp14).Nullable(NullableMode.Enable);
         var context = document.Class("GeneratedAsyncJsonContext").Internal().Partial()
             .Base(Cs.Type("System.Text.Json.Serialization.JsonSerializerContext"));
@@ -103,7 +103,7 @@ internal sealed class AsyncContextEmitter
             context.Attribute(Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf)));
         }
         context.End();
-        try { File.WriteAllText(Path.Combine(directory, "JsonCodecsAsyncContext.g.cs"), document.Render()); }
+        try { return document.Render(); }
         catch (Neemle.CSharpComposer.Validation.GenValidationException)
         {
             int index = 0;

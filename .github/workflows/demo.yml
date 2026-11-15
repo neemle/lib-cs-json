@@ -29,7 +29,7 @@ jobs:
             rid: linux-musl-x64
     steps:
       - uses: actions/checkout@v4
-      - name: Build and run demo without packaging
+      - name: Build and run demo with the local package
         env:
           DOTNET_VERSION: ${{ matrix.dotnet }}
           RID: ${{ matrix.rid }}
@@ -37,14 +37,11 @@ jobs:
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work \
             mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot \
-            dotnet build src/JsonGenerator/JsonGenerator.csproj -c Release --nologo -v:q
+            dotnet pack src/JsonGenerator/JsonGenerator.csproj -c Release -p:PackageVersion=1.11.2-ci -o /work/.dev-temp/ci/packages --nologo -v:q
           docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e DOTNET_VERSION -e RID -e MODE \
             mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}.0-alpine-aot sh -c '
               set -eu
-              mkdir -p .dev-temp/ci/consumer .dev-temp/ci/tools .dev-temp/ci/buildTransitive
-              cp .dev-temp/bin/src/JsonGenerator/JsonGenerator/Release/net10.0/JsonGenerator.dll .dev-temp/ci/tools/
-              cp src/JsonGenerator/JsonRuntime*.patch .dev-temp/ci/tools/
-              cp src/JsonGenerator/Neemle.JSON.targets .dev-temp/ci/buildTransitive/
+              mkdir -p .dev-temp/ci/consumer
               printf "%s\n" \
                 "<Project Sdk=\"Microsoft.NET.Sdk\">" \
                 "  <PropertyGroup>" \
@@ -58,14 +55,13 @@ jobs:
                 "    <OptimizationPreference>Size</OptimizationPreference>" \
                 "  </PropertyGroup>" \
                 "  <ItemGroup>" \
-                "    <PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" />" \
+                "    <PackageReference Include=\"Neemle.JSON\" Version=\"1.11.2-ci\" Condition=\"&apos;\$(MODE)&apos; == &apos;aot&apos;\" />" \
                 "    <Compile Include=\"/work/samples/JsonAotDemo${DOTNET_VERSION#10}/Program.cs\" />" \
                 "  </ItemGroup>" \
                 "  <ItemGroup><IlcArg Include=\"--reflectiondata:none\" /></ItemGroup>" \
-                "  <Import Project=\"/work/.dev-temp/ci/buildTransitive/Neemle.JSON.targets\" Condition=\"&apos;\$(MODE)&apos; == &apos;aot&apos;\" />" \
                 "</Project>" > .dev-temp/ci/consumer/Consumer.csproj
               if [ "$MODE" = jit ]; then
-                dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=false
+                dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=false --source /work/.dev-temp/ci/packages --source https://api.nuget.org/v3/index.json
                 dotnet build .dev-temp/ci/consumer/Consumer.csproj --no-restore -c Release -r "$RID" \
                   -p:PublishAot=false -o /work/.dev-temp/ci/bin
                 if ! timeout -s KILL 180 dotnet /work/.dev-temp/ci/bin/Consumer.dll > /work/.dev-temp/ci/output.txt; then
@@ -73,7 +69,7 @@ jobs:
                   exit 1
                 fi
               else
-                dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=true
+                dotnet restore .dev-temp/ci/consumer/Consumer.csproj -r "$RID" -p:PublishAot=true --source /work/.dev-temp/ci/packages --source https://api.nuget.org/v3/index.json
                 dotnet publish .dev-temp/ci/consumer/Consumer.csproj --no-restore -c Release -r "$RID" \
                   -p:PublishAot=true -o /work/.dev-temp/ci/bin
                 response="/work/.dev-temp/obj/.dev-temp/ci/consumer/Consumer/Release/net$DOTNET_VERSION.0/$RID/native/Consumer.ilc.rsp"

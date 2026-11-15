@@ -22,7 +22,7 @@ internal static class NativeTypeMetadataEmitter
     private const int Sealed = 16;
     private const int OverridesToString = 32;
 
-    internal static void Write(string directory, IEnumerable<ITypeSymbol> candidates)
+    internal static IReadOnlyList<string> Generate(IEnumerable<ITypeSymbol> candidates)
     {
         var types = candidates.Select(type => type.WithNullableAnnotation(NullableAnnotation.None))
             .Where(type => (type is IArrayTypeSymbol or INamedTypeSymbol { IsUnboundGenericType: false }) &&
@@ -93,38 +93,38 @@ internal static class NativeTypeMetadataEmitter
             .Attribute(Cs.Attribute(Cs.Type("System.Runtime.CompilerServices.ModuleInitializer")))
             .Body(Cs.Tree(locked)).End();
         root.End();
-        WriteParts(directory, document.Render());
+        return Split(document.Render());
     }
 
-    private static void WriteParts(string directory, string source)
+    private static IReadOnlyList<string> Split(string source)
     {
         var unit = CSharpSyntaxTree.ParseText(source).GetCompilationUnitRoot();
         var declaration = unit.Members.OfType<ClassDeclarationSyntax>().Single();
         var members = new List<MemberDeclarationSyntax>();
         int lines = 4;
-        int index = 0;
+        var sources = new List<string>();
         foreach (var member in declaration.Members)
         {
             int count = member.NormalizeWhitespace().ToFullString().Count(character => character == '\n') + 1;
             if (count > 450) throw new InvalidOperationException("Static metadata method is too large.");
             if (lines + count > 450)
             {
-                WritePart(directory, unit, declaration, members, index++);
+                sources.Add(Part(unit, declaration, members));
                 members.Clear();
                 lines = 4;
             }
             members.Add(member);
             lines += count;
         }
-        if (members.Count != 0) WritePart(directory, unit, declaration, members, index);
+        if (members.Count != 0) sources.Add(Part(unit, declaration, members));
+        return sources;
     }
 
-    private static void WritePart(string directory, CompilationUnitSyntax unit, ClassDeclarationSyntax declaration,
-        IEnumerable<MemberDeclarationSyntax> members, int index)
+    private static string Part(CompilationUnitSyntax unit, ClassDeclarationSyntax declaration,
+        IEnumerable<MemberDeclarationSyntax> members)
     {
         var part = unit.ReplaceNode(declaration, declaration.WithMembers(SyntaxFactory.List(members)));
-        File.WriteAllText(Path.Combine(directory, "JsonCodecsNativeMetadata_" + index + ".g.cs"),
-            part.NormalizeWhitespace().ToFullString());
+        return part.NormalizeWhitespace().ToFullString();
     }
 
     private static void EmitPolymorphism(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> root,
