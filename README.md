@@ -55,7 +55,9 @@ prepared by an MSBuild task when publishing for NativeAOT.
 
 For a solution with multiple projects, add Neemle.JSON to every project whose
 JSON calls need generation. Adding it only to the application does not generate
-code for referenced projects or precompiled dependencies.
+code for referenced projects or precompiled dependencies. JSON metadata is
+generated in each project even when that project is built without `PublishAot`;
+no additional compilation symbol is needed.
 
 For ASP.NET Core HTTP JSON, register the generated resolver before mapping endpoints:
 
