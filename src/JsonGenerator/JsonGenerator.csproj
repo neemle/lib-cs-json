@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Neemle.JSON</PackageId>
-    <Version>1.11.0</Version>
+    <Version>1.11.1</Version>
     <Authors>Neemle</Authors>
     <Description>Compile-time JSON generation for .NET NativeAOT.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

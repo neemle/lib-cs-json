@@ -1,6 +1,6 @@
 # Neemle.JSON
 
-Neemle.JSON 1.11.0 supports both .NET 10 and .NET 11. Add it to your application
+Neemle.JSON 1.11.1 supports both .NET 10 and .NET 11. Add it to your application
 and keep using `System.Text.Json` as usual. During the build, the package generates
 the JSON code needed for NativeAOT: no manual generator setup or
 `JsonSerializerContext` is required.
@@ -15,7 +15,7 @@ support.
 Add the dependency to your project:
 
 ```sh
-dotnet add package Neemle.JSON --version 1.11.0
+dotnet add package Neemle.JSON --version 1.11.1
 ```
 
 Then use `System.Text.Json` normally:
