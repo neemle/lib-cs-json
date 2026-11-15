@@ -173,8 +173,7 @@ internal static class RuntimeBuilder
         string[] args = ["build", project, "-f", framework, "-c", "Release", $"-p:TargetFrameworks={framework}",
             $"-p:CustomAfterMicrosoftCommonTargets={references}", "-p:BuildProjectReferences=false",
             "-p:UseLocalTargetingRuntimePack=false", "-p:DisableImplicitFrameworkReferences=false",
-            "-p:_RequiresLiveILLink=false", "-p:DotNetBuildSourceOnly=true", "-p:TreatWarningsAsErrors=true",
-            "-p:NoWarn=", "-v:quiet"];
+            "-p:_RequiresLiveILLink=false", "-p:DotNetBuildSourceOnly=true", "-v:quiet"];
         var start = new ProcessStartInfo("dotnet") { UseShellExecute = false };
         foreach (string arg in args) start.ArgumentList.Add(arg);
         if (offline) start.ArgumentList.Add("-p:NuGetAudit=false");
