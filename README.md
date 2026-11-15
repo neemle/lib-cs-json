@@ -72,10 +72,10 @@ outputs are not visible to other generators in the same compilation. Put generat
 models in a referenced project or include them before compilation with your existing
 pre-compile step. A producing generator that supports Roslyn's experimental
 pre-compilation output can also make its types visible on a compatible SDK. For
-example, the .NET 11 SDK supports `RegisterPreCompilationSourceOutput`; this
-requires the producing generator to use that API and generate from inputs that do
-not depend on the compilation. Ordinary generator output still requires one of the
-two approaches above.
+example, recent .NET 10 and .NET 11 SDKs support `RegisterPreCompilationSourceOutput`;
+this experimental API requires the producing generator to use it and generate from
+inputs that do not depend on the compilation. Ordinary generator output still
+requires one of the two approaches above.
 
 NativeAOT publishing normally downloads the matching .NET runtime source from
 GitHub. For an offline build, provide the matching official `runtime-<version>`
