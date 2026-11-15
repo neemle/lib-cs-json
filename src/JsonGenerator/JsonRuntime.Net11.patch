@@ -135,3 +135,53 @@ index 190eec5..0e09b4e 100644
                      break;
                  case DataType.Base64String:
                      message = SR.CannotDecodeInvalidBase64;
+diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
+index 54f79db..6fdd1c8 100644
+--- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
++++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
+@@ -60,2 +60,2 @@ namespace System.Text.Json.Serialization
+-            return EnumConverterFactory.Helpers.Create<TEnum>(_converterOptions, options, _namingPolicy);
++            return StaticEnumConverters.Create(typeof(TEnum), _namingPolicy, (_converterOptions & EnumConverterOptions.AllowNumbers) != 0);
+         }
+@@ -69,5 +69,2 @@ namespace System.Text.Json.Serialization
+     /// </remarks>
+-    [RequiresDynamicCode(
+-        "JsonStringEnumConverter cannot be statically analyzed and requires runtime code generation. " +
+-        "Applications should use the generic JsonStringEnumConverter<TEnum> instead.")]
+     public class JsonStringEnumConverter : JsonConverterFactory
+@@ -107,3 +104,3 @@ namespace System.Text.Json.Serialization
+         {
+-            return typeToConvert.IsEnum;
++            return StaticEnumConverters.Contains(typeToConvert);
+         }
+@@ -113,3 +110,3 @@ namespace System.Text.Json.Serialization
+         {
+-            if (!typeToConvert.IsEnum)
++            if (!StaticEnumConverters.Contains(typeToConvert))
+             {
+@@ -119,4 +116,24 @@ namespace System.Text.Json.Serialization
+-            return EnumConverterFactory.Create(typeToConvert, _converterOptions, _namingPolicy, options);
++            return StaticEnumConverters.Create(typeToConvert, _namingPolicy, (_converterOptions & EnumConverterOptions.AllowNumbers) != 0);
+         }
+     }
++internal static class StaticEnumConverters
++{
++    private const string Key = "Neemle.JSON.EnumConverters";
++    private static System.Collections.Generic.Dictionary<Type, Func<JsonNamingPolicy?, bool, JsonConverter>>? Registry =>
++        AppContext.GetData(Key) as System.Collections.Generic.Dictionary<Type, Func<JsonNamingPolicy?, bool, JsonConverter>>;
++
++    internal static bool Contains(Type type)
++    {
++        lock (typeof(JsonSerializer)) return Registry?.ContainsKey(type) == true;
++    }
++
++    internal static JsonConverter Create(Type type, JsonNamingPolicy? policy, bool allowInteger)
++    {
++        lock (typeof(JsonSerializer))
++        {
++            if (Registry?.TryGetValue(type, out var factory) == true) return factory(policy, allowInteger);
++        }
++        throw new NotSupportedException("Static JSON enum converter is missing.");
++    }
++}
+ }

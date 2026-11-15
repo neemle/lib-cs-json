@@ -139,6 +139,15 @@ internal static class Program
         string dynamicJson = JsonSerializer.Serialize(boxed, runtimeType);
         Report("105", JsonSerializer.Deserialize(dynamicJson, runtimeType) is Payload { Name: "Ada" } &&
             JsonSerializer.Serialize(boxed) == dynamicJson);
+        var converterOptions = new JsonSerializerOptions();
+        converterOptions.Converters.Add(new UpperConverter());
+        string converted = JsonSerializer.Serialize("hello", converterOptions);
+        Report("106", converted == "\"HELLO\"" && JsonSerializer.Deserialize<string>(converted, converterOptions) == "hello");
+        var enumOptions = new JsonSerializerOptions();
+        enumOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
+        string enumJson = JsonSerializer.Serialize(DemoAction.Created, enumOptions);
+        Report("107", enumJson == "\"created\"" &&
+            JsonSerializer.Deserialize<DemoAction>(enumJson, enumOptions) == DemoAction.Created);
         Console.WriteLine(failures == 0 ? "JSON_DEMO_PASS" : $"JSON_DEMO_FAIL {failures}");
         if (failures != 0) Environment.ExitCode = 1;
     }
@@ -217,6 +226,13 @@ public sealed class Payload
 
 public enum DemoAction { Created }
 public sealed record DemoEntry(DemoAction Action);
+public sealed class UpperConverter : JsonConverter<string>
+{
+    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        reader.GetString()?.ToLowerInvariant();
+    public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options) =>
+        writer.WriteStringValue(value.ToUpperInvariant());
+}
 
 [JsonSerializable(typeof(Payload))]
 internal partial class DemoContext : JsonSerializerContext;

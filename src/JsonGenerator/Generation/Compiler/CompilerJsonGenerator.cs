@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Operations;
 using Neemle.CSharpComposer;
 using Neemle.CSharpComposer.Model;
 using Neemle.CSharpComposer.Rendering;
@@ -23,10 +24,23 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
         var interceptors = document.Class("GeneratedInterceptors").Internal().Static();
         string assembly = compilation.AssemblyName ?? "";
         bool dynamicValues = false;
+        bool usesEnumConverter = false;
         int count = 0;
         foreach (var tree in compilation.SyntaxTrees)
         {
             var model = compilation.GetSemanticModel(tree);
+            usesEnumConverter |= tree.GetRoot(output.CancellationToken).DescendantNodes().Any(node =>
+            {
+                var type = node switch
+                {
+                    BaseObjectCreationExpressionSyntax creation => model.GetTypeInfo(creation).Type,
+                    TypeOfExpressionSyntax typeOf => model.GetTypeInfo(typeOf.Type).Type,
+                    _ => null
+                };
+                return type is INamedTypeSymbol named && named.OriginalDefinition.ToDisplayString() is
+                    "System.Text.Json.Serialization.JsonStringEnumConverter" or
+                    "System.Text.Json.Serialization.JsonStringEnumConverter<TEnum>";
+            });
             foreach (var invocation in tree.GetRoot(output.CancellationToken).DescendantNodes()
                          .OfType<InvocationExpressionSyntax>())
             {
@@ -49,7 +63,10 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
                 int index = -1;
                 bool generic = call.Type is ITypeParameterSymbol;
                 if (generic) emitter.TryRegister(compilation.GetSpecialType(SpecialType.System_Object), out _);
-                bool framework = !generic && (call.Operation == "Framework" || !emitter.TryRegister(call.Type, out index));
+                bool framework = !generic && !call.RuntimeType && (call.Operation == "Framework" ||
+                    UsesRegisteredConverters(model, invocation) || !emitter.TryRegister(call.Type, out index));
+                if (call.RuntimeType) emitter.TryRegister(call.Type, out index);
+                if (call.Type.TypeKind == Microsoft.CodeAnalysis.TypeKind.Enum) emitter.TryRegister(call.Type, out index);
                 if (framework && !contexts.RegisterUnsupported(call.Type)) continue;
                 if (!framework && call.Method.Name == "DeserializeAsyncEnumerable") emitter.RegisterAsyncSequence(index);
                 var location = model.GetInterceptableLocation(invocation, output.CancellationToken);
@@ -57,7 +74,22 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
                 AddInterceptor(interceptors, call, location, assembly, index, count++, framework, generic);
             }
         }
-        if (count == 0) return;
+        if (usesEnumConverter)
+        {
+            var candidates = compilation.SyntaxTrees.SelectMany(tree =>
+            {
+                var model = compilation.GetSemanticModel(tree);
+                return tree.GetRoot(output.CancellationToken).DescendantNodes().Select(node => node switch
+                {
+                    BaseTypeDeclarationSyntax declaration => model.GetDeclaredSymbol(declaration) as ITypeSymbol,
+                    TypeOfExpressionSyntax typeOf => model.GetTypeInfo(typeOf.Type).Type,
+                    _ => null
+                }).OfType<ITypeSymbol>();
+            });
+            foreach (var type in MetadataTypes.CollectMetadataTypes(candidates, compilation.Assembly))
+                if (type.TypeKind == Microsoft.CodeAnalysis.TypeKind.Enum) emitter.TryRegister(type, out _);
+        }
+        if (count == 0 && !usesEnumConverter) return;
         if (dynamicValues)
         {
             var candidates = new List<ITypeSymbol>();
@@ -98,7 +130,25 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
             var types = MetadataTypes.CollectMetadataTypes(declared.Concat(emitter.RegisteredTypes).Concat(contexts.KnownTypes), compilation.Assembly);
             var metadata = NativeTypeMetadataEmitter.Generate(types);
             for (int i = 0; i < metadata.Count; i++) output.AddSource($"NeemleMetadata{i}.g.cs", metadata[i]);
+            if (EnumConverterRegistryEmitter.Generate(emitter.RegisteredTypes.ToArray(), assembly) is { } enumConverters)
+                output.AddSource("NeemleEnumConverters.g.cs", enumConverters);
         }
+    }
+
+    private static bool UsesRegisteredConverters(SemanticModel model, InvocationExpressionSyntax invocation)
+    {
+        if (model.GetOperation(invocation) is not IInvocationOperation operation) return false;
+        var argument = operation.Arguments.FirstOrDefault(item => item.Parameter?.Type
+            .WithNullableAnnotation(NullableAnnotation.None).ToDisplayString() == "System.Text.Json.JsonSerializerOptions");
+        if (argument?.Syntax is not ArgumentSyntax syntax) return false;
+        if (syntax.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>()
+            .Any(item => item.Identifier.ValueText == "Converters")) return true;
+        var symbol = model.GetSymbolInfo(syntax.Expression).Symbol;
+        if (symbol is IFieldSymbol or IParameterSymbol or IPropertySymbol) return true;
+        if (symbol is not ILocalSymbol) return false;
+        return invocation.SyntaxTree.GetRoot().DescendantNodes().OfType<MemberAccessExpressionSyntax>()
+            .Any(member => member.Name.Identifier.ValueText == "Converters" &&
+                SymbolEqualityComparer.Default.Equals(model.GetSymbolInfo(member.Expression).Symbol, symbol));
     }
 
     private static void AddNodeInterceptor(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> root,

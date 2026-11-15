@@ -530,25 +530,62 @@ index 8fda42b..d79d67a 100644
                          hc.Add(value);
                      }
 diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
-index 54f79db..00afb39 100644
+index 54f79db..9c3c64f 100644
 --- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
 +++ b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonStringEnumConverter.cs
-@@ -16,6 +16,7 @@ namespace System.Text.Json.Serialization
-     public class JsonStringEnumConverter<TEnum> : JsonConverterFactory
-         where TEnum : struct, Enum
+@@ -18,2 +18,3 @@ namespace System.Text.Json.Serialization
      {
 +        internal override bool IsInternalConverterType => GetType() == typeof(JsonStringEnumConverter<TEnum>);
          private readonly JsonNamingPolicy? _namingPolicy;
-         private readonly EnumConverterOptions _converterOptions;
- 
-@@ -72,6 +73,7 @@ public JsonStringEnumConverter(JsonNamingPolicy? namingPolicy = null, bool allow
-         "Applications should use the generic JsonStringEnumConverter<TEnum> instead.")]
+@@ -60,2 +61,2 @@ namespace System.Text.Json.Serialization
+-            return EnumConverterFactory.Helpers.Create<TEnum>(_converterOptions, options, _namingPolicy);
++            return StaticEnumConverters.Create(typeof(TEnum), _namingPolicy, (_converterOptions & EnumConverterOptions.AllowNumbers) != 0);
+         }
+@@ -69,7 +70,5 @@ namespace System.Text.Json.Serialization
+     /// </remarks>
+-    [RequiresDynamicCode(
+-        "JsonStringEnumConverter cannot be statically analyzed and requires runtime code generation. " +
+-        "Applications should use the generic JsonStringEnumConverter<TEnum> instead.")]
      public class JsonStringEnumConverter : JsonConverterFactory
      {
 +        internal override bool IsInternalConverterType => GetType() == typeof(JsonStringEnumConverter);
          private readonly JsonNamingPolicy? _namingPolicy;
-         private readonly EnumConverterOptions _converterOptions;
- 
+@@ -107,3 +106,3 @@ namespace System.Text.Json.Serialization
+         {
+-            return typeToConvert.IsEnum;
++            return StaticEnumConverters.Contains(typeToConvert);
+         }
+@@ -113,3 +112,3 @@ namespace System.Text.Json.Serialization
+         {
+-            if (!typeToConvert.IsEnum)
++            if (!StaticEnumConverters.Contains(typeToConvert))
+             {
+@@ -119,4 +118,24 @@ namespace System.Text.Json.Serialization
+-            return EnumConverterFactory.Create(typeToConvert, _converterOptions, _namingPolicy, options);
++            return StaticEnumConverters.Create(typeToConvert, _namingPolicy, (_converterOptions & EnumConverterOptions.AllowNumbers) != 0);
+         }
+     }
++internal static class StaticEnumConverters
++{
++    private const string Key = "Neemle.JSON.EnumConverters";
++    private static System.Collections.Generic.Dictionary<Type, Func<JsonNamingPolicy?, bool, JsonConverter>>? Registry =>
++        AppContext.GetData(Key) as System.Collections.Generic.Dictionary<Type, Func<JsonNamingPolicy?, bool, JsonConverter>>;
++
++    internal static bool Contains(Type type)
++    {
++        lock (typeof(JsonSerializer)) return Registry?.ContainsKey(type) == true;
++    }
++
++    internal static JsonConverter Create(Type type, JsonNamingPolicy? policy, bool allowInteger)
++    {
++        lock (typeof(JsonSerializer))
++        {
++            if (Registry?.TryGetValue(type, out var factory) == true) return factory(policy, allowInteger);
++        }
++        throw new NotSupportedException("Static JSON enum converter is missing.");
++    }
++}
+ }
 diff --git a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs b/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs
 index cacd6f8..dca4eb4 100644
 --- a/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Metadata/JsonPropertyInfo.cs

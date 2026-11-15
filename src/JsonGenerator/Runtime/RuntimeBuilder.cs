@@ -90,6 +90,7 @@ internal static class RuntimeBuilder
 
     private static bool ExcludedOnNet11(string path) =>
         path.EndsWith("/JsonSerializer.Read.HandleMetadata.cs", StringComparison.Ordinal) ||
+        path.EndsWith("/Serialization/JsonStringEnumConverter.cs", StringComparison.Ordinal) ||
         path.EndsWith("/Metadata/JsonPropertyInfo.cs", StringComparison.Ordinal) ||
         path.EndsWith("/Metadata/JsonTypeInfo.cs", StringComparison.Ordinal);
 
