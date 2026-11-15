@@ -24,7 +24,7 @@ public sealed class CompilerJsonSuppressor : DiagnosticSuppressor
             if (diagnostic.Location.SourceTree is not { } tree) continue;
             var model = context.GetSemanticModel(tree);
             var node = tree.GetRoot(context.CancellationToken).FindNode(diagnostic.Location.SourceSpan);
-            if (diagnostic.Id == "IL3050" && node.DescendantNodesAndSelf().OfType<ObjectCreationExpressionSyntax>()
+            if (diagnostic.Id == "IL3050" && node.DescendantNodesAndSelf().OfType<BaseObjectCreationExpressionSyntax>()
                 .FirstOrDefault(creation => creation.Span == diagnostic.Location.SourceSpan) is { } creation &&
                 model.GetTypeInfo(creation).Type?.ToDisplayString() == "System.Text.Json.Serialization.JsonStringEnumConverter")
             {

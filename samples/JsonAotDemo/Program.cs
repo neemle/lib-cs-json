@@ -144,7 +144,8 @@ internal static class Program
         string converted = JsonSerializer.Serialize("hello", converterOptions);
         Report("106", converted == "\"HELLO\"" && JsonSerializer.Deserialize<string>(converted, converterOptions) == "hello");
         var enumOptions = new JsonSerializerOptions();
-        enumOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
+        JsonStringEnumConverter enumConverter = new(JsonNamingPolicy.CamelCase, false);
+        enumOptions.Converters.Add(enumConverter);
         string enumJson = JsonSerializer.Serialize(DemoAction.Created, enumOptions);
         Report("107", enumJson == "\"created\"" &&
             JsonSerializer.Deserialize<DemoAction>(enumJson, enumOptions) == DemoAction.Created);
