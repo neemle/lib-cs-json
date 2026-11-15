@@ -168,7 +168,8 @@ internal static class NativeTypeMetadataEmitter
     {
         ITypeParameterSymbol => true,
         IArrayTypeSymbol array => ContainsTypeParameter(array.ElementType),
-        INamedTypeSymbol named => named.TypeArguments.Any(ContainsTypeParameter),
+        INamedTypeSymbol named => named.IsUnboundGenericType || named.TypeArguments.Any(ContainsTypeParameter) ||
+            named.ContainingType is not null && ContainsTypeParameter(named.ContainingType),
         _ => false
     };
 

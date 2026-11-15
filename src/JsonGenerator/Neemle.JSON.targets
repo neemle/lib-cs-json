@@ -1,9 +1,6 @@
 <Project>
   <UsingTask TaskName="Neemle.Json.Generator.BuildRuntimeTask"
              AssemblyFile="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" />
-  <PropertyGroup Condition="'$(PublishAot)' == 'true'">
-    <DefineConstants>$(DefineConstants);NEEMLE_STATIC_NATIVE_METADATA</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup>
     <InterceptorsNamespaces>$(InterceptorsNamespaces);Neemle.Json.Interceptors</InterceptorsNamespaces>
   </PropertyGroup>

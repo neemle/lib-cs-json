@@ -11,10 +11,11 @@ internal static class HttpJsonResolverEmitter
     private const string Resolver = "System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver";
     private const string Collection = "System.Collections.Generic.List<" + Resolver + ">";
 
-    internal static string Generate(string? contextName)
+    internal static string Generate(string? contextName, bool exposed)
     {
         var document = Cs.Document(CsLanguageVersion.CSharp14).Namespace("Neemle.Json").Nullable(NullableMode.Enable);
-        var root = document.Class("GeneratedJsonResolver").Internal().Sealed().Base(NodeType(Resolver));
+        var root = document.Class("GeneratedJsonResolver").Sealed().Base(NodeType(Resolver));
+        if (exposed) root.Internal(); else root.Modifier("file");
         root.Field(NodeType("GeneratedJsonResolver"), "Instance").Internal().Static().ReadOnly()
             .Initialize(new CsExpression(ExpressionKind.New, "", []) { Type = Cs.Type("GeneratedJsonResolver") }).End();
         var read = new List<CsNode>

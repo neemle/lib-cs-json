@@ -15,6 +15,9 @@ app.MapGet("/array", () => new[] { new Message("Ada") });
 app.MapPost("/echo", (Message message) => Results.Json(message));
 app.MapGet("/response", async (HttpContext context) => await context.Response.WriteAsJsonAsync(new Message("Ada")));
 app.MapPost("/body", async (HttpRequest request) => TypedResults.Ok(await request.ReadFromJsonAsync<Message>()));
+#if MULTI_ASSEMBLY
+app.MapGet("/foreign", () => TypedResults.Ok<LibraryBase>(new LibraryChild("Ada")));
+#endif
 if (JsonSerializer.IsReflectionEnabledByDefault)
     throw new InvalidOperationException("Reflection-based JSON serialization must be disabled.");
 var action = ProbeAction.Created;
@@ -39,6 +42,12 @@ string responseJson = await client.GetStringAsync(new Uri(new Uri(app.Urls.Singl
 using var body = new StringContent("{\"name\":\"Ada\"}", System.Text.Encoding.UTF8, "application/json");
 using var bodyReply = await client.PostAsync(new Uri(new Uri(app.Urls.Single()), "/body"), body);
 var bodyMessage = await bodyReply.Content.ReadFromJsonAsync<Message>();
+#if MULTI_ASSEMBLY
+string foreign = await client.GetStringAsync(new Uri(new Uri(app.Urls.Single()), "/foreign"));
+using var foreignJson = JsonDocument.Parse(foreign);
+if (foreignJson.RootElement.GetProperty("name").GetString() != "Ada")
+    throw new InvalidOperationException("Cross-assembly HTTP JSON failed.");
+#endif
 await app.StopAsync();
 var webOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 if (JsonSerializer.Deserialize<Message[]>(arrayJson, webOptions)?[0].Name != "Ada" ||

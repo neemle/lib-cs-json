@@ -32,10 +32,24 @@ public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
         bool dynamicValues = false;
         bool usesEnumConverter = false;
         var interceptedTypes = new List<ITypeSymbol>();
+        var contextRoots = new List<ITypeSymbol>();
         int count = 0;
         foreach (var tree in compilation.SyntaxTrees)
         {
             var model = compilation.GetSemanticModel(tree);
+            foreach (var declaration in tree.GetRoot(output.CancellationToken).DescendantNodes().OfType<TypeDeclarationSyntax>())
+                if (model.GetDeclaredSymbol(declaration, output.CancellationToken) is { } declared)
+                {
+                    if (MetadataTypes.CandidateVisible(declared, compilation.Assembly) && declared.GetAttributes().Any(item =>
+                            CodecEmitter.IsJsonAttribute(item, "JsonPolymorphicAttribute") ||
+                            CodecEmitter.IsJsonAttribute(item, "JsonDerivedTypeAttribute") ||
+                            CodecEmitter.IsJsonAttribute(item, "JsonConverterAttribute"))) contextRoots.Add(declared);
+                    foreach (var contextAttribute in declared.GetAttributes().Where(item =>
+                                 CodecEmitter.IsJsonAttribute(item, "JsonSerializableAttribute")))
+                        if (contextAttribute.ConstructorArguments.Length != 0 &&
+                            contextAttribute.ConstructorArguments[0].Kind != TypedConstantKind.Array &&
+                            contextAttribute.ConstructorArguments[0].Value is ITypeSymbol root) contextRoots.Add(root);
+                }
             usesEnumConverter |= tree.GetRoot(output.CancellationToken).DescendantNodes().Any(node =>
             {
                 var type = node switch
@@ -114,15 +128,16 @@ public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
                 var model = compilation.GetSemanticModel(tree);
                 return tree.GetRoot(output.CancellationToken).DescendantNodes().Select(node => node switch
                 {
-                    BaseTypeDeclarationSyntax declaration => model.GetDeclaredSymbol(declaration) as ITypeSymbol,
+                    EnumDeclarationSyntax declaration => model.GetDeclaredSymbol(declaration) as ITypeSymbol,
                     TypeOfExpressionSyntax typeOf => model.GetTypeInfo(typeOf.Type).Type,
                     _ => null
                 }).OfType<ITypeSymbol>();
             });
-            foreach (var type in MetadataTypes.CollectMetadataTypes(candidates, compilation.Assembly))
+            foreach (var type in MetadataTypes.CollectMetadataTypes(candidates.Where(type =>
+                         type.TypeKind == Microsoft.CodeAnalysis.TypeKind.Enum).Concat(contextRoots).Concat(interceptedTypes), compilation.Assembly))
                 if (type.TypeKind == Microsoft.CodeAnalysis.TypeKind.Enum) emitter.TryRegister(type, out _);
         }
-        if (count == 0 && !usesEnumConverter && !hasHttp) return;
+        if (count == 0 && !usesEnumConverter && !hasHttp && contextRoots.Count == 0) return;
         if (dynamicValues)
         {
             var candidates = new List<ITypeSymbol>();
@@ -153,19 +168,15 @@ public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
         if (contextSource is not null)
             GenerateFrameworkContext(output, compilation, parseOptions, contextSource, contextName);
         if (hasHttp || contextSource is not null) output.AddSource("NeemleHttpResolver.g.cs", HttpJsonResolverEmitter.Generate(
-            contextSource is null ? null : contextName));
+            contextSource is null ? null : contextName, hasHttp && compilation.Options.OutputKind is
+                (OutputKind.ConsoleApplication or OutputKind.WindowsApplication)));
         var sources = GeneratedCodeLayout.Split(emitter.Generate());
         for (int i = 0; i < sources.Count; i++)
             output.AddSource($"NeemleCodecs{i}.g.cs", GeneratedAssemblyNames.Rename(sources[i], assembly, parseOptions));
-        if (parseOptions.PreprocessorSymbolNames.Contains("NEEMLE_STATIC_NATIVE_METADATA", StringComparer.Ordinal))
+        var types = MetadataTypes.CollectMetadataTypes(contextRoots.Concat(interceptedTypes).Concat(emitter.RegisteredTypes)
+            .Concat(contexts.KnownTypes), compilation.Assembly).ToArray();
+        if (types.Length != 0)
         {
-            var declared = compilation.SyntaxTrees.SelectMany(tree =>
-            {
-                var model = compilation.GetSemanticModel(tree);
-                return tree.GetRoot(output.CancellationToken).DescendantNodes().OfType<BaseTypeDeclarationSyntax>()
-                    .Select(node => model.GetDeclaredSymbol(node)).OfType<ITypeSymbol>();
-            });
-            var types = MetadataTypes.CollectMetadataTypes(declared.Concat(interceptedTypes).Concat(emitter.RegisteredTypes).Concat(contexts.KnownTypes), compilation.Assembly);
             var metadata = NativeTypeMetadataEmitter.Generate(types);
             for (int i = 0; i < metadata.Count; i++) output.AddSource($"NeemleMetadata{i}.g.cs", metadata[i]);
             if (EnumConverterRegistryEmitter.Generate(emitter.RegisteredTypes.ToArray(), assembly) is { } enumConverters)

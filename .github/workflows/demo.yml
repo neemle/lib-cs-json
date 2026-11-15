@@ -127,14 +127,22 @@ jobs:
           docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e DOTNET_VERSION -e RID \
             mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}.0-alpine-aot sh -c '
               set -eu
-              mkdir -p .dev-temp/aspnet/tools .dev-temp/aspnet/buildTransitive .dev-temp/aspnet/app
+              mkdir -p .dev-temp/aspnet/tools .dev-temp/aspnet/buildTransitive .dev-temp/aspnet/app .dev-temp/aspnet/lib
               cp .dev-temp/bin/src/JsonGenerator/JsonGenerator/Release/net10.0/JsonGenerator.dll .dev-temp/aspnet/tools/
               cp src/JsonGenerator/JsonRuntime*.patch .dev-temp/aspnet/tools/
               cp src/JsonGenerator/Neemle.JSON.targets .dev-temp/aspnet/buildTransitive/
               printf "%s\n" \
+                "<Project Sdk=\"Microsoft.NET.Sdk\">" \
+                "<PropertyGroup><TargetFramework>net$DOTNET_VERSION.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><DefineConstants>LIBRARY</DefineConstants><TreatWarningsAsErrors>true</TreatWarningsAsErrors><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault></PropertyGroup>" \
+                "<ItemGroup><PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" /><Compile Include=\"/work/.github/MultiAssemblyProbe.cs\" /></ItemGroup>" \
+                "<Import Project=\"../buildTransitive/Neemle.JSON.targets\" />" \
+                "</Project>" > .dev-temp/aspnet/lib/Lib.csproj
+              dotnet restore .dev-temp/aspnet/lib/Lib.csproj -p:PublishAot=false
+              dotnet build .dev-temp/aspnet/lib/Lib.csproj -c Release -p:PublishAot=false --no-restore -o /work/.dev-temp/aspnet/precompiled
+              printf "%s\n" \
                 "<Project Sdk=\"Microsoft.NET.Sdk.Web\">" \
-                "<PropertyGroup><TargetFramework>net$DOTNET_VERSION.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><InvariantGlobalization>true</InvariantGlobalization><StaticExecutable>true</StaticExecutable><TreatWarningsAsErrors>true</TreatWarningsAsErrors><IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault><EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator></PropertyGroup>" \
-                "<ItemGroup><PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" /><Compile Include=\"/work/.github/AspNetProbe.cs\" /></ItemGroup>" \
+                "<PropertyGroup><TargetFramework>net$DOTNET_VERSION.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><DefineConstants>MULTI_ASSEMBLY</DefineConstants><InvariantGlobalization>true</InvariantGlobalization><StaticExecutable>true</StaticExecutable><TreatWarningsAsErrors>true</TreatWarningsAsErrors><IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault><EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator></PropertyGroup>" \
+                "<ItemGroup><PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" /><Compile Include=\"/work/.github/AspNetProbe.cs\" /><Reference Include=\"Lib\"><HintPath>../precompiled/Lib.dll</HintPath></Reference></ItemGroup>" \
                 "<Import Project=\"../buildTransitive/Neemle.JSON.targets\" />" \
                 "</Project>" > .dev-temp/aspnet/app/App.csproj
               dotnet restore .dev-temp/aspnet/app/App.csproj -r "$RID" -p:PublishAot=false
@@ -187,7 +195,7 @@ jobs:
                 if [ "$project" = app ]; then properties="<OutputType>Exe</OutputType>"; fi
                 if [ "$project" = lib ]; then properties="<DefineConstants>LIBRARY</DefineConstants>"; fi
                 reference=""
-                if [ "$project" = app ]; then reference="<ProjectReference Include=\"../lib/Lib.csproj\" />"; fi
+                if [ "$project" = app ]; then reference="<Reference Include=\"Lib\"><HintPath>../precompiled/Lib.dll</HintPath></Reference>"; fi
                 printf "%s\n" \
                   "<Project Sdk=\"Microsoft.NET.Sdk\">" \
                   "<PropertyGroup><TargetFramework>net$DOTNET_VERSION.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><TreatWarningsAsErrors>true</TreatWarningsAsErrors><IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors><JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault><WarningsNotAsErrors>CS0618</WarningsNotAsErrors><NoWarn>CS1591</NoWarn>$properties</PropertyGroup>" \
@@ -196,6 +204,8 @@ jobs:
                   "<Import Project=\"../buildTransitive/Neemle.JSON.targets\" />" \
                   "</Project>" > ".dev-temp/multi/$project/$(if [ "$project" = app ]; then echo App; else echo Lib; fi).csproj"
               done
+              dotnet restore .dev-temp/multi/lib/Lib.csproj -p:PublishAot=false
+              dotnet build .dev-temp/multi/lib/Lib.csproj -c Release -p:PublishAot=false --no-restore -o /work/.dev-temp/multi/precompiled
               dotnet restore .dev-temp/multi/app/App.csproj -r "$RID" -p:PublishAot=false
               dotnet build .dev-temp/multi/app/App.csproj -c Release -r "$RID" -p:PublishAot=false --no-restore -o /work/.dev-temp/multi/jit
               dotnet /work/.dev-temp/multi/jit/App.dll > /work/.dev-temp/multi/jit.txt
