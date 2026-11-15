@@ -25,7 +25,8 @@ sealed partial class Rewriter(SemanticModel semantic, CodecEmitter emitter, Asyn
         if (!staticNativeMetadata || semantic.GetTypeInfo(node.Expression).Type?.TypeKind != TypeKind.Enum) return visited;
         if (node.FormatClause is not null)
             throw new InvalidOperationException("Formatted enum interpolation requires generated formatting support.");
-        return visited.WithExpression(RewriteEnumDisplay(node.Expression, visited.Expression));
+        return visited.WithExpression(SyntaxFactory.ParenthesizedExpression(
+            RewriteEnumDisplay(node.Expression, visited.Expression).WithoutTrivia()).WithTriviaFrom(visited.Expression));
     }
 
     private ExpressionSyntax RewriteEnumDisplay(ExpressionSyntax original, ExpressionSyntax visited)

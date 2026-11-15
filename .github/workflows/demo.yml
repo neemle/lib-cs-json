@@ -61,6 +61,7 @@ jobs:
                 "    <PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" />" \
                 "    <Compile Include=\"/work/samples/JsonAotDemo${DOTNET_VERSION#10}/Program.cs\" />" \
                 "  </ItemGroup>" \
+                "  <ItemGroup><IlcArg Include=\"--reflectiondata:none\" /></ItemGroup>" \
                 "  <Import Project=\"/work/.dev-temp/ci/buildTransitive/Neemle.JSON.targets\" Condition=\"&apos;\$(MODE)&apos; == &apos;aot&apos;\" />" \
                 "</Project>" > .dev-temp/ci/consumer/Consumer.csproj
               if [ "$MODE" = jit ]; then
@@ -99,9 +100,116 @@ jobs:
           include-hidden-files: true
           retention-days: 1
 
+  aspnet:
+    name: ASP.NET startup / .NET ${{ matrix.dotnet }} / ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet: [10, 11]
+        arch: [arm64, x64]
+        include:
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+            rid: linux-musl-arm64
+          - arch: x64
+            runner: ubuntu-24.04
+            rid: linux-musl-x64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify startup and JSON without global metadata restrictions
+        env:
+          DOTNET_VERSION: ${{ matrix.dotnet }}
+          RID: ${{ matrix.rid }}
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot \
+            dotnet build src/JsonGenerator/JsonGenerator.csproj -c Release --nologo -v:q
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e DOTNET_VERSION -e RID \
+            mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}.0-alpine-aot sh -c '
+              set -eu
+              mkdir -p .dev-temp/aspnet/tools .dev-temp/aspnet/buildTransitive .dev-temp/aspnet/app
+              cp .dev-temp/bin/src/JsonGenerator/JsonGenerator/Release/net10.0/JsonGenerator.dll .dev-temp/aspnet/tools/
+              cp src/JsonGenerator/JsonRuntime*.patch .dev-temp/aspnet/tools/
+              cp src/JsonGenerator/Neemle.JSON.targets .dev-temp/aspnet/buildTransitive/
+              printf "%s\n" \
+                "<Project Sdk=\"Microsoft.NET.Sdk.Web\">" \
+                "<PropertyGroup><TargetFramework>net$DOTNET_VERSION.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><InvariantGlobalization>true</InvariantGlobalization><StaticExecutable>true</StaticExecutable></PropertyGroup>" \
+                "<ItemGroup><PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" /><Compile Include=\"/work/.github/AspNetProbe.cs\" /></ItemGroup>" \
+                "<Import Project=\"../buildTransitive/Neemle.JSON.targets\" />" \
+                "</Project>" > .dev-temp/aspnet/app/App.csproj
+              dotnet restore .dev-temp/aspnet/app/App.csproj -r "$RID" -p:PublishAot=false
+              dotnet build .dev-temp/aspnet/app/App.csproj -c Release -r "$RID" -p:PublishAot=false --no-restore -o /work/.dev-temp/aspnet/jit
+              dotnet /work/.dev-temp/aspnet/jit/App.dll > /work/.dev-temp/aspnet/jit.txt
+              dotnet restore .dev-temp/aspnet/app/App.csproj -r "$RID" -p:PublishAot=true
+              dotnet publish .dev-temp/aspnet/app/App.csproj -c Release -r "$RID" -p:PublishAot=true --no-restore -o /work/.dev-temp/aspnet/aot
+              response="/work/.dev-temp/obj/.dev-temp/aspnet/app/App/Release/net$DOTNET_VERSION.0/$RID/native/App.ilc.rsp"
+              if grep -Fxq -- --reflectiondata:none "$response"; then exit 1; fi
+              grep -Fxq -- --warnaserror "$response"
+              timeout -s KILL 180 /work/.dev-temp/aspnet/aot/App > /work/.dev-temp/aspnet/aot.txt
+              grep -Fxq ASPNET_STARTUP_PASS /work/.dev-temp/aspnet/aot.txt
+              cmp /work/.dev-temp/aspnet/jit.txt /work/.dev-temp/aspnet/aot.txt
+            '
+
+  multiple-assemblies:
+    name: Multiple assemblies / .NET ${{ matrix.dotnet }} / ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet: [10, 11]
+        arch: [arm64, x64]
+        include:
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+            rid: linux-musl-arm64
+          - arch: x64
+            runner: ubuntu-24.04
+            rid: linux-musl-x64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test both projects with the generator
+        env:
+          DOTNET_VERSION: ${{ matrix.dotnet }}
+          RID: ${{ matrix.rid }}
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work \
+            mcr.microsoft.com/dotnet/sdk:10.0-alpine-aot \
+            dotnet build src/JsonGenerator/JsonGenerator.csproj -c Release --nologo -v:q
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" -w /work -e DOTNET_VERSION -e RID \
+            mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}.0-alpine-aot sh -c '
+              set -eu
+              mkdir -p .dev-temp/multi/tools .dev-temp/multi/buildTransitive .dev-temp/multi/app .dev-temp/multi/lib
+              cp .dev-temp/bin/src/JsonGenerator/JsonGenerator/Release/net10.0/JsonGenerator.dll .dev-temp/multi/tools/
+              cp src/JsonGenerator/JsonRuntime*.patch .dev-temp/multi/tools/
+              cp src/JsonGenerator/Neemle.JSON.targets .dev-temp/multi/buildTransitive/
+              for project in app lib; do
+                properties=""
+                if [ "$project" = app ]; then properties="<OutputType>Exe</OutputType>"; fi
+                if [ "$project" = lib ]; then properties="<DefineConstants>LIBRARY</DefineConstants>"; fi
+                reference=""
+                if [ "$project" = app ]; then reference="<ProjectReference Include=\"../lib/Lib.csproj\" />"; fi
+                printf "%s\n" \
+                  "<Project Sdk=\"Microsoft.NET.Sdk\">" \
+                  "<PropertyGroup><TargetFramework>net$DOTNET_VERSION.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems>$properties</PropertyGroup>" \
+                  "<ItemGroup><PackageReference Include=\"Neemle.CSharpComposer\" Version=\"0.5.0\" /><Compile Include=\"/work/.github/MultiAssemblyProbe.cs\" />$reference</ItemGroup>" \
+                  "<ItemGroup><IlcArg Include=\"--reflectiondata:none\" /></ItemGroup>" \
+                  "<Import Project=\"../buildTransitive/Neemle.JSON.targets\" />" \
+                  "</Project>" > ".dev-temp/multi/$project/$(if [ "$project" = app ]; then echo App; else echo Lib; fi).csproj"
+              done
+              dotnet restore .dev-temp/multi/app/App.csproj -r "$RID" -p:PublishAot=false
+              dotnet build .dev-temp/multi/app/App.csproj -c Release -r "$RID" -p:PublishAot=false --no-restore -o /work/.dev-temp/multi/jit
+              dotnet /work/.dev-temp/multi/jit/App.dll > /work/.dev-temp/multi/jit.txt
+              dotnet restore .dev-temp/multi/app/App.csproj -r "$RID" -p:PublishAot=true
+              dotnet publish .dev-temp/multi/app/App.csproj -c Release -r "$RID" -p:PublishAot=true -p:StaticExecutable=true -p:InvariantGlobalization=true --no-restore -o /work/.dev-temp/multi/aot
+              timeout -s KILL 180 /work/.dev-temp/multi/aot/App > /work/.dev-temp/multi/aot.txt
+              grep -Fxq MULTI_ASSEMBLY_PASS /work/.dev-temp/multi/aot.txt
+              cmp /work/.dev-temp/multi/jit.txt /work/.dev-temp/multi/aot.txt
+            '
+
   compare:
     name: Compare JIT and AOT / .NET ${{ matrix.dotnet }} / ${{ matrix.arch }}
-    needs: demo
+    needs: [demo, multiple-assemblies, aspnet]
     runs-on: ubuntu-latest
     strategy:
       matrix:

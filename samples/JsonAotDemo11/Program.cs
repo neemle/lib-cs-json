@@ -134,6 +134,7 @@ internal static class Program
         CheckJson("103", JsonSerializer.Serialize<Payload>(payload, typedInfo));
 
         await CheckNet11();
+        Report("137", $"Action: {DemoAction.Created}" == "Action: Created");
         Console.WriteLine(failures == 0 ? "JSON_DEMO_PASS" : $"JSON_DEMO_FAIL {failures}");
         if (failures != 0) Environment.ExitCode = 1;
     }
@@ -310,6 +311,8 @@ public sealed class Payload
 {
     public string Name { get; set; } = "";
 }
+
+public enum DemoAction { Created }
 
 [JsonSerializable(typeof(Payload))]
 [JsonSerializable(typeof(int))]

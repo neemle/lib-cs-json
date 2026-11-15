@@ -12,7 +12,6 @@
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
   <ItemGroup Condition="'$(PublishAot)' == 'true'">
-    <IlcArg Include="--reflectiondata:none" />
     <LinkerArg Include="-Wl,--fatal-warnings" />
   </ItemGroup>
   <PropertyGroup Condition="'$(PublishAot)' == 'true'">
@@ -63,9 +62,9 @@
     <ItemGroup>
       <_NeemleInput Include="@(Compile)" />
       <_NeemleReferences Include="@(ReferencePathWithRefAssemblies)" />
-      <_NeemleComposer Include="@(ReferenceCopyLocalPaths)"
-        Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Neemle.CSharpComposer' and
-                   '%(ReferenceCopyLocalPaths.Filename)' == 'Neemle.CSharpComposer'" />
+      <_NeemleComposer Include="@(ReferencePath)"
+        Condition="'%(ReferencePath.NuGetPackageId)' == 'Neemle.CSharpComposer' and
+                   '%(ReferencePath.Filename)' == 'Neemle.CSharpComposer'" />
     </ItemGroup>
     <Error Condition="'@(_NeemleInput->Count())' == '0' Or '@(_NeemleReferences->Count())' == '0'"
            Text="JSON generation requires source files and resolved references." />
@@ -82,7 +81,7 @@
     <Neemle.Json.Generator.GenerateTask SourcesFile="$(_NeemleOutput)sources.txt"
       ReferencesFile="$(_NeemleOutput)references.txt" OutputDirectory="$(_NeemleOutput)"
       DefinesFile="$(_NeemleOutput)defines.txt" LanguageFile="$(_NeemleOutput)language.txt"
-      NullableFile="$(_NeemleOutput)nullable.txt" RoslynDirectory="$(MSBuildToolsPath)/Roslyn/bincore"
+      NullableFile="$(_NeemleOutput)nullable.txt" AssemblyName="$(AssemblyName)" RoslynDirectory="$(MSBuildToolsPath)/Roslyn/bincore"
       ComposerReferences="@(_NeemleComposer)" />
     <ItemGroup>
       <Compile Remove="@(_NeemleInput)" />
@@ -98,18 +97,12 @@
       <Output TaskParameter="Lines" ItemName="_NeemleIlcArguments" />
     </ReadLinesFromFile>
     <ItemGroup>
-      <_NeemleReflection Include="@(_NeemleIlcArguments)"
-        Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(_NeemleIlcArguments.Identity)',
-          '(?i)^--reflectiondata'))" />
-      <_NeemleReflectionNone Include="@(_NeemleReflection)"
-        Condition="'%(_NeemleReflection.Identity)' == '--reflectiondata:none'" />
       <_NeemleFatal Include="@(_NeemleIlcArguments)" Condition="'%(_NeemleIlcArguments.Identity)' == '--warnaserror'" />
       <_NeemleSuppressed Include="@(_NeemleIlcArguments)"
         Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(_NeemleIlcArguments.Identity)',
           '(?i)^--(nowarn|nowarnaserr|notrimwarn|noaotwarn|resilient)'))" />
     </ItemGroup>
-    <Error Condition="'@(_NeemleReflection->Count())' != '1' Or '@(_NeemleReflectionNone->Count())' != '1' Or
-                      '@(_NeemleFatal->Count())' != '1' Or '@(_NeemleSuppressed)' != ''"
-           Text="NativeAOT requires --reflectiondata:none and fatal, unsuppressed warnings." />
+    <Error Condition="'@(_NeemleFatal->Count())' != '1' Or '@(_NeemleSuppressed)' != ''"
+           Text="NativeAOT requires fatal, unsuppressed warnings." />
   </Target>
 </Project>

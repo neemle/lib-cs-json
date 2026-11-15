@@ -8,7 +8,7 @@ namespace Neemle.Json.Generator;
 internal static class SourceGenerator
 {
     internal static void Generate(string sourcesFile, string referencesFile, string output,
-        string definesFile, string languageFile, string nullableFile)
+        string definesFile, string languageFile, string nullableFile, string assemblyName)
     {
         var sources = File.ReadAllLines(sourcesFile).Where(File.Exists).ToArray();
         var references = File.ReadAllLines(referencesFile).Where(File.Exists);
@@ -87,6 +87,8 @@ internal static class SourceGenerator
         if (symbols.Contains("NEEMLE_STATIC_NATIVE_METADATA", StringComparer.Ordinal))
             NativeTypeMetadataEmitter.Write(output, CollectMetadataTypes(
                 candidates.Concat(emitter.RegisteredTypes).Concat(asyncContexts.KnownTypes), compilation.Assembly));
+
+        GeneratedAssemblyNames.Rewrite(output, assemblyName, new CSharpParseOptions(language, preprocessorSymbols: symbols));
 
     }
 

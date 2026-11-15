@@ -12,6 +12,7 @@ public sealed class GenerateTask : Microsoft.Build.Utilities.Task
     [Required] public string DefinesFile { get; set; } = "";
     [Required] public string LanguageFile { get; set; } = "";
     [Required] public string NullableFile { get; set; } = "";
+    [Required] public string AssemblyName { get; set; } = "";
     [Required] public string RoslynDirectory { get; set; } = "";
     [Required] public ITaskItem[] ComposerReferences { get; set; } = [];
 
@@ -21,7 +22,8 @@ public sealed class GenerateTask : Microsoft.Build.Utilities.Task
         context.Resolving += Resolve;
         try
         {
-            SourceGenerator.Generate(SourcesFile, ReferencesFile, OutputDirectory, DefinesFile, LanguageFile, NullableFile);
+            SourceGenerator.Generate(SourcesFile, ReferencesFile, OutputDirectory, DefinesFile, LanguageFile, NullableFile,
+                AssemblyName);
             return true;
         }
         catch (Exception error) { Log.LogErrorFromException(error, true); return false; }

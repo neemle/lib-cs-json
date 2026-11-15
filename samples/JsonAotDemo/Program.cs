@@ -132,6 +132,7 @@ internal static class Program
         CheckJson("102", JsonSerializer.Serialize<Payload>(payload, options));
         CheckJson("103", JsonSerializer.Serialize<Payload>(payload, typedInfo));
 
+        Report("104", $"Action: {DemoAction.Created}" == "Action: Created");
         Console.WriteLine(failures == 0 ? "JSON_DEMO_PASS" : $"JSON_DEMO_FAIL {failures}");
         if (failures != 0) Environment.ExitCode = 1;
     }
@@ -207,6 +208,8 @@ public sealed class Payload
 {
     public string Name { get; set; } = "";
 }
+
+public enum DemoAction { Created }
 
 [JsonSerializable(typeof(Payload))]
 internal partial class DemoContext : JsonSerializerContext;

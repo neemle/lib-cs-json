@@ -15,4 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Neemle.JSON" Version="$(NeemlePackageVersion)" />
   </ItemGroup>
+  <ItemGroup Condition="'$(PublishAot)' == 'true'">
+    <IlcArg Include="--reflectiondata:none" />
+  </ItemGroup>
 </Project>
