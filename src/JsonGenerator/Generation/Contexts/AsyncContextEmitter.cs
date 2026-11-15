@@ -102,8 +102,11 @@ internal sealed class AsyncContextEmitter(string contextName = "GeneratedAsyncJs
         {
             var typeOf = new CsExpression(ExpressionKind.TypeOf, "", [])
             { Type = CodecApiEmitter.NodeType(type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)) };
-            context.Attribute(Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf),
-                new AttributeArgument(Cs.Literal("NeemleType" + typeIndex++), "TypeInfoPropertyName", false)));
+            var attribute = FrameworkCaseName(type) is null ?
+                Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf),
+                    new AttributeArgument(Cs.Literal("NeemleType" + typeIndex++), "TypeInfoPropertyName", false)) :
+                Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf));
+            context.Attribute(attribute);
         }
         context.End();
         try { return document.Render(); }

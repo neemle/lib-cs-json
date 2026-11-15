@@ -10,6 +10,16 @@ namespace Neemle.Json.Generator;
 
 public sealed partial class CompilerJsonGenerator
 {
+    private static bool IsGenericConverter(ITypeParameterSymbol parameter)
+    {
+        if (parameter.TypeParameterKind != TypeParameterKind.Type || parameter.ContainingType is not { } owner)
+            return false;
+        for (INamedTypeSymbol? type = owner; type is not null; type = type.BaseType)
+            if (type.OriginalDefinition.ToDisplayString() == "System.Text.Json.Serialization.JsonConverter<T>")
+                return true;
+        return false;
+    }
+
     private static void AddHttpJsonInterceptor(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> root,
         IMethodSymbol original, InterceptableLocation location, string assembly, int position)
     {
@@ -40,13 +50,20 @@ public sealed partial class CompilerJsonGenerator
             var web = NodeNew("System.Text.Json.JsonSerializerOptions", NodeMember(TypeRef("System.Text.Json.JsonSerializerDefaults"), "Web"));
             var context = NodeCall(GeneratedAssemblyNames.Name("GeneratedAsyncJsonContext", assembly) + ".ForOptions",
                 NodeBinary(CsOperator.Coalesce, options, web));
-            var info = Cs.Symbol("GetTypeInfo", new() { Target = context, AsCall = true,
-                Arguments = Cs.Compound(TypeOf(TypeName(original.TypeArguments[0]))) });
+            var info = Cs.Symbol("GetTypeInfo", new()
+            {
+                Target = context,
+                AsCall = true,
+                Arguments = Cs.Compound(TypeOf(TypeName(original.TypeArguments[0])))
+            });
             var metadata = Cast("System.Text.Json.Serialization.Metadata.JsonTypeInfo<" + TypeName(original.TypeArguments[0]) + ">", NonNull(info));
             if (optionIndex >= 0) arguments[optionIndex + 1] = metadata; else arguments.Insert(1, metadata);
         }
-        var target = Cs.Symbol(original.Name, new() { Target = TypeRef(original.ContainingType.ToDisplayString()),
-            TypeArguments = new[] { NodeType(TypeName(original.TypeArguments[0])) } });
+        var target = Cs.Symbol(original.Name, new()
+        {
+            Target = TypeRef(original.ContainingType.ToDisplayString()),
+            TypeArguments = new[] { NodeType(TypeName(original.TypeArguments[0])) }
+        });
         var call = Cs.Symbol(new() { AsCall = true, Target = target, Arguments = Cs.Compound(arguments.ToArray()) });
         method.Body(original.ReturnsVoid ? Cs.Tree(call) : Cs.Tree(Return(call))).End();
     }

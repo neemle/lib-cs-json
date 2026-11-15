@@ -68,8 +68,11 @@ public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
                     AddNodeInterceptor(interceptors, nodeMethod, nodeLocation, assembly, nodeIndex, count++);
                     continue;
                 }
-                if (invocation.Expression is MemberAccessExpressionSyntax { Name.Identifier.ValueText: "Add",
-                    Expression: MemberAccessExpressionSyntax { Name.Identifier.ValueText: "TypeClassifiers" } classifiers } &&
+                if (invocation.Expression is MemberAccessExpressionSyntax
+                    {
+                        Name.Identifier.ValueText: "Add",
+                        Expression: MemberAccessExpressionSyntax { Name.Identifier.ValueText: "TypeClassifiers" } classifiers
+                    } &&
                     model.GetSymbolInfo(classifiers).Symbol is IPropertySymbol property &&
                     property.ContainingType.ToDisplayString() == "System.Text.Json.JsonSerializerOptions")
                     contexts.RegisterOptionsClassifier();
@@ -81,6 +84,11 @@ public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
                         method.Parameters.Any(item => item.Type.WithNullableAnnotation(NullableAnnotation.None)
                             .ToDisplayString() == "System.Text.Json.JsonSerializerOptions"))
                         output.ReportDiagnostic(Diagnostic.Create(OpenGeneric, invocation.GetLocation(), parameter.Name));
+                    continue;
+                }
+                if (call.Type is ITypeParameterSymbol genericParameter && !IsGenericConverter(genericParameter))
+                {
+                    output.ReportDiagnostic(Diagnostic.Create(OpenGeneric, invocation.GetLocation(), genericParameter.Name));
                     continue;
                 }
                 if (call.Type is not ITypeParameterSymbol) interceptedTypes.Add(call.Type);
@@ -190,8 +198,12 @@ public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
             if (framework && type == "System.Text.Json.JsonSerializerOptions")
             {
                 var info = NodeCall(GeneratedAssemblyNames.Name("GeneratedAsyncJsonContext", assembly) + ".ForOptions", Cs.Symbol(name));
-                var lookup = Cs.Symbol("GetTypeInfo", new() { Target = info, AsCall = true,
-                    Arguments = Cs.Compound(TypeOf(TypeName(call.Type))) });
+                var lookup = Cs.Symbol("GetTypeInfo", new()
+                {
+                    Target = info,
+                    AsCall = true,
+                    Arguments = Cs.Compound(TypeOf(TypeName(call.Type)))
+                });
                 string metadata = call.Method.IsGenericMethod ?
                     "System.Text.Json.Serialization.Metadata.JsonTypeInfo<" + TypeName(call.Type) + ">" :
                     "System.Text.Json.Serialization.Metadata.JsonTypeInfo";
