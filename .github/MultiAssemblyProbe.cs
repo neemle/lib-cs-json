@@ -33,6 +33,11 @@ if (Library.Encode() != "{\"Name\":\"ADA\"}" || encoded != Library.Encode() ||
 string polymorphic = Library.EncodePolymorphic();
 if (JsonSerializer.Deserialize<LibraryBase>(polymorphic, options) is not LibraryChild { Name: "ada" })
     throw new InvalidOperationException("Cross-assembly polymorphism failed.");
+string first = JsonSerializer.Serialize(new First.Entry("Ada"), options);
+string second = JsonSerializer.Serialize(new Second.Entry("Ada"), options);
+if (JsonSerializer.Deserialize<First.Entry>(first, options)?.Name != "ada" ||
+    JsonSerializer.Deserialize<Second.Entry>(second, options)?.Name != "ada")
+    throw new InvalidOperationException("JSON metadata type names collided.");
 Console.WriteLine("MULTI_ASSEMBLY_PASS");
 #endif
 
@@ -43,3 +48,8 @@ internal sealed class UpperConverter : JsonConverter<string>
     public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value.ToUpperInvariant());
 }
+
+#if LIBRARY
+namespace First { public sealed record Entry(string Name); }
+namespace Second { public sealed record Entry(string Name); }
+#endif

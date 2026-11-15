@@ -96,11 +96,14 @@ internal sealed class AsyncContextEmitter(string contextName = "GeneratedAsyncJs
                 Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf));
             context.Attribute(attribute);
         }
-        foreach (var type in types.Where(type => !unionCases.Any(item => SymbolEqualityComparer.Default.Equals(item, type))))
+        int typeIndex = 0;
+        foreach (var type in ExpandPolymorphicTypes().Where(type =>
+                     !unionCases.Any(item => SymbolEqualityComparer.Default.Equals(item, type))))
         {
             var typeOf = new CsExpression(ExpressionKind.TypeOf, "", [])
             { Type = CodecApiEmitter.NodeType(type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)) };
-            context.Attribute(Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf)));
+            context.Attribute(Cs.Attribute(Cs.Type("System.Text.Json.Serialization.JsonSerializable"), Cs.Arg(typeOf),
+                new AttributeArgument(Cs.Literal("NeemleType" + typeIndex++), "TypeInfoPropertyName", false)));
         }
         context.End();
         try { return document.Render(); }
@@ -109,6 +112,30 @@ internal sealed class AsyncContextEmitter(string contextName = "GeneratedAsyncJs
             int index = 0;
             foreach (var type in types) Console.Error.WriteLine("Generated context type " + index++ + ": " + type);
             throw;
+        }
+    }
+
+    private IEnumerable<ITypeSymbol> ExpandPolymorphicTypes()
+    {
+        var seen = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+        var pending = new Queue<ITypeSymbol>(types);
+        while (pending.TryDequeue(out var type))
+        {
+            type = type.WithNullableAnnotation(NullableAnnotation.None);
+            if (!seen.Add(type)) continue;
+            yield return type;
+            if (type is not INamedTypeSymbol named) continue;
+            foreach (var attribute in named.GetAttributes().Where(attribute =>
+                         CodecEmitter.IsJsonAttribute(attribute, "JsonDerivedTypeAttribute")))
+            {
+                if (attribute.ConstructorArguments.Length == 0 ||
+                    attribute.ConstructorArguments[0].Kind == TypedConstantKind.Array ||
+                    attribute.ConstructorArguments[0].Value is not ITypeSymbol derived) continue;
+                if (derived is INamedTypeSymbol { IsUnboundGenericType: true } generic &&
+                    generic.Arity == named.TypeArguments.Length)
+                    derived = generic.ConstructedFrom.Construct(named.TypeArguments.ToArray());
+                pending.Enqueue(derived);
+            }
         }
     }
 
