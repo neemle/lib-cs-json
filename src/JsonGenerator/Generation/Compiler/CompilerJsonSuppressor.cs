@@ -32,6 +32,11 @@ public sealed class CompilerJsonSuppressor : DiagnosticSuppressor
                 continue;
             }
             var invocation = node.FirstAncestorOrSelf<InvocationExpressionSyntax>();
+            if (invocation is not null && HttpJsonCall.TryCreate(model, invocation, out _))
+            {
+                context.ReportSuppression(Suppression.Create(diagnostic.Id == "IL2026" ? Trim : Aot, diagnostic));
+                continue;
+            }
             if (invocation is null || !CompilerJsonCall.TryCreate(model, invocation, out var call)) continue;
             var emitter = new CodecEmitter(model.Compilation.GetSpecialType(SpecialType.System_Object));
             if (call.Type is not ITypeParameterSymbol && !emitter.TryRegister(call.Type, out _) &&

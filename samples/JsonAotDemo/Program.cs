@@ -149,6 +149,11 @@ internal static class Program
         string enumJson = JsonSerializer.Serialize(DemoAction.Created, enumOptions);
         Report("107", enumJson == "\"created\"" &&
             JsonSerializer.Deserialize<DemoAction>(enumJson, enumOptions) == DemoAction.Created);
+        var large = new LargeRecord(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39);
+        Report("108", JsonSerializer.Deserialize<LargeRecord>(JsonSerializer.Serialize(large)) == large);
+        List<string?> nullable = ["value", null];
+        Report("109", JsonSerializer.Deserialize<List<string?>>(JsonSerializer.Serialize(nullable))?.Count == 2);
         Console.WriteLine(failures == 0 ? "JSON_DEMO_PASS" : $"JSON_DEMO_FAIL {failures}");
         if (failures != 0) Environment.ExitCode = 1;
     }
@@ -227,6 +232,15 @@ public sealed class Payload
 
 public enum DemoAction { Created }
 public sealed record DemoEntry(DemoAction Action);
+[DemoIndex("first", "second")]
+public sealed record LargeRecord(int P01, int P02, int P03, int P04, int P05, int P06, int P07, int P08, int P09,
+    int P10, int P11, int P12, int P13, int P14, int P15, int P16, int P17, int P18, int P19, int P20,
+    int P21, int P22, int P23, int P24, int P25, int P26, int P27, int P28, int P29, int P30,
+    int P31, int P32, int P33, int P34, int P35, int P36, int P37, int P38, int P39);
+public sealed class DemoIndexAttribute(params string[] names) : Attribute
+{
+    public string[] Names { get; } = names;
+}
 public sealed class UpperConverter : JsonConverter<string>
 {
     public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>

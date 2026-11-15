@@ -18,16 +18,31 @@ internal static class MetadataTypes
             foreach (var argument in named.TypeArguments) pending.Enqueue(argument);
             if (named.BaseType is not null) pending.Enqueue(named.BaseType);
             foreach (var contract in named.Interfaces) pending.Enqueue(contract);
-            if (!SymbolEqualityComparer.Default.Equals(named.ContainingAssembly, assembly)) continue;
+            if (!SymbolEqualityComparer.Default.Equals(named.ContainingAssembly, assembly) &&
+                named.ContainingAssembly.Identity.Name.StartsWith("System", StringComparison.Ordinal)) continue;
             foreach (var member in named.GetMembers())
             {
                 if (member is IPropertySymbol { IsStatic: false } property) pending.Enqueue(property.Type);
                 if (member is IFieldSymbol { IsStatic: false, IsImplicitlyDeclared: false } field) pending.Enqueue(field.Type);
             }
             foreach (var attribute in named.GetAttributes())
+            {
                 foreach (var argument in attribute.ConstructorArguments)
-                    if (argument.Value is ITypeSymbol attributeType) pending.Enqueue(attributeType);
+                    EnqueueArgument(argument, pending);
+                foreach (var argument in attribute.NamedArguments)
+                    EnqueueArgument(argument.Value, pending);
+            }
         }
+    }
+
+    private static void EnqueueArgument(TypedConstant argument, Queue<ITypeSymbol> pending)
+    {
+        if (argument.Kind == TypedConstantKind.Array)
+        {
+            if (argument.IsNull) return;
+            foreach (var item in argument.Values) EnqueueArgument(item, pending);
+        }
+        else if (argument.Value is ITypeSymbol type) pending.Enqueue(type);
     }
 
     internal static bool CandidateVisible(ITypeSymbol type, IAssemblySymbol assembly)

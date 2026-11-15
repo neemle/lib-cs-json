@@ -6,7 +6,7 @@ using static Neemle.Json.Generator.CodecApiEmitter;
 
 namespace Neemle.Json.Generator;
 
-internal sealed class AsyncContextEmitter
+internal sealed class AsyncContextEmitter(string contextName = "GeneratedAsyncJsonContext")
 {
     private readonly HashSet<ITypeSymbol> types = new(SymbolEqualityComparer.Default);
     private bool hasOptionsClassifier;
@@ -46,7 +46,7 @@ internal sealed class AsyncContextEmitter
     {
         if (types.Count == 0) return null;
         var document = Cs.Document(CsLanguageVersion.CSharp14).Nullable(NullableMode.Enable);
-        var context = document.Class("GeneratedAsyncJsonContext").Internal().Partial()
+        var context = document.Class(contextName).Internal().Partial()
             .Base(Cs.Type("System.Text.Json.Serialization.JsonSerializerContext"));
         if (hasOptionsClassifier)
         {
@@ -70,20 +70,20 @@ internal sealed class AsyncContextEmitter
         var unionNames = unionCases.Select((type, index) => FrameworkCaseName(type) ?? "NeemleUnionCase" + index).ToArray();
         var options = Cs.Type("System.Text.Json.JsonSerializerOptions");
         context.Field(Cs.Generic("System.Runtime.CompilerServices.ConditionalWeakTable", options,
-            Cs.Type("GeneratedAsyncJsonContext")), "Contexts").Private().Static().ReadOnly()
+            Cs.Type(contextName)), "Contexts").Private().Static().ReadOnly()
             .Initialize(new CsExpression(ExpressionKind.New, "", [])).End();
         var create = Cs.Lambda(new CsBody
         {
-            Tree = Cs.Tree(Return(NodeNew("GeneratedAsyncJsonContext",
+            Tree = Cs.Tree(Return(NodeNew(contextName,
             NodeNew("System.Text.Json.JsonSerializerOptions", Cs.Symbol("value")))))
         }, Cs.LambdaParameter("value"))
             with
         { IsStatic = true };
         if (unionCases.Length != 0) EmitUnionRoots(context, unionCases, unionNames);
         CsNode Prepared(CsNode value) => unionCases.Length == 0 ? value : NodeCall("PrepareUnionRoots", value);
-        context.Method(Cs.Type("GeneratedAsyncJsonContext"), "ForOptions").Internal().Static()
+        context.Method(Cs.Type(contextName), "ForOptions").Internal().Static()
             .Parameter(options.Nullable(), "options").Body(Cs.Tree(NodeIf(NullTest(Cs.Symbol("options")),
-                Return(Prepared(hasOptionsClassifier ? NodeNew("GeneratedAsyncJsonContext",
+                Return(Prepared(hasOptionsClassifier ? NodeNew(contextName,
                     NodeNew("System.Text.Json.JsonSerializerOptions")) : Cs.Symbol("Default")))),
                 Return(Prepared(NodeCall("Contexts.GetValue", Cs.Symbol("options"), create))))).End();
         for (int i = 0; i < unionCases.Length; i++)
@@ -112,10 +112,10 @@ internal sealed class AsyncContextEmitter
         }
     }
 
-    private static void EmitUnionRoots(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> context,
+    private void EmitUnionRoots(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> context,
         IReadOnlyList<ITypeSymbol> cases, IReadOnlyList<string> names)
     {
-        var contextType = Cs.Type("GeneratedAsyncJsonContext");
+        var contextType = Cs.Type(contextName);
         context.Field(Cs.Generic("System.Runtime.CompilerServices.ConditionalWeakTable", contextType, Cs.Type("object")),
             "UnionRoots").Private().Static().ReadOnly().Initialize(new CsExpression(ExpressionKind.New, "", [])).End();
         var calls = cases.Select((type, index) => (CsNode)NodeCall("GC.KeepAlive", NodeNew(

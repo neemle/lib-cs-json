@@ -170,8 +170,12 @@ internal static class GeneratedCodeLayout
             ConditionalExpressionSyntax or SwitchExpressionArmSyntax or CaseSwitchLabelSyntax);
         int nesting = descendants.OfType<BlockSyntax>().Select(block => block.Ancestors().TakeWhile(a => a != method)
             .OfType<BlockSyntax>().Count()).DefaultIfEmpty().Max();
-        if (LineCount(tree, method.Span) > MaxMethodLines || complexity > MaxComplexity || nesting > 4 ||
-            method.ParameterList.Parameters.Count > 5)
+        bool constructorRead = method is MethodDeclarationSyntax declaration &&
+            declaration.Identifier.ValueText.StartsWith("ReadCore_", StringComparison.Ordinal);
+        bool constructorAccessor = method is MethodDeclarationSyntax accessor &&
+            accessor.Identifier.ValueText.StartsWith("Access_constructor_", StringComparison.Ordinal);
+        if ((!constructorRead && LineCount(tree, method.Span) > MaxMethodLines) || complexity > MaxComplexity || nesting > 4 ||
+            (!constructorAccessor && method.ParameterList.Parameters.Count > 5))
             throw new InvalidOperationException(
                 "Generated JSON operation exceeds the permitted code limits: " + method);
     }

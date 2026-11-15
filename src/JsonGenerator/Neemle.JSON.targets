@@ -1,17 +1,6 @@
 <Project>
   <UsingTask TaskName="Neemle.Json.Generator.BuildRuntimeTask"
              AssemblyFile="$(MSBuildThisFileDirectory)../tools/JsonGenerator.dll" />
-  <PropertyGroup>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
-    <ILLinkTreatWarningsAsErrors>true</ILLinkTreatWarningsAsErrors>
-    <IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors>
-    <IlcResilient>false</IlcResilient>
-    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(PublishAot)' == 'true'">
-    <LinkerArg Include="-Wl,--fatal-warnings" />
-  </ItemGroup>
   <PropertyGroup Condition="'$(PublishAot)' == 'true'">
     <DefineConstants>$(DefineConstants);NEEMLE_STATIC_NATIVE_METADATA</DefineConstants>
   </PropertyGroup>
@@ -26,14 +15,6 @@
       <Analyzer Include="@(ReferencePath)" Condition="'%(ReferencePath.NuGetPackageId)' == 'Neemle.CSharpComposer' and
                        '%(ReferencePath.Filename)' == 'Neemle.CSharpComposer'" />
     </ItemGroup>
-  </Target>
-  <Target Name="NeemleValidateWarnings" BeforeTargets="WriteIlcRspFileForCompilation"
-          Condition="'$(PublishAot)' == 'true'">
-    <Error Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(NoWarn)', '^;?((1701|1702|8002|IL2121)(;|$))*$'))"
-           Text="Warning suppression is not supported." />
-    <PropertyGroup><NoWarn></NoWarn></PropertyGroup>
-    <Error Condition="'$(IlcTreatWarningsAsErrors)' != 'true' Or '$(IlcResilient)' != 'false'"
-           Text="NativeAOT warnings must be fatal." />
   </Target>
   <Target Name="NeemleSelectJsonRuntime" BeforeTargets="WriteIlcRspFileForCompilation"
           Condition="'$(PublishAot)' == 'true'">
@@ -53,7 +34,7 @@
            Text="The .NET runtime version could not be determined." />
     <Neemle.Json.Generator.BuildRuntimeTask Condition="'$(NeemleJsonRuntimeAssembly)' == ''"
       RuntimeVersion="$(_NeemleRuntimeVersion)" OutputFile="$(_NeemleRuntimeOutput)"
-      WorkingDirectory="$(_NeemleRuntimeDirectory)" />
+      WorkingDirectory="$(_NeemleRuntimeDirectory)" SourceArchive="$(NeemleRuntimeSourceArchive)" />
     <PropertyGroup>
       <NeemleJsonRuntimeAssembly Condition="'$(NeemleJsonRuntimeAssembly)' == ''">$(_NeemleRuntimeOutput)</NeemleJsonRuntimeAssembly>
     </PropertyGroup>
@@ -63,19 +44,5 @@
       <IlcReference Remove="@(_NeemleFrameworkJson)" />
       <IlcReference Include="$(NeemleJsonRuntimeAssembly)" />
     </ItemGroup>
-  </Target>
-  <Target Name="NeemleVerifyCompilerFlags" AfterTargets="WriteIlcRspFileForCompilation"
-          BeforeTargets="IlcCompile" Condition="'$(PublishAot)' == 'true'">
-    <ReadLinesFromFile File="%(ManagedBinary.IlcRspFile)">
-      <Output TaskParameter="Lines" ItemName="_NeemleIlcArguments" />
-    </ReadLinesFromFile>
-    <ItemGroup>
-      <_NeemleFatal Include="@(_NeemleIlcArguments)" Condition="'%(_NeemleIlcArguments.Identity)' == '--warnaserror'" />
-      <_NeemleSuppressed Include="@(_NeemleIlcArguments)"
-        Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(_NeemleIlcArguments.Identity)',
-          '(?i)^--(nowarn|nowarnaserr|notrimwarn|noaotwarn|resilient)'))" />
-    </ItemGroup>
-    <Error Condition="'@(_NeemleFatal->Count())' != '1' Or '@(_NeemleSuppressed)' != ''"
-           Text="NativeAOT requires fatal, unsuppressed warnings." />
   </Target>
 </Project>

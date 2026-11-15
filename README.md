@@ -45,9 +45,9 @@ dotnet publish -c Release -r linux-musl-arm64 \
   -p:JsonSerializerIsReflectionEnabledByDefault=false
 ```
 
-Use `linux-musl-x64` for x64. The package disables reflection-based JSON serialization
-and makes build warnings fatal. Publishing downloads and builds the matching
-official .NET JSON runtime, so it requires network access to GitHub.
+Use `linux-musl-x64` for x64. Set `JsonSerializerIsReflectionEnabledByDefault=false`
+to disable reflection-based JSON serialization. Warning settings remain under the
+application's control.
 
 The package registers a Roslyn source generator automatically. NuGet restores the
 `Neemle.CSharpComposer` dependency automatically. The matching JSON runtime is
@@ -56,6 +56,27 @@ prepared by an MSBuild task when publishing for NativeAOT.
 For a solution with multiple projects, add Neemle.JSON to every project whose
 JSON calls need generation. Adding it only to the application does not generate
 code for referenced projects or precompiled dependencies.
+
+For ASP.NET Core HTTP JSON, register the generated resolver before mapping endpoints:
+
+```csharp
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, Neemle.Json.GeneratedJsonResolver.Instance));
+```
+
+The resolver combines generated metadata registered by loaded projects. Add the
+package to each project that needs JSON generation. Roslyn generators do not see
+other generators' output in the same compilation; put generated models in a
+referenced project so they are compiled before the consuming project.
+
+NativeAOT publishing normally downloads the matching .NET runtime source from
+GitHub. For an offline build, provide the matching official `runtime-<version>`
+source archive with `-p:NeemleRuntimeSourceArchive=/path/to/runtime.tar.gz`, or
+reuse a previously built matching patched assembly with
+`-p:NeemleJsonRuntimeAssembly=/path/to/System.Text.Json.dll`. Restore the SDK and
+NuGet dependencies beforehand. The archive or assembly must match the runtime
+version and the Neemle.JSON package used for the build. Source builds using the
+offline archive disable the NuGet vulnerability-data query for that build.
 
 ## Demo
 

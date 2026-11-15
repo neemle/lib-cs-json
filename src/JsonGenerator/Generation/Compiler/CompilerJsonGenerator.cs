@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Operations;
 using Neemle.CSharpComposer;
 using Neemle.CSharpComposer.Model;
 using Neemle.CSharpComposer.Rendering;
@@ -10,21 +9,29 @@ using static Neemle.Json.Generator.CodecApiEmitter;
 namespace Neemle.Json.Generator;
 
 [Generator(LanguageNames.CSharp)]
-public sealed class CompilerJsonGenerator : IIncrementalGenerator
+public sealed partial class CompilerJsonGenerator : IIncrementalGenerator
 {
+    private static readonly DiagnosticDescriptor OpenGeneric = new("NEEMLE001", "Unsupported generic JSON call",
+        "JSON call for open type parameter '{0}' needs a JsonTypeInfo<T> or a concrete type", "Neemle.JSON",
+        DiagnosticSeverity.Error, true);
+
     public void Initialize(IncrementalGeneratorInitializationContext context) =>
         context.RegisterSourceOutput(context.CompilationProvider, Generate);
 
     private static void Generate(SourceProductionContext output, Compilation compilation)
     {
         var emitter = new CodecEmitter(compilation.GetSpecialType(SpecialType.System_Object));
-        var contexts = new AsyncContextEmitter();
+        string assembly = compilation.AssemblyName ?? "";
+        string contextName = GeneratedAssemblyNames.Name("GeneratedAsyncJsonContext", assembly);
+        var contexts = new AsyncContextEmitter(contextName);
+        bool hasHttp = compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Builder.WebApplication") is not null;
+        foreach (var type in HttpJsonRoots.Find(compilation, output.CancellationToken)) contexts.RegisterUnsupported(type);
         var document = Cs.Document(CsLanguageVersion.CSharp14).Namespace("Neemle.Json.Interceptors")
             .Nullable(NullableMode.Enable);
         var interceptors = document.Class("GeneratedInterceptors").Internal().Static();
-        string assembly = compilation.AssemblyName ?? "";
         bool dynamicValues = false;
         bool usesEnumConverter = false;
+        var interceptedTypes = new List<ITypeSymbol>();
         int count = 0;
         foreach (var tree in compilation.SyntaxTrees)
         {
@@ -44,6 +51,14 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
             foreach (var invocation in tree.GetRoot(output.CancellationToken).DescendantNodes()
                          .OfType<InvocationExpressionSyntax>())
             {
+                if (HttpJsonCall.TryCreate(model, invocation, out var httpMethod) &&
+                    contexts.RegisterUnsupported(httpMethod.TypeArguments[0]) &&
+                    model.GetInterceptableLocation(invocation, output.CancellationToken) is { } httpLocation)
+                {
+                    interceptedTypes.Add(httpMethod.TypeArguments[0]);
+                    AddHttpJsonInterceptor(interceptors, httpMethod, httpLocation, assembly, count++);
+                    continue;
+                }
                 if (model.GetSymbolInfo(invocation).Symbol is IMethodSymbol { Name: "GetValue", TypeArguments.Length: 1 } nodeMethod &&
                     nodeMethod.ContainingType.ToDisplayString() == "System.Text.Json.Nodes.JsonNode" &&
                     emitter.TryRegister(nodeMethod.TypeArguments[0], out int nodeIndex) &&
@@ -58,7 +73,17 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
                     model.GetSymbolInfo(classifiers).Symbol is IPropertySymbol property &&
                     property.ContainingType.ToDisplayString() == "System.Text.Json.JsonSerializerOptions")
                     contexts.RegisterOptionsClassifier();
-                if (!CompilerJsonCall.TryCreate(model, invocation, out var call)) continue;
+                if (!CompilerJsonCall.TryCreate(model, invocation, out var call))
+                {
+                    if (model.GetSymbolInfo(invocation).Symbol is IMethodSymbol method &&
+                        method.ContainingType.ToDisplayString() == "System.Text.Json.JsonSerializer" &&
+                        method.TypeArguments.FirstOrDefault() is ITypeParameterSymbol parameter &&
+                        method.Parameters.Any(item => item.Type.WithNullableAnnotation(NullableAnnotation.None)
+                            .ToDisplayString() == "System.Text.Json.JsonSerializerOptions"))
+                        output.ReportDiagnostic(Diagnostic.Create(OpenGeneric, invocation.GetLocation(), parameter.Name));
+                    continue;
+                }
+                if (call.Type is not ITypeParameterSymbol) interceptedTypes.Add(call.Type);
                 dynamicValues |= call.Type.SpecialType == SpecialType.System_Object;
                 int index = -1;
                 bool generic = call.Type is ITypeParameterSymbol;
@@ -89,7 +114,7 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
             foreach (var type in MetadataTypes.CollectMetadataTypes(candidates, compilation.Assembly))
                 if (type.TypeKind == Microsoft.CodeAnalysis.TypeKind.Enum) emitter.TryRegister(type, out _);
         }
-        if (count == 0 && !usesEnumConverter) return;
+        if (count == 0 && !usesEnumConverter && !hasHttp) return;
         if (dynamicValues)
         {
             var candidates = new List<ITypeSymbol>();
@@ -112,10 +137,15 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
         var options = new RenderOptions { NamespaceStyle = NamespaceStyle.BlockScoped };
         var attribute = CSharpSyntaxTree.ParseText(AttributeDocument().Render(options)).GetCompilationUnitRoot();
         var methods = CSharpSyntaxTree.ParseText(document.Render(options)).GetCompilationUnitRoot();
-        output.AddSource("NeemleInterceptors.g.cs", attribute.AddMembers(methods.Members.ToArray()).ToFullString());
+        string interceptorSource = attribute.AddMembers(methods.Members.ToArray()).ToFullString();
+        output.AddSource("NeemleInterceptors.g.cs", interceptorSource.Replace("#nullable enable",
+            "#nullable enable\n#nullable disable warnings", StringComparison.Ordinal));
         var parseOptions = compilation.SyntaxTrees.FirstOrDefault()?.Options as CSharpParseOptions ?? new();
-        if (contexts.Generate() is { } contextSource)
-            GenerateFrameworkContext(output, compilation, parseOptions, contextSource);
+        string? contextSource = contexts.Generate();
+        if (contextSource is not null)
+            GenerateFrameworkContext(output, compilation, parseOptions, contextSource, contextName);
+        if (hasHttp || contextSource is not null) output.AddSource("NeemleHttpResolver.g.cs", HttpJsonResolverEmitter.Generate(
+            contextSource is null ? null : contextName));
         var sources = GeneratedCodeLayout.Split(emitter.Generate());
         for (int i = 0; i < sources.Count; i++)
             output.AddSource($"NeemleCodecs{i}.g.cs", GeneratedAssemblyNames.Rename(sources[i], assembly, parseOptions));
@@ -127,40 +157,12 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
                 return tree.GetRoot(output.CancellationToken).DescendantNodes().OfType<BaseTypeDeclarationSyntax>()
                     .Select(node => model.GetDeclaredSymbol(node)).OfType<ITypeSymbol>();
             });
-            var types = MetadataTypes.CollectMetadataTypes(declared.Concat(emitter.RegisteredTypes).Concat(contexts.KnownTypes), compilation.Assembly);
+            var types = MetadataTypes.CollectMetadataTypes(declared.Concat(interceptedTypes).Concat(emitter.RegisteredTypes).Concat(contexts.KnownTypes), compilation.Assembly);
             var metadata = NativeTypeMetadataEmitter.Generate(types);
             for (int i = 0; i < metadata.Count; i++) output.AddSource($"NeemleMetadata{i}.g.cs", metadata[i]);
             if (EnumConverterRegistryEmitter.Generate(emitter.RegisteredTypes.ToArray(), assembly) is { } enumConverters)
                 output.AddSource("NeemleEnumConverters.g.cs", enumConverters);
         }
-    }
-
-    private static bool UsesRegisteredConverters(SemanticModel model, InvocationExpressionSyntax invocation)
-    {
-        if (model.GetOperation(invocation) is not IInvocationOperation operation) return false;
-        var argument = operation.Arguments.FirstOrDefault(item => item.Parameter?.Type
-            .WithNullableAnnotation(NullableAnnotation.None).ToDisplayString() == "System.Text.Json.JsonSerializerOptions");
-        if (argument?.Syntax is not ArgumentSyntax syntax) return false;
-        if (syntax.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>()
-            .Any(item => item.Identifier.ValueText == "Converters")) return true;
-        var symbol = model.GetSymbolInfo(syntax.Expression).Symbol;
-        if (symbol is IFieldSymbol or IParameterSymbol or IPropertySymbol) return true;
-        if (symbol is not ILocalSymbol) return false;
-        return invocation.SyntaxTree.GetRoot().DescendantNodes().OfType<MemberAccessExpressionSyntax>()
-            .Any(member => member.Name.Identifier.ValueText == "Converters" &&
-                SymbolEqualityComparer.Default.Equals(model.GetSymbolInfo(member.Expression).Symbol, symbol));
-    }
-
-    private static void AddNodeInterceptor(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> root,
-        IMethodSymbol original, InterceptableLocation location, string assembly, int index, int position)
-    {
-        string result = original.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        string codec = GeneratedAssemblyNames.Name("GeneratedJsonCodec_" + index, assembly);
-        root.Method(NodeType(result), "Call" + position).Internal().Static()
-            .Attribute(Cs.Attribute(Cs.Type("System.Runtime.CompilerServices.InterceptsLocation"),
-                Cs.Arg(Cs.Literal(location.Version)), Cs.Arg(Cs.Literal(location.Data))))
-            .Parameter(Cs.Type("global::System.Text.Json.Nodes.JsonNode"), "node", "this")
-            .Body(Cs.Tree(Return(NodeCall(codec + ".NodeGetValue_" + index, Cs.Symbol("node"))))).End();
     }
 
     private static void AddInterceptor(Neemle.CSharpComposer.Builders.TypeBuilder<Neemle.CSharpComposer.Builders.FileBuilder> root,
@@ -187,7 +189,7 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
             if (framework && type == "System.Type") continue;
             if (framework && type == "System.Text.Json.JsonSerializerOptions")
             {
-                var info = NodeCall("GeneratedAsyncJsonContext.ForOptions", Cs.Symbol(name));
+                var info = NodeCall(GeneratedAssemblyNames.Name("GeneratedAsyncJsonContext", assembly) + ".ForOptions", Cs.Symbol(name));
                 var lookup = Cs.Symbol("GetTypeInfo", new() { Target = info, AsCall = true,
                     Arguments = Cs.Compound(TypeOf(TypeName(call.Type))) });
                 string metadata = call.Method.IsGenericMethod ?
@@ -230,35 +232,8 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
         method.Body(call.Method.ReturnsVoid ? Cs.Tree(invoke) : Cs.Tree(Return(invoke))).End();
     }
 
-    private static string RuntimeMethod(IMethodSymbol method)
-    {
-        string first = method.Parameters[0].Type.WithNullableAnnotation(NullableAnnotation.None).ToDisplayString();
-        bool stream = first is "System.IO.Stream" or "System.IO.Pipelines.PipeReader" or "System.IO.Pipelines.PipeWriter";
-        return method.Name switch
-        {
-            "SerializeAsync" => "EncodeRuntimeStreamAsync",
-            "DeserializeAsync" => "DecodeRuntimeStreamAsync",
-            "Serialize" when stream => "EncodeRuntimeStream",
-            "Serialize" when first == "System.Text.Json.Utf8JsonWriter" => "EncodeRuntimeWriter",
-            "Serialize" => "EncodeRuntime",
-            "SerializeToUtf8Bytes" => "EncodeRuntimeBytes",
-            "SerializeToElement" => "EncodeRuntimeElement",
-            "SerializeToDocument" => "EncodeRuntimeDocument",
-            "SerializeToNode" => "EncodeRuntimeNode",
-            "Deserialize" when stream => "DecodeRuntimeStream",
-            "Deserialize" when first == "System.Text.Json.Utf8JsonReader" => "DecodeRuntimeReader",
-            "Deserialize" when first == "System.Text.Json.JsonElement" => "DecodeRuntimeElement",
-            "Deserialize" when first == "System.Text.Json.JsonDocument" => "DecodeRuntimeDocument",
-            "Deserialize" when first == "System.Text.Json.Nodes.JsonNode" => "DecodeRuntimeNode",
-            "Deserialize" when first == "System.ReadOnlySpan<byte>" => "DecodeRuntimeBytes",
-            "Deserialize" when first == "System.ReadOnlySpan<char>" => "DecodeRuntimeChars",
-            "Deserialize" => "DecodeRuntime",
-            _ => throw new InvalidOperationException("Unsupported runtime JSON operation: " + method.Name)
-        };
-    }
-
     private static void GenerateFrameworkContext(SourceProductionContext output, Compilation compilation,
-        CSharpParseOptions options, string source)
+        CSharpParseOptions options, string source, string contextName)
     {
         var tree = CSharpSyntaxTree.ParseText(source, options, "NeemleFrameworkContext.cs", System.Text.Encoding.UTF8);
         var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(item =>
@@ -277,7 +252,7 @@ public sealed class CompilerJsonGenerator : IIncrementalGenerator
                 throw new InvalidOperationException(diagnostic.ToString());
         }
         var generated = result.Results.SelectMany(item => item.GeneratedSources)
-            .Where(item => item.HintName.StartsWith("GeneratedAsyncJsonContext", StringComparison.Ordinal)).ToArray();
+            .Where(item => item.HintName.StartsWith(contextName, StringComparison.Ordinal)).ToArray();
         if (generated.Length == 0) throw new InvalidOperationException("The SDK did not generate JSON metadata.");
         output.AddSource("NeemleFrameworkContext.g.cs", source);
         foreach (var item in generated) output.AddSource("NeemleFramework." + item.HintName, item.SourceText);

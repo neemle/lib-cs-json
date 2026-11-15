@@ -14,7 +14,7 @@ internal static class RuntimeBuilder
         "src/libraries/System.Text.RegularExpressions/gen/", "src/libraries/Microsoft.NETCore.Platforms/"
     ];
 
-    internal static async Task BuildAsync(string version, string output, string parent)
+    internal static async Task BuildAsync(string version, string output, string parent, string sourceArchive)
     {
         if (!Version.TryParse(version, out var parsed) || parsed.Major is not (10 or 11) || parsed.Build < 0)
             throw new ArgumentException("Invalid runtime version.", nameof(version));
@@ -22,32 +22,45 @@ internal static class RuntimeBuilder
         Directory.CreateDirectory(work);
         try
         {
-            await ExtractAsync(version, work);
+            await ExtractAsync(version, work, sourceArchive);
             string tools = Path.GetDirectoryName(typeof(RuntimeBuilder).Assembly.Location)!;
             ApplyPatch(work, Path.Combine(tools, "JsonRuntime.patch"), parsed.Major == 11);
             if (parsed.Major == 11) ApplyPatch(work, Path.Combine(tools, "JsonRuntime.Net11.patch"), false);
-            await BuildRuntimeAsync(work, output, parsed.Major);
+            await BuildRuntimeAsync(work, output, parsed.Major, !string.IsNullOrEmpty(sourceArchive));
         }
-        finally { Directory.Delete(work, true); }
+        finally
+        {
+            try { Directory.Delete(work, true); }
+            catch (DirectoryNotFoundException) { }
+        }
     }
 
-    private static async Task ExtractAsync(string version, string root)
+    private static async Task ExtractAsync(string version, string root, string sourceArchive)
     {
         using var client = new HttpClient();
-        using var response = await client.GetAsync($"https://codeload.github.com/dotnet/runtime/tar.gz/refs/tags/v{version}",
-            HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-        await using var compressed = await response.Content.ReadAsStreamAsync();
+        using var response = string.IsNullOrEmpty(sourceArchive) ?
+            await client.GetAsync($"https://codeload.github.com/dotnet/runtime/tar.gz/refs/tags/v{version}",
+                HttpCompletionOption.ResponseHeadersRead) : null;
+        response?.EnsureSuccessStatusCode();
+        await using var compressed = response is null ? File.OpenRead(sourceArchive) : await response.Content.ReadAsStreamAsync();
         await using var archive = new GZipStream(compressed, CompressionMode.Decompress);
         using var reader = new TarReader(archive);
+        bool verified = false;
         while (await reader.GetNextEntryAsync() is { } entry)
         {
             int separator = entry.Name.IndexOf('/');
             if (separator < 0) continue;
+            if (!verified)
+            {
+                if (!entry.Name[..separator].Equals("runtime-" + version, StringComparison.Ordinal))
+                    throw new InvalidDataException("The runtime source archive does not match " + version + ".");
+                verified = true;
+            }
             string relative = entry.Name[(separator + 1)..];
             if (relative.Length == 0 || !RequiredSource(relative)) continue;
             await ExtractEntryAsync(entry, root, relative);
         }
+        if (!verified) throw new InvalidDataException("The runtime source archive is empty.");
     }
 
     private static bool RequiredSource(string path) =>
@@ -149,7 +162,7 @@ internal static class RuntimeBuilder
         position++;
     }
 
-    private static async Task BuildRuntimeAsync(string root, string output, int major)
+    private static async Task BuildRuntimeAsync(string root, string output, int major, bool offline)
     {
         string linker = Path.Combine(root, "eng", "illink.targets");
         File.WriteAllText(linker, File.ReadAllText(linker).Replace("TaskFactory=\"TaskHostFactory\"", ""));
@@ -164,6 +177,7 @@ internal static class RuntimeBuilder
             "-p:NoWarn=", "-v:quiet"];
         var start = new ProcessStartInfo("dotnet") { UseShellExecute = false };
         foreach (string arg in args) start.ArgumentList.Add(arg);
+        if (offline) start.ArgumentList.Add("-p:NuGetAudit=false");
         if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NUGET_PACKAGES")))
             start.Environment["NUGET_PACKAGES"] = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages");
         using Process process = Process.Start(start) ?? throw new InvalidOperationException("Could not start dotnet.");

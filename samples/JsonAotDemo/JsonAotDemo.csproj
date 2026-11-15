@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PublishAot>true</PublishAot>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <InvariantGlobalization>true</InvariantGlobalization>
     <StaticICULinking>false</StaticICULinking>
@@ -17,5 +19,6 @@
   </ItemGroup>
   <ItemGroup Condition="'$(PublishAot)' == 'true'">
     <IlcArg Include="--reflectiondata:none" />
+    <LinkerArg Include="-Wl,--fatal-warnings" />
   </ItemGroup>
 </Project>
